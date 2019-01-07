@@ -9,5 +9,8 @@ int main()
 {
 	std::cout << "Test!" << std::endl;
 
+	// another repository change test
+	getchar();
+
 	return 0;
 }

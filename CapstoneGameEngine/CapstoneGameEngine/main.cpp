@@ -3,13 +3,18 @@
 */
 
 #include <iostream> //cin & cout
+#include "HeadHancho.h"
 
+HeadHancho sysHeadHancho; // global HeadHancho for engine
 
 int main()
 {
-	std::cout << "Test!" << std::endl;
+	//std::cout << "Test!" << std::endl;
 
-	// another repository change test
+	sysHeadHancho.start();
+	sysHeadHancho.run();
+	sysHeadHancho.end();
+
 	getchar();
 
 	return 0;

@@ -112,9 +112,11 @@
   <ItemGroup>
     <ClCompile Include="HeadHancho.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="WindowsInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HeadHancho.h" />
+    <ClInclude Include="WindowsInterface.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

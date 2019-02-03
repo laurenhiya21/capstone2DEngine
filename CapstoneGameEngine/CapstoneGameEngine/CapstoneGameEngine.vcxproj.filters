@@ -21,9 +21,15 @@
     <ClCompile Include="HeadHancho.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="WindowsInterface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HeadHancho.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowsInterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

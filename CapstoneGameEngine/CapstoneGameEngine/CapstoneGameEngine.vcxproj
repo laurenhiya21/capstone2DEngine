@@ -126,13 +126,12 @@
     <ClCompile Include="HeadHancho.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Window.cpp" />
-    <ClCompile Include="WindowsInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="HeadHancho.h" />
+    <ClInclude Include="System.h" />
     <ClInclude Include="Window.h" />
-    <ClInclude Include="WindowsInterface.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

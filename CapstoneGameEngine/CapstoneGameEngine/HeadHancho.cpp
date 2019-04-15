@@ -4,7 +4,7 @@
 #include <iostream> //temp-------------------------------
 
 // start the engine's various managers and necessary parts
-void HeadHancho::start()
+HeadHancho::HeadHancho()
 {
 	std::cout << "start engine!" << std::endl;
 
@@ -19,7 +19,7 @@ void HeadHancho::run()
 }
 
 // clean up the managers as get ready to end the engine
-void HeadHancho::end()
+HeadHancho::~HeadHancho()
 {
 	std::cout << "end engine!" << std::endl;
 

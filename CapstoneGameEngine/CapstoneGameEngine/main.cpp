@@ -25,7 +25,10 @@ int main()
 	//sysHeadHancho.run();
 	//sysHeadHancho.end();
 
-	makeWindow();
+	Window newWindow;
+	newWindow.makeWindow();
+
+	//makeWindow();
 	render();
 
 	// glfw: terminate, clearing all previously allocated GLFW resources.

@@ -1,14 +1,16 @@
 #include "Window.h"
 
-// settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
-
 // global pointer to created window
 GLFWwindow* window;
 
-// make the window
-int makeWindow()
+// default constructor
+Window::Window(unsigned w = DEFAULT_SCR_WIDTH, unsigned h = DEFAULT_SCR_HEIGHT)
+{
+	screenWidth = w;
+	screenHeight = h;
+}
+
+int Window::makeWindow()
 {
 	// glfw: initialize and configure
 	// ------------------------------
@@ -19,7 +21,7 @@ int makeWindow()
 
 	// glfw window creation
 	// --------------------
-	window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+	window = glfwCreateWindow(screenWidth, screenHeight, "LearnOpenGL", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -39,6 +41,12 @@ int makeWindow()
 	}
 
 	return 0;
+}
+
+// deconstructor
+Window::~Window()
+{
+
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes

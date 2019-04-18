@@ -1,5 +1,5 @@
 #include "HeadHancho.h"
-#include "WindowsInterface.h"
+//#include "WindowsInterface.h"
 
 #include <iostream> //temp-------------------------------
 
@@ -9,7 +9,7 @@ HeadHancho::HeadHancho()
 	std::cout << "start engine!" << std::endl;
 
 	// create and start the WindowsInterface system
-	WindowsInterface sysWindowsInterface();
+	//WindowsInterface sysWindowsInterface();
 }
 
 // continue running the engine

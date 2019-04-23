@@ -1,13 +1,16 @@
 #pragma once
 
 // default settings
-const bool DEFAULT_ZOMBIE = false;
-const bool DEFAULT_VISABLE = false;
+//const bool DEFAULT_ZOMBIE = false;
+//const bool DEFAULT_VISABLE = false;
 
 class Object
 {
-	private:
+	protected:
+		static unsigned freeID; // first free ID
 
+	private:
+		unsigned ID; // unique ID for object
 		bool zombie; // is object to be deleted?
 		bool visable; // is object visable?
 		// bounding box?
@@ -22,6 +25,7 @@ class Object
 		// getters
 		bool getZombie();
 		bool getVisable();
+		unsigned getID();
 
 		// setters
 		void setZombie(bool);
@@ -31,3 +35,6 @@ class Object
 		~Object();
 
 };
+
+// set first free id
+unsigned Object::freeID = 0;

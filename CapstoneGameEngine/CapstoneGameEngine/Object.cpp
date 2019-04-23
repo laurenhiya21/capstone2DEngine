@@ -3,6 +3,8 @@
 // default constructor
 Object::Object()
 {
+	ID = freeID;
+	++freeID;
 }
 
 //----------------------------------------------------------------------------------
@@ -17,6 +19,11 @@ bool Object::getZombie()
 bool Object::getVisable()
 {
 	return visable;
+}
+
+unsigned Object::getID()
+{
+	return ID;
 }
 
 //----------------------------------------------------------------------------------

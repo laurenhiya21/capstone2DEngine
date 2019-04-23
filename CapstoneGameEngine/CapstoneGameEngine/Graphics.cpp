@@ -1,6 +1,18 @@
 #include "Graphics.h"
 #include "Window.h"
 
+// constructor
+Graphics::Graphics()
+{
+
+}
+
+// deconstructor
+Graphics::~Graphics()
+{
+
+}
+
 // renders the screen
 int render()
 {

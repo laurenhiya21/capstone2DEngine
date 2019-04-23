@@ -4,3 +4,12 @@
 
 int render(); // renders the screen
 void processInput(GLFWwindow *window);
+
+class Graphics
+{
+	// constructor
+	Graphics();
+
+	// deconstructor
+	~Graphics();
+};

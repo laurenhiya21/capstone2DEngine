@@ -21,7 +21,7 @@ class Window
 
 	public:
 		// default constructor
-		Window(unsigned w, unsigned h);
+		Window(unsigned w = DEFAULT_SCR_WIDTH, unsigned h = DEFAULT_SCR_HEIGHT);
 
 		int makeWindow();
 

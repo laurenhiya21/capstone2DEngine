@@ -4,7 +4,7 @@
 GLFWwindow* window;
 
 // default constructor
-Window::Window(unsigned w = DEFAULT_SCR_WIDTH, unsigned h = DEFAULT_SCR_HEIGHT)
+Window::Window(unsigned w, unsigned h)
 {
 	screenWidth = w;
 	screenHeight = h;

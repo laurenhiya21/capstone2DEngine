@@ -1,10 +1,18 @@
 #include "Object.h"
 
+// set first free id
+unsigned Object::freeID = 0;
+
 // default constructor
 Object::Object()
 {
+	// set the id and set the next free id
 	ID = freeID;
 	++freeID;
+
+	//set zombie and visable
+	zombie = false;
+	visable = true;
 }
 
 //----------------------------------------------------------------------------------

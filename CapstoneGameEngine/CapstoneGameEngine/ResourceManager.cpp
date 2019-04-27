@@ -1,5 +1,20 @@
 #include "ResourceManager.h"
 
+// removes all zombies from object list (private function)
+void ResourceManager::killAllZombies()
+{
+	// while still objects to check, check if object needs to be removed
+	for (int x = 0; x < objectList.size(); ++x)
+	{
+		// return position of object if found
+		if (objectList[x].getZombie() == true)
+		{
+			// remove the object from the list
+			objectList.erase(objectList.begin() + x);
+		}		
+	}
+}
+
 // add an object to the manager
 void ResourceManager::addObject(Object newObj)
 {
@@ -7,7 +22,7 @@ void ResourceManager::addObject(Object newObj)
 	objectList.push_back(newObj);
 }
 
-// remove an object
+// makes an object to be removed, given its id
 void ResourceManager::removeObject(unsigned objID)
 {
 	// find the object in the list (spot in vector)
@@ -17,8 +32,11 @@ void ResourceManager::removeObject(unsigned objID)
 	if (x == -1)
 		return;
 
-	// remove the object from the list
-	objectList.erase(objectList.begin() + x);
+	// set the object to be removed
+	objectList[x].setZombie(true);
+
+	//TEST ONLY
+	killAllZombies();
 }
 
 // get number of objects

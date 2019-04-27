@@ -35,6 +35,3 @@ class Object
 		~Object();
 
 };
-
-// set first free id
-unsigned Object::freeID = 0;

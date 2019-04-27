@@ -6,6 +6,7 @@
 #include "HeadHancho.h"
 #include "Window.h"
 #include "Graphics.h"
+#include "ResourceManager.h"
 
 HeadHancho sysHeadHancho; // global HeadHancho for engine
 
@@ -24,6 +25,31 @@ int main()
 	//sysHeadHancho.start();
 	//sysHeadHancho.run();
 	//sysHeadHancho.end();
+
+	// create test objects
+	ResourceManager RManager;
+	Object o1;
+	Object o2;
+	Object o3;
+	Object o4;
+
+	// add objects to manager
+	RManager.addObject(o1);
+	RManager.addObject(o2);
+	RManager.addObject(o3);
+	RManager.addObject(o4);
+
+	// get num object before deltion
+	unsigned before = RManager.getNumObjects();
+
+	// remove an object
+	RManager.removeObject(o3.getID());
+
+	// get num object after deltion
+	unsigned after = RManager.getNumObjects();
+
+	// find an object
+	int o4Spot = RManager.findObject(o4.getID());
 
 	Window newWindow;
 	newWindow.makeWindow();

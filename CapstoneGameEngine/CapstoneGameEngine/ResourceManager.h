@@ -8,6 +8,9 @@ class ResourceManager
 	private:
 		std::vector<Object> objectList; // the list of objects
 
+		// removes all zombies from object list
+		void killAllZombies();
+
 	public:
 
 		// constructor?
@@ -15,7 +18,7 @@ class ResourceManager
 		// add a new object
 		void addObject(Object);
 
-		// remove an object
+		// sets an object to be removed, given its id
 		void removeObject(unsigned);
 
 		// get number of objects

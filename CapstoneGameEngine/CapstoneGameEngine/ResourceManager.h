@@ -27,6 +27,13 @@ class ResourceManager
 		// find object
 		int findObject(unsigned);
 
+		// render all the visable objects
+		void renderVisable();
+
+		// updates all objects that need to be updated
+		// including killing zombies
+		void updateActiveObjects();
+
 		// deconstructor?
 
 };

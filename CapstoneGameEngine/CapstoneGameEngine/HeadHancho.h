@@ -1,12 +1,15 @@
 #pragma once
 
 #include "System.h"
+#include "ResourceManager.h"
 
 // Manager that takes care of communication between the systems
 // Also takes care of starting and ending the systems
 class HeadHancho: public System
 {
 	public:
+
+		ResourceManager RManager;
 
 		// start the engine's systems
 		HeadHancho();
@@ -18,3 +21,5 @@ class HeadHancho: public System
 		~HeadHancho();
 
 };
+
+extern HeadHancho sysHeadHancho; // global HeadHancho for engine

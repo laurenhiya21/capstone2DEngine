@@ -10,9 +10,10 @@ Object::Object()
 	ID = freeID;
 	++freeID;
 
-	//set zombie and visable
+	//set zombie, visable, and active
 	zombie = false;
 	visable = true;
+	active = true;
 }
 
 //----------------------------------------------------------------------------------
@@ -34,6 +35,11 @@ unsigned Object::getID()
 	return ID;
 }
 
+bool Object::getActive()
+{
+	return active;
+}
+
 //----------------------------------------------------------------------------------
 // Setters------------------------------------------------------------------------------
 // -----------------------------------------------------------------------------------
@@ -48,6 +54,10 @@ void Object::setVisable(bool v)
 	visable = v;
 }
 
+void Object::setActive(bool a)
+{
+	active = a;
+}
 
 // deconstructor
 Object::~Object()

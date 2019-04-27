@@ -34,9 +34,6 @@ void ResourceManager::removeObject(unsigned objID)
 
 	// set the object to be removed
 	objectList[x].setZombie(true);
-
-	//TEST ONLY
-	killAllZombies();
 }
 
 // get number of objects
@@ -58,4 +55,37 @@ int ResourceManager::findObject(unsigned objID)
 
 	// object was not found
 	return -1;
+}
+
+// render all the visable objects
+void ResourceManager::renderVisable()
+{
+	// while still objects to check, check if object visable
+	for (int x = 0; x < objectList.size(); ++x)
+	{
+		// return position of object if found
+		if (objectList[x].getVisable() == true)
+		{
+			//render here
+		}
+			
+	}
+}
+
+// updates all objects that need to be updated, including killing zombies
+void ResourceManager::updateActiveObjects()
+{
+	// go through all the objects
+	for (int x = 0; x < objectList.size(); ++x)
+	{
+		// check if active
+		if (objectList[x].getActive() == true)
+		{
+			// update here
+		}
+
+	}
+
+	// kill the zombies
+	killAllZombies();
 }

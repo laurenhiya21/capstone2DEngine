@@ -1,11 +1,16 @@
 #include "Graphics.h"
-#include "Window.h"
-#include "HeadHancho.h"
 
-// constructor
+// itilize graphics things
 Graphics::Graphics()
 {
+	// Load sprite shader
+	ResourceManager::LoadShader("../shaders/sprite.vs", "../shaders/sprite.frag", nullptr, "sprite");
 
+	// Configure shaders
+	// creates projection matrix to scale, rotate, translate objects
+	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(this->Width), static_cast<GLfloat>(this->Height), 0.0f, -1.0f, 1.0f); 
+	ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
+	ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
 }
 
 // deconstructor

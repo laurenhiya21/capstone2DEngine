@@ -15,11 +15,27 @@ void ResourceManager::killAllZombies()
 	}
 }
 
+// Loads and generates a vertex, fragment, and (optionally) geometry shader from file
+Shader ResourceManager::loadShaderFromFile(const char * vShaderFile, const char * fShaderFile, const char * gShaderFile)
+{
+	return Shader();
+}
+
 // add an object to the manager
 void ResourceManager::addObject(Object newObj)
 {
 	// push new object to end of the list
 	objectList.push_back(newObj);
+}
+
+// add a new shader to the manager, returns position of shader
+unsigned ResourceManager::addShader(Shader newShad)
+{
+	// push new shader to the end of the list
+	shaderList.push_back(newShad);
+
+	// return the position of the newly added shader (not multi-thread safe!)
+	return shaderList.size() - 1;
 }
 
 // makes an object to be removed, given its id
@@ -88,4 +104,36 @@ void ResourceManager::updateActiveObjects()
 
 	// kill the zombies
 	killAllZombies();
+}
+
+// Loads a shader from a vertex and fragment shader's code, 
+// also can load geometry shader if not null
+// if shader isn't already in the shader list, add it to the list
+Shader ResourceManager::LoadShader(const char * vShaderFile, const char * fShaderFile, const char * gShaderFile, std::string name)
+{
+	int x = 0;
+	bool found = false; // if the shader was found in the shaderlist
+
+	// find the shader from the shader list
+	for (; x < shaderList.size(); ++x)
+	{
+		// check if correct shader
+		if (shaderList[x].getName() == name)
+		{
+			// something about load shader from file
+			shaderList[x] = loadShaderFromFile(vShaderFile, fShaderFile, gShaderFile);
+
+			found = true;
+			break;
+		}
+	}
+
+	// if the shader was not found in the list, add it to the list
+	if (!found)
+	{
+		// add the shader
+		// x = addShader(Shader(vShaderFile, fShaderFile, gShaderFile, name));
+	}
+
+	return shaderList[x];
 }

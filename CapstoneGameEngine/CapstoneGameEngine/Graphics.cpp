@@ -4,6 +4,7 @@
 Graphics::Graphics()
 {
 	// Load sprite shader
+	// need to change how this is called!-----------------------------------------------------
 	ResourceManager::LoadShader("../shaders/sprite.vs", "../shaders/sprite.frag", nullptr, "sprite");
 
 	// Configure shaders

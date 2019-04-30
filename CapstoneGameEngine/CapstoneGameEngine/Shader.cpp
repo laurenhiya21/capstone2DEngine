@@ -35,6 +35,13 @@ std::string Shader::getName()
 	return name;
 }
 
+// sets current shader as active
+Shader& Shader::use()
+{
+	glUseProgram(ID);
+	return *this;
+}
+
 // compiles the shader given the source code
 void Shader::compile(const char * vSource, const char * fSource)
 {
@@ -62,4 +69,20 @@ void Shader::compile(const char * vSource, const char * fSource)
 	// deleted uneeded created shaders, as they are linked to program now
 	glDeleteShader(sVertex);
 	glDeleteShader(sFragment);
+}
+
+// comments are hard???==============--------------------------------------------------------------------
+
+void Shader::setInteger(const char * n, float value, bool useShader)
+{
+	if (useShader)
+		use();
+	glUniform1i(glGetUniformLocation(ID, n), value);
+}
+
+void Shader::setMatrix4(const char * n, const glm::mat4 & matrix, bool useShader)
+{
+	if (useShader)
+		use();
+	glUniformMatrix4fv(glGetUniformLocation(ID, n), 1, GL_FALSE, glm::value_ptr(matrix));
 }

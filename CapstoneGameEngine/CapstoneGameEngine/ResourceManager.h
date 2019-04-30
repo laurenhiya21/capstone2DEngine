@@ -45,6 +45,9 @@ class ResourceManager
 		// Loads a shader from a vertex and fragment shader's code, 
 		Shader LoadShader(const char* vShaderFile, const char* fShaderFile, std::string name);
 
+		// Gets a stored shader
+		Shader& getShader(std::string name);
+
 		// deconstructor?
 
 };

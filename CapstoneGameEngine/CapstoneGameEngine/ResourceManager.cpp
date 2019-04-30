@@ -179,3 +179,20 @@ Shader ResourceManager::LoadShader(const char * vShaderFile, const char * fShade
 
 	return shaderList[x];
 }
+
+// Gets a stored shader
+Shader& ResourceManager::getShader(std::string name)
+{
+	// find the shader from the shader list
+	for (int x = 0; x < shaderList.size(); ++x)
+	{
+		// check if correct shader
+		if (shaderList[x].getName() == name)
+		{
+			return shaderList[x];
+		}
+	}
+
+	// couldn't find so return empty shader?------------------------------
+	return Shader();
+}

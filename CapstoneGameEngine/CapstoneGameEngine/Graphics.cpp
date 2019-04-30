@@ -4,14 +4,20 @@
 Graphics::Graphics()
 {
 	// Load sprite shader
-	// need to change how this is called!-----------------------------------------------------
-	sysHeadHancho.RManager.LoadShader("../shaders/sprite.vs", "../shaders/sprite.frag", nullptr, "sprite");
+	sysHeadHancho.RManager.LoadShader("../shaders/sprite.vs", "../shaders/sprite.frag", "sprite");
 
 	// Configure shaders
 	// creates projection matrix to scale, rotate, translate objects
-	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(this->Width), static_cast<GLfloat>(this->Height), 0.0f, -1.0f, 1.0f); 
-	ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
-	ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
+	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(this->Width), static_cast<GLfloat>(this->Height), 0.0f, -1.0f, 1.0f); //-----------not sure which include?
+
+	// ---------------------------?????------------------------------------
+	sysHeadHancho.RManager.getShader("sprite").use().setInteger("image", 0);
+	sysHeadHancho.RManager.getShader("sprite").setMatrix4("projection", projection);
+
+	// create the sprite rendererer in the graphics class actually is this needed???------- just use the rm's sprite shader????
+	// Renderer = new SpriteRenderer(ResourceManager::GetShader("sprite")); from tutorial
+
+
 }
 
 // deconstructor

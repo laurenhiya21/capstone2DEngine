@@ -2,8 +2,8 @@
 
 #include <string>
 #include <glew.h>
-//#include <glm/glm.hpp>
-//#include <glm/gtc/type_ptr.hpp>
+#include <glm/glm.hpp> //matrix stuff
+#include <glm/gtc/type_ptr.hpp> //mat4 ptr stuff?--------------------
 
 // Object to compile and manange the shaders
 class Shader
@@ -30,7 +30,14 @@ class Shader
 		unsigned getID();
 		std::string getName();
 
+		// sets current shader as active
+		Shader& use();
+
 		// compiles the shader given the source code
 		void compile(const char* vSource, const char* fSource);
+
+		//-----------------??
+		void setInteger(const char* n, float value, bool useShader = false);
+		void setMatrix4(const char* n, const glm::mat4& matrix, bool useShader = false);
 
 };

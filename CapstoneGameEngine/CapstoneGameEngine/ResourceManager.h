@@ -15,8 +15,8 @@ class ResourceManager
 		// removes all zombies from object list
 		void killAllZombies();
 
-		// Loads and generates a vertex, fragment, and (optionally) geometry shader from file
-		Shader loadShaderFromFile(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile = nullptr);
+		// Retrieves the vertex and fragment shader code from file and complie
+		Shader loadShaderFromFile(const char* vShaderFile, const char* fShaderFile);
 
 	public:
 
@@ -43,8 +43,7 @@ class ResourceManager
 		void updateActiveObjects();
 
 		// Loads a shader from a vertex and fragment shader's code, 
-		// also can load geometry shader if not null
-		Shader LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, std::string name);
+		Shader LoadShader(const char* vShaderFile, const char* fShaderFile, std::string name);
 
 		// deconstructor?
 

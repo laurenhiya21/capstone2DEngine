@@ -11,13 +11,17 @@ class Shader
 	private:
 		unsigned ID; // unique ID for the shader
 		std::string name; // name of the shader
-		// probably need 3 char* for each shader
-		//TO DOOO
+		
+		//not sure if these should be char* or strings-------------------------------------
+		// location of the vertex and fragment shader source code
+		char* vertexSource;
+		char* fragmentSource;
 
 	public:
 
-		// construtcor
+		// construtcors
 		Shader();
+		Shader(const char* vSource, const char* fSource, std::string n);
 
 		// gettors
 		unsigned getID();

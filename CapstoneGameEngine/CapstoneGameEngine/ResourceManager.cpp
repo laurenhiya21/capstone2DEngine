@@ -1,3 +1,6 @@
+#include <iostream> // cout, endl
+#include <sstream> // stringstream
+#include <fstream> // ifstream
 #include "ResourceManager.h"
 
 // removes all zombies from object list (private function)
@@ -15,10 +18,48 @@ void ResourceManager::killAllZombies()
 	}
 }
 
-// Loads and generates a vertex, fragment, and (optionally) geometry shader from file
-Shader ResourceManager::loadShaderFromFile(const char * vShaderFile, const char * fShaderFile, const char * gShaderFile)
+// Retrieves the vertex and fragment shader code from file and complie
+Shader ResourceManager::loadShaderFromFile(const char* vShaderFile, const char* fShaderFile)
 {
-	return Shader();
+	// the source code from the file for the shaders
+	std::string vertexCode;
+	std::string fragmentCode;
+
+	// try to open the files given
+	try
+	{
+		// open the files
+		std::ifstream vertexShaderFile(vShaderFile);
+		std::ifstream fragmentShaderFile(fShaderFile);
+		std::stringstream vShaderStream, fShaderStream;
+
+		// read file contents
+		vShaderStream << vertexShaderFile.rdbuf();
+		fShaderStream << fragmentShaderFile.rdbuf();
+
+		// close the files
+		vertexShaderFile.close();
+		fragmentShaderFile.close();
+
+		// convert streams into strings
+		vertexCode = vShaderStream.str();
+		fragmentCode = fShaderStream.str();
+	}
+
+	// if cannot open the file(s)
+	catch (std::exception e)
+	{
+		std::cout << "ERROR SHADER: Shader files could not be read" << std::endl;
+	}
+
+	// create a shader object given the shader code
+	const char* vShaderCode = vertexCode.c_str();
+	const char* fShaderCode = fragmentCode.c_str();
+
+	Shader newShader;
+	//call shader compile here------------------------------------------------------------
+
+	return newShader;
 }
 
 // add an object to the manager
@@ -107,9 +148,8 @@ void ResourceManager::updateActiveObjects()
 }
 
 // Loads a shader from a vertex and fragment shader's code, 
-// also can load geometry shader if not null
 // if shader isn't already in the shader list, add it to the list
-Shader ResourceManager::LoadShader(const char * vShaderFile, const char * fShaderFile, const char * gShaderFile, std::string name)
+Shader ResourceManager::LoadShader(const char * vShaderFile, const char * fShaderFile, std::string name)
 {
 	int x = 0;
 	bool found = false; // if the shader was found in the shaderlist
@@ -120,9 +160,7 @@ Shader ResourceManager::LoadShader(const char * vShaderFile, const char * fShade
 		// check if correct shader
 		if (shaderList[x].getName() == name)
 		{
-			// something about load shader from file
-			shaderList[x] = loadShaderFromFile(vShaderFile, fShaderFile, gShaderFile);
-
+			// correct shader was found so stop
 			found = true;
 			break;
 		}
@@ -132,8 +170,11 @@ Shader ResourceManager::LoadShader(const char * vShaderFile, const char * fShade
 	if (!found)
 	{
 		// add the shader
-		// x = addShader(Shader(vShaderFile, fShaderFile, gShaderFile, name));
+		x = addShader(Shader(vShaderFile, fShaderFile, name));
 	}
+
+	// load the shader from the file to the correct spot
+	shaderList[x] = loadShaderFromFile(vShaderFile, fShaderFile);
 
 	return shaderList[x];
 }

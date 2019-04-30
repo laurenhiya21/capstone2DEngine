@@ -2,13 +2,13 @@
 	Lauren Bratt
 */
 
+HeadHancho sysHeadHancho; // global HeadHancho for engine
+
 #include <iostream> //cin & cout
 #include "HeadHancho.h"
 #include "Window.h"
 #include "Graphics.h"
 #include "ResourceManager.h"
-
-HeadHancho sysHeadHancho; // global HeadHancho for engine
 
 //---------MOVE LATER YO0000000000000000000-------------------------------
 #include <glad.h>  //-----------

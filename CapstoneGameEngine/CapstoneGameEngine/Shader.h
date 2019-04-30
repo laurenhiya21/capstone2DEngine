@@ -1,6 +1,9 @@
 #pragma once
 
 #include <string>
+#include <glew.h>
+//#include <glm/glm.hpp>
+//#include <glm/gtc/type_ptr.hpp>
 
 // Object to compile and manange the shaders
 class Shader
@@ -26,5 +29,8 @@ class Shader
 		// gettors
 		unsigned getID();
 		std::string getName();
+
+		// compiles the shader given the source code
+		void compile(const char* vSource, const char* fSource);
 
 };

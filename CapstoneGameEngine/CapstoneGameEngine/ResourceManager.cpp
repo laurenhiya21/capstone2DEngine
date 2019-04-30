@@ -56,8 +56,9 @@ Shader ResourceManager::loadShaderFromFile(const char* vShaderFile, const char* 
 	const char* vShaderCode = vertexCode.c_str();
 	const char* fShaderCode = fragmentCode.c_str();
 
+	// create the shader object from source code
 	Shader newShader;
-	//call shader compile here------------------------------------------------------------
+	newShader.compile(vShaderCode, fShaderCode);
 
 	return newShader;
 }

@@ -13,10 +13,32 @@ Graphics::Graphics()
 	// ---------------------------?????------------------------------------
 	sysHeadHancho.RManager.getShader("sprite").use().setInteger("image", 0);
 	sysHeadHancho.RManager.getShader("sprite").setMatrix4("projection", projection);
+}
 
-	// create the sprite rendererer in the graphics class actually is this needed???------- just use the rm's sprite shader????
-	// Renderer = new SpriteRenderer(ResourceManager::GetShader("sprite")); from tutorial
+// draw a sprite on the screen (add texture later)
+void Graphics::drawSprite(glm::vec2 position, glm::vec2 size, float rotate, glm::vec3 color)
+{
+	// get the sprite shader & set to use
+	Shader sShader = sysHeadHancho.RManager.getShader("sprite");
+	sShader.use();
 
+	// set up a matrix to be used for transformation (start as identidy)
+	glm::mat4 model(1.0);
+
+	// transform the sprite appropriatly
+	// translate -> rotate -> scale
+	model = glm::translate(model, glm::vec3(position, 0.0f)); // translate
+
+	model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f)); // move origin of rotation to center
+	model = glm::rotate(model, rotate, glm::vec3(0.0f, 0.0f, 1.0f)); // rotate
+	model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f)); // move origin back
+
+	model = glm::scale(model, glm::vec3(size, 1.0f)); // scale sprite
+
+	//--------------------?? not super sure-----------------------------------------------------------
+	sShader.setMatrix4("model", model);
+
+	// some more stuff in spriterenderer::draw sprite but don't know atm
 
 }
 
@@ -25,6 +47,8 @@ Graphics::~Graphics()
 {
 
 }
+
+//TEMPPppppppppppppppppppppppppp
 
 // renders the screen
 int render()
@@ -53,8 +77,6 @@ int render()
 
 	return 0;
 }
-
-//TEMPPppppppppppppppppppppppppp
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------

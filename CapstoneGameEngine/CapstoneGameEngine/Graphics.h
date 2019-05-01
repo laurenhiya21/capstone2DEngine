@@ -22,6 +22,9 @@ class Graphics
 		// constructor
 		Graphics();
 
+		// draw a sprite on the screen (add texture later)
+		void drawSprite(glm::vec2 position, glm::vec2 size, float rotate, glm::vec3 color);
+
 		// deconstructor
 		~Graphics();
 };

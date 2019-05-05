@@ -10,7 +10,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "HeadHancho.h"
+#include "System.h"
 
 int render(); // renders the screen
 void processInput(GLFWwindow *window);

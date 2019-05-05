@@ -141,7 +141,7 @@
     <ClInclude Include="Object.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="System.h" />
-    <ClInclude Include="Windowx.h" />
+    <ClInclude Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

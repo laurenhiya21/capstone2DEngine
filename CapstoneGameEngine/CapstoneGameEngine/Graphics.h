@@ -10,18 +10,21 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-//SET UP GLM TO ACTIALL BE FOUND YO
+#include "HeadHancho.h"
 
 int render(); // renders the screen
 void processInput(GLFWwindow *window);
 
-class Graphics
+class Graphics: public System
 {
 	private:
 
 	public:
 		// constructor
 		Graphics();
+
+		// run/update the graphics system
+		void run();
 
 		// draw a sprite on the screen (add texture later)
 		void drawSprite(glm::vec2 position, glm::vec2 size, float rotate, glm::vec3 color);

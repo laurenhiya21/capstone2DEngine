@@ -1,4 +1,4 @@
-#include "Windowx.h"
+#include "Window.h"
 #include <iostream> //cin & cout
 #include "HeadHancho.h"
 #include "Graphics.h"

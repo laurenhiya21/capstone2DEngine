@@ -1,5 +1,5 @@
 #include "Graphics.h"
-#include "Windowx.h"
+#include "Window.h"
 #include "HeadHancho.h"
 #include "Shader.h"
 
@@ -16,6 +16,11 @@ Graphics::Graphics()
 	// ---------------------------?????------------------------------------
 	sysHeadHancho.RManager.getShader("sprite").use().setInteger("image", 0);
 	sysHeadHancho.RManager.getShader("sprite").setMatrix4("projection", projection);
+}
+
+// run/update the graphics system
+void Graphics::run()
+{
 }
 
 // draw a sprite on the screen (add texture later)

@@ -1,6 +1,6 @@
 #include "Logic.h"
 
-// run the logic system
+// run/update the logic system
 void Logic::run()
 {
 	// update the active objects (and kill zombies)

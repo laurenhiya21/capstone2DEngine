@@ -56,9 +56,6 @@
     <ClInclude Include="System.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Object.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ResourceManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -71,7 +68,10 @@
     <ClInclude Include="Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Windowx.h">
+    <ClInclude Include="Window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

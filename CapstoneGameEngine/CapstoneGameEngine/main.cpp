@@ -4,7 +4,7 @@
 
 #include <iostream> //cin & cout
 #include "HeadHancho.h"
-#include "Windowx.h"
+#include "Window.h"
 #include "Graphics.h"
 #include "ResourceManager.h"
 
@@ -18,22 +18,7 @@ HeadHancho sysHeadHancho; // global HeadHancho for engine
 
 int main()
 {
-	//std::cout << "Test!" << std::endl;
-
-	//sysHeadHancho.start();
-	//sysHeadHancho.run();
-	//sysHeadHancho.end();
-
-	Window newWindow;
-	newWindow.makeWindow();
-
-	//makeWindow();
-	render();
-
-	// glfw: terminate, clearing all previously allocated GLFW resources.
-	// ------------------------------------------------------------------
-	glfwTerminate();
-
+	sysHeadHancho.run();
 	return 0;
 }
 

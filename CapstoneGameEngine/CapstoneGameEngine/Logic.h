@@ -5,6 +5,8 @@
 class Logic: public System
 {
 	public:
+
+		// run/update the logic system
 		void run();
 
 };

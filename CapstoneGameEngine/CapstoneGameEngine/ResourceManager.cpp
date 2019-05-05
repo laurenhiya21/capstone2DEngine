@@ -150,7 +150,7 @@ void ResourceManager::updateActiveObjects()
 
 // Loads a shader from a vertex and fragment shader's code, 
 // if shader isn't already in the shader list, add it to the list
-Shader ResourceManager::LoadShader(const char * vShaderFile, const char * fShaderFile, std::string name)
+Shader ResourceManager::LoadShader(const char* vShaderFile, const char* fShaderFile, std::string name)
 {
 	int x = 0;
 	bool found = false; // if the shader was found in the shaderlist

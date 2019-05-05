@@ -49,5 +49,5 @@ class ResourceManager
 		Shader& getShader(std::string name);
 
 		// deconstructor?
-
+			// clear out object and shader list?
 };

@@ -1,9 +1,8 @@
 #pragma once
 
+#include <iostream> // cout erors
 #include <string>
-#include <glew.h>
-#include <glm/glm.hpp> //matrix stuff
-#include <glm/gtc/type_ptr.hpp> //mat4 ptr stuff?--------------------
+#include "Graphics.h"
 
 // Object to compile and manange the shaders
 class Shader
@@ -20,6 +19,8 @@ class Shader
 		char* vertexSource;
 		char* fragmentSource;
 
+		int makeShader(GLenum shaderType, const char * source); // make the shader given source code
+
 	public:
 
 		// construtcors
@@ -35,6 +36,9 @@ class Shader
 
 		// compiles the shader given the source code
 		void compile(const char* vSource, const char* fSource);
+
+		// checks the shader for compile errors
+		void Shader::checkCompileErrors(int object, std::string type);
 
 		//-----------------??
 		void setInteger(const char* n, float value, bool useShader = false);

@@ -1,4 +1,7 @@
 #include "Graphics.h"
+#include "Windowx.h"
+#include "HeadHancho.h"
+#include "Shader.h"
 
 // itilize graphics things
 Graphics::Graphics()
@@ -8,7 +11,7 @@ Graphics::Graphics()
 
 	// Configure shaders
 	// creates projection matrix to scale, rotate, translate objects
-	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(this->Width), static_cast<GLfloat>(this->Height), 0.0f, -1.0f, 1.0f); //-----------not sure which include?
+	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(sysHeadHancho.mainWindow.getWidth()), static_cast<GLfloat>(sysHeadHancho.mainWindow.getHeight()), 0.0f, -1.0f, 1.0f); //-----------not sure which include?
 
 	// ---------------------------?????------------------------------------
 	sysHeadHancho.RManager.getShader("sprite").use().setInteger("image", 0);
@@ -55,11 +58,11 @@ int render()
 {
 	// render loop
 	// -----------
-	while (!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(sysHeadHancho.mainWindow.windowPtr))
 	{
 		// input
 		// -----
-		processInput(window);
+		processInput(sysHeadHancho.mainWindow.windowPtr);
 
 		// render
 		// ------
@@ -71,7 +74,7 @@ int render()
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
-		glfwSwapBuffers(window);
+		glfwSwapBuffers(sysHeadHancho.mainWindow.windowPtr);
 		glfwPollEvents();
 	}
 

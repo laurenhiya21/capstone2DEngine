@@ -2,21 +2,19 @@
 	Lauren Bratt
 */
 
-HeadHancho sysHeadHancho; // global HeadHancho for engine
-
 #include <iostream> //cin & cout
 #include "HeadHancho.h"
-#include "Window.h"
+#include "Windowx.h"
 #include "Graphics.h"
 #include "ResourceManager.h"
 
-//---------MOVE LATER YO0000000000000000000-------------------------------
-#include <glad.h>  //-----------
-#include <glfw3.h> //------------
+//---------MOVE LATER YO0000000000000000000--------------------------------
 
 void processInput(GLFWwindow *window);
 
 //-------END OF MOVE LATER YOOO--------------------------------------------
+
+HeadHancho sysHeadHancho; // global HeadHancho for engine
 
 int main()
 {

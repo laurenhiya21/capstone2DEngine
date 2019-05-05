@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Windowx.h"
 #include "System.h"
 #include "ResourceManager.h"
 
@@ -8,7 +9,7 @@
 class HeadHancho: public System
 {
 	public:
-
+		Window mainWindow;
 		ResourceManager RManager;
 
 		// start the engine's systems
@@ -19,7 +20,6 @@ class HeadHancho: public System
 
 		// end the engine's systems
 		~HeadHancho();
-
 };
 
 extern HeadHancho sysHeadHancho; // global HeadHancho for engine

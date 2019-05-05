@@ -1,16 +1,10 @@
 #pragma once
-#include <iostream> //cin & cout
-#include <glad.h>  //-----------
-#include <glfw3.h>
 
 // settings
 const unsigned int DEFAULT_SCR_WIDTH = 800;
 const unsigned int DEFAULT_SCR_HEIGHT = 600;
 
-// global pointer to created window
-extern GLFWwindow* window;
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+struct GLFWwindow;
 
 class Window
 {
@@ -25,6 +19,12 @@ class Window
 
 		int makeWindow();
 
+		// gettors
+		unsigned getWidth();
+		unsigned getHeight();
+
 		// deconstructor
 		~Window();
+
+		GLFWwindow* windowPtr;
 };

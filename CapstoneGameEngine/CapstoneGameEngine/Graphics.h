@@ -1,13 +1,14 @@
 #pragma once
-#include <glad.h>  //-----------
+
+//We are statically linking glew, so we have to define GLEW_STATIC
+//for the linker to be happy
+#define GLEW_STATIC
+
+#include <glew.h>
 #include <glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-//#include <glew.h>
-//#include <glfw3.h>
-#include "Window.h"
-#include "HeadHancho.h"
-#include "Shader.h"
+#include <glm/gtc/type_ptr.hpp>
 
 //SET UP GLM TO ACTIALL BE FOUND YO
 

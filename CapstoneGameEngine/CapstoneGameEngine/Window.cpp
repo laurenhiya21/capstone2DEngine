@@ -1,7 +1,10 @@
-#include "Window.h"
+#include "Windowx.h"
+#include <iostream> //cin & cout
+#include "HeadHancho.h"
+#include "Graphics.h"
 
-// global pointer to created window
-GLFWwindow* window;
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 // default constructor
 Window::Window(unsigned w, unsigned h)
@@ -21,26 +24,30 @@ int Window::makeWindow()
 
 	// glfw window creation
 	// --------------------
-	window = glfwCreateWindow(screenWidth, screenHeight, "LearnOpenGL", NULL, NULL);
-	if (window == NULL)
+	windowPtr = glfwCreateWindow(screenWidth, screenHeight, "LearnOpenGL", NULL, NULL);
+	if (windowPtr == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
 		return -1;
 	}
 
-	glfwMakeContextCurrent(window);
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-
-	// glad: load all OpenGL function pointers
-	// ---------------------------------------
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-	{
-		std::cout << "Failed to initialize GLAD" << std::endl;
-		return -1;
-	}
+	glfwMakeContextCurrent(windowPtr);
+	glfwSetFramebufferSizeCallback(windowPtr, framebuffer_size_callback);
 
 	return 0;
+}
+
+// gettors-----------------------------------------------------------------------------------------
+
+unsigned Window::getWidth()
+{
+	return screenWidth;
+}
+
+unsigned Window::getHeight()
+{
+	return screenHeight;
 }
 
 // deconstructor

@@ -171,7 +171,7 @@ Shader ResourceManager::LoadShader(const char* vShaderFile, const char* fShaderF
 	if (!found)
 	{
 		// add the shader
-		x = addShader(Shader(vShaderFile, fShaderFile, name));
+		x = addShader(Shader(name));
 	}
 
 	// load the shader from the file to the correct spot

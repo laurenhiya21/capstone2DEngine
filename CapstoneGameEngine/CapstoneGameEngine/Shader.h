@@ -13,11 +13,6 @@ class Shader
 	private:
 		unsigned ID; // unique ID for the shader
 		std::string name; // name of the shader
-		
-		//not sure if these should be char* or strings-------------------------------------
-		// location of the vertex and fragment shader source code
-		char* vertexSource;
-		char* fragmentSource;
 
 		int makeShader(GLenum shaderType, const char * source); // make the shader given source code
 
@@ -25,7 +20,7 @@ class Shader
 
 		// construtcors
 		Shader();
-		Shader(const char* vSource, const char* fSource, std::string n);
+		Shader(std::string n);
 
 		// gettors
 		unsigned getID();

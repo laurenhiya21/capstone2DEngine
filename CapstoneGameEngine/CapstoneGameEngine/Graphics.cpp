@@ -6,6 +6,12 @@
 // itilize graphics things
 Graphics::Graphics()
 {
+	// Before we call any more gl functions, we have to init glew
+	glewInit();
+
+	// Check for any errors from init glew
+	glGetError();
+
 	// Load sprite shader
 	sysHeadHancho.RManager.LoadShader("../shaders/sprite.vs", "../shaders/sprite.frag", "sprite");
 

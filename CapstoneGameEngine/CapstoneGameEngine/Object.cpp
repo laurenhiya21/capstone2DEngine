@@ -3,17 +3,21 @@
 // set first free id
 unsigned Object::freeID = 0;
 
-// default constructor
-Object::Object()
+// default constructor (default parameters for each)
+Object::Object(bool z, bool v, bool a, glm::vec2 pos, glm::vec2 s, glm::vec3 c, float r)
 {
 	// set the id and set the next free id
 	ID = freeID;
 	++freeID;
 
-	//set zombie, visable, and active
-	zombie = false;
-	visable = true;
-	active = true;
+	//set all of the other parameters
+	zombie = z;
+	visable = v;
+	active = a;
+	position = pos;
+	size = s;
+	colour = c;
+	rotation = r;
 }
 
 //----------------------------------------------------------------------------------

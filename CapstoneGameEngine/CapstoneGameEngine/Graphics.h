@@ -11,6 +11,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "System.h"
+#include "Object.h" // for drawing the objects
 
 class Graphics: public System
 {
@@ -24,7 +25,7 @@ class Graphics: public System
 		void run();
 
 		// draw a sprite on the screen (add texture later)
-		void drawSprite(glm::vec2 position, glm::vec2 size, float rotate, glm::vec3 color);
+		void drawSprite(Object obj);
 
 		// deconstructor
 		~Graphics();

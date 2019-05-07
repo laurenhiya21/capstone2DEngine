@@ -32,6 +32,9 @@ class Object
 		bool getVisable();
 		unsigned getID();
 		bool getActive();
+		glm::vec2 getPosition();
+		glm::vec2 getSize();
+		float getRotation();
 
 		// setters
 		void setZombie(bool);

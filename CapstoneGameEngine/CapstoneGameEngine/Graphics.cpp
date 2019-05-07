@@ -27,7 +27,6 @@ Graphics::Graphics()
 // run/update the graphics system
 void Graphics::run()
 {
-	
 }
 
 // draw a sprite on the screen (add texture later)

@@ -44,6 +44,21 @@ bool Object::getActive()
 	return active;
 }
 
+glm::vec2 Object::getPosition()
+{
+	return position;
+}
+
+glm::vec2 Object::getSize()
+{
+	return size;
+}
+
+float Object::getRotation()
+{
+	return rotation;
+}
+
 //----------------------------------------------------------------------------------
 // Setters------------------------------------------------------------------------------
 // -----------------------------------------------------------------------------------

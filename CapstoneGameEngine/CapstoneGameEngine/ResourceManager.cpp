@@ -2,6 +2,8 @@
 #include <sstream> // stringstream
 #include <fstream> // ifstream
 #include "ResourceManager.h"
+#include "HeadHancho.h"
+#include "Graphics.h"
 
 // constructor
 // might not need this for later but using to add objects for testing!------------------
@@ -127,6 +129,9 @@ int ResourceManager::findObject(unsigned objID)
 // render all the visable objects
 void ResourceManager::renderVisable()
 {
+	// get the graphics sytstemt to draw the objects
+	Graphics* graphicsPtr = (Graphics*)sysHeadHancho.sysList[sysNames::GRAPHICS];
+
 	// while still objects to check, check if object visable
 	for (int x = 0; x < objectList.size(); ++x)
 	{
@@ -134,6 +139,8 @@ void ResourceManager::renderVisable()
 		if (objectList[x].getVisable() == true)
 		{
 			//render here
+			
+			//graphicsPtr->drawSprite;
 		}
 			
 	}

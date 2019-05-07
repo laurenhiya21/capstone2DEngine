@@ -3,6 +3,12 @@
 #include <fstream> // ifstream
 #include "ResourceManager.h"
 
+// constructor
+// might not need this for later but using to add objects for testing!------------------
+ResourceManager::ResourceManager()
+{
+}
+
 // removes all zombies from object list (private function)
 void ResourceManager::killAllZombies()
 {
@@ -115,6 +121,7 @@ int ResourceManager::findObject(unsigned objID)
 	return -1;
 }
 
+// this sounds more like graphics??----------------------------------------
 // render all the visable objects
 void ResourceManager::renderVisable()
 {

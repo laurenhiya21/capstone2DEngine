@@ -20,7 +20,8 @@ class ResourceManager
 
 	public:
 
-		// constructor?
+		// constructor
+		ResourceManager();
 
 		// add a new object/shader
 		void addObject(Object newObj);

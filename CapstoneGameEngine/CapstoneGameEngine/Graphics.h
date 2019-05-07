@@ -12,9 +12,6 @@
 
 #include "System.h"
 
-int render(); // renders the screen
-void processInput(GLFWwindow *window);
-
 class Graphics: public System
 {
 	private:

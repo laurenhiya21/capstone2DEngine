@@ -64,6 +64,7 @@ Graphics::~Graphics()
 
 //TEMPPppppppppppppppppppppppppp
 
+/*
 // renders the screen
 int render()
 {
@@ -99,3 +100,4 @@ void processInput(GLFWwindow *window)
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 }
+*/

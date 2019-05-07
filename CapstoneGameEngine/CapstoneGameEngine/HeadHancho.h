@@ -21,6 +21,9 @@ namespace sysNames
 // Also takes care of starting and ending the systems
 class HeadHancho: public System
 {
+	private:
+		bool runGame; // signals if game should stop or continue running
+
 	public:
 		Window mainWindow;
 		ResourceManager RManager;
@@ -31,6 +34,9 @@ class HeadHancho: public System
 
 		// continue running the engine's systems
 		void run();
+
+		// mark the game as ready to exit (right no no real checks...)
+		void exit();
 
 		// end the engine's systems
 		~HeadHancho();

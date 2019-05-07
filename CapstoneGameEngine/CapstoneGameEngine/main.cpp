@@ -21,6 +21,3 @@ int main()
 	sysHeadHancho.run();
 	return 0;
 }
-
-
-//MOVE LAYER YOOO----------------------------------------------------

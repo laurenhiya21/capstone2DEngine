@@ -25,7 +25,7 @@ class Graphics: public System
 		void run();
 
 		// draw a sprite on the screen (add texture later)
-		void drawSprite(Object obj);
+		void drawSprite(Object& obj);
 
 		// deconstructor
 		~Graphics();

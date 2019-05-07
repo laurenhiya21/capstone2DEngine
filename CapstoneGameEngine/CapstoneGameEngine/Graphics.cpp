@@ -30,7 +30,7 @@ void Graphics::run()
 }
 
 // draw a sprite on the screen (add texture later)
-void Graphics::drawSprite(glm::vec2 position, glm::vec2 size, float rotate, glm::vec3 color)
+void Graphics::drawSprite(Object& obj)
 {
 	// get the sprite shader & set to use
 	Shader sShader = sysHeadHancho.RManager.getShader("sprite");
@@ -41,13 +41,13 @@ void Graphics::drawSprite(glm::vec2 position, glm::vec2 size, float rotate, glm:
 
 	// transform the sprite appropriatly
 	// translate -> rotate -> scale
-	model = glm::translate(model, glm::vec3(position, 0.0f)); // translate
+	model = glm::translate(model, glm::vec3(obj.getPosition(), 0.0f)); // translate
 
-	model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f)); // move origin of rotation to center
-	model = glm::rotate(model, rotate, glm::vec3(0.0f, 0.0f, 1.0f)); // rotate
-	model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f)); // move origin back
+	model = glm::translate(model, glm::vec3(0.5f * obj.getSize().x, 0.5f * obj.getSize().y, 0.0f)); // move origin of rotation to center
+	model = glm::rotate(model, obj.getRotation(), glm::vec3(0.0f, 0.0f, 1.0f)); // rotate
+	model = glm::translate(model, glm::vec3(-0.5f * obj.getSize().x, -0.5f * obj.getSize().y, 0.0f)); // move origin back
 
-	model = glm::scale(model, glm::vec3(size, 1.0f)); // scale sprite
+	model = glm::scale(model, glm::vec3(obj.getSize(), 1.0f)); // scale sprite
 
 	//--------------------?? not super sure-----------------------------------------------------------
 	sShader.setMatrix4("model", model);

@@ -125,7 +125,6 @@ int ResourceManager::findObject(unsigned objID)
 	return -1;
 }
 
-// this sounds more like graphics??----------------------------------------
 // render all the visable objects
 void ResourceManager::renderVisable()
 {

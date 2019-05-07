@@ -52,6 +52,8 @@ void Graphics::drawSprite(Object& obj)
 	//--------------------?? not super sure-----------------------------------------------------------
 	sShader.setMatrix4("model", model);
 
+	
+
 	// some more stuff in spriterenderer::draw sprite but don't know atm
 
 }

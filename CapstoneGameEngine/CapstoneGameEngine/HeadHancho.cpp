@@ -6,17 +6,6 @@
 #include "Logic.h"
 #include "Graphics.h"
 
-// run the necessary functions to set up openGL
-void HeadHancho::configureOpenGL()
-{
-	// glfw: initialize and configure
-	// ------------------------------
-	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-}
-
 // start the engine's various managers and necessary parts
 HeadHancho::HeadHancho()
 {
@@ -25,11 +14,20 @@ HeadHancho::HeadHancho()
 	// set the game to continue running by default
 	runGame = true;
 
-	// configure openGL's intial settings
-	configureOpenGL();
+	// glfw: configure openGL's intial settings
+	glfwInit();
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// create the main window
 	mainWindow.makeWindow();
+
+	// not sure if I need these opengl configureations or not?--------------------------------------
+	//glViewport(0, 0, mainWindow.getWidth(), mainWindow.getHeight());
+	//glEnable(GL_CULL_FACE);
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// add the different systems to headHancho's list
 	sysList[sysNames::INPUT] = new Input();
@@ -55,9 +53,9 @@ void HeadHancho::run()
 			sysList[x]->run();
 		}
 
-		// might need to do this or somewhere else but not sure----------
+		// might need to do this or somewhere else but not sure------------
 		// but it swaps the front and back buffer to minimize flicker
-		//glfwSwapBuffers(sysHeadHancho.mainWindow.windowPtr);
+		glfwSwapBuffers(sysHeadHancho.mainWindow.windowPtr);
 
 		// need more conditions here?------------------------------------
 		//break;

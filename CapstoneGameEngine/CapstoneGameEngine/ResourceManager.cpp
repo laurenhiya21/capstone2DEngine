@@ -129,18 +129,17 @@ int ResourceManager::findObject(unsigned objID)
 // render all the visable objects
 void ResourceManager::renderVisable()
 {
-	// get the graphics sytstemt to draw the objects
+	// get the graphics sytstem to draw the objects
 	Graphics* graphicsPtr = (Graphics*)sysHeadHancho.sysList[sysNames::GRAPHICS];
 
 	// while still objects to check, check if object visable
 	for (int x = 0; x < objectList.size(); ++x)
 	{
-		// return position of object if found
+		// check if object is visable and actually should be rendereed
 		if (objectList[x].getVisable() == true)
 		{
-			//render here
-			
-			//graphicsPtr->drawSprite;
+			//render the object
+			graphicsPtr->drawSprite(objectList[x]);
 		}
 			
 	}

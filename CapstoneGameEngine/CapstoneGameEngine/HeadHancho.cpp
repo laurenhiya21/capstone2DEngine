@@ -6,6 +6,17 @@
 #include "Logic.h"
 #include "Graphics.h"
 
+// run the necessary functions to set up openGL
+void HeadHancho::configureOpenGL()
+{
+	// glfw: initialize and configure
+	// ------------------------------
+	glfwInit();
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+}
+
 // start the engine's various managers and necessary parts
 HeadHancho::HeadHancho()
 {
@@ -13,6 +24,9 @@ HeadHancho::HeadHancho()
 
 	// set the game to continue running by default
 	runGame = true;
+
+	// configure openGL's intial settings
+	configureOpenGL();
 
 	// create the main window
 	mainWindow.makeWindow();

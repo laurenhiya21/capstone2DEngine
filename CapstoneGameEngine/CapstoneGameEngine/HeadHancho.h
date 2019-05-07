@@ -24,6 +24,8 @@ class HeadHancho: public System
 	private:
 		bool runGame; // signals if game should stop or continue running
 
+		void configureOpenGL(); // run the necessary functions to set up openGL
+
 	public:
 		Window mainWindow;
 		ResourceManager RManager;

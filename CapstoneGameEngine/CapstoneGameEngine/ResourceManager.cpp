@@ -7,6 +7,8 @@
 // might not need this for later but using to add objects for testing!------------------
 ResourceManager::ResourceManager()
 {
+	// just add an object with default values? let's seeee---------------------------
+	addObject(new Object);
 }
 
 // removes all zombies from object list (private function)
@@ -202,4 +204,19 @@ Shader& ResourceManager::getShader(std::string name)
 
 	// couldn't find so return empty shader?------------------------------
 	return Shader();
+}
+
+// deconstructor
+// not sure if need/want yet to delete objects here? unsure--------------------------
+ResourceManager::~ResourceManager()
+{
+	// go through all the objects
+	for (int x = 0; x < objectList.size(); ++x)
+	{
+		// delete the object---------------------------------------- not sure on this way of deletion?
+		delete &objectList[x];
+
+		// set with nullptr
+		objectList[x] = nullptr;
+	}
 }

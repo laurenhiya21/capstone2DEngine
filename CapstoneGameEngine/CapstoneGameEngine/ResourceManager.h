@@ -49,6 +49,6 @@ class ResourceManager
 		// Gets a stored shader
 		Shader& getShader(std::string name);
 
-		// deconstructor?
-			// clear out object and shader list?
+		// deconstructor
+		~ResourceManager();
 };

@@ -1,6 +1,7 @@
 #include <iostream> // cout, endl
 #include <sstream> // stringstream
 #include <fstream> // ifstream
+#include <SOIL.h> // load image files
 #include "ResourceManager.h"
 #include "HeadHancho.h"
 #include "Graphics.h"
@@ -72,6 +73,28 @@ void ResourceManager::loadShaderFromFile(const char* vShaderFile, const char* fS
 
 	// create the shader object from source code
 	shaderList[position].compile(vShaderCode, fShaderCode);
+}
+
+// retrive texture from the file
+void ResourceManager::loadTextureFromFile(const char * file, bool alpha, unsigned position)
+{
+	// if there is transparency, set the correct formats
+	if (alpha)
+	{
+		textureList[position].setInternalFormat(GL_RGBA);
+		textureList[position].setImageFormat(GL_RGBA);
+	}
+
+	// load the image for the texture
+	int width, height;
+	unsigned char* image = SOIL_load_image(file, &width, &height, 0, textureList[position].getImageFormat() == GL_RGBA ? SOIL_LOAD_RGBA : SOIL_LOAD_RGB);
+
+	// generate the texture
+	textureList[position].generate(width, height, image);
+
+	// free image data
+	SOIL_free_image_data(image);
+
 }
 
 // add an object to the manager
@@ -184,7 +207,7 @@ Shader ResourceManager::LoadShader(const char* vShaderFile, const char* fShaderF
 	for (; x < shaderList.size(); ++x)
 	{
 		// check if correct shader
-		if (shaderList[x].getName() == name)
+		if (!shaderList[x].getName().compare(name))
 		{
 			// correct shader was found so stop
 			found = true;
@@ -203,6 +226,35 @@ Shader ResourceManager::LoadShader(const char* vShaderFile, const char* fShaderF
 	loadShaderFromFile(vShaderFile, fShaderFile, x);
 
 	return shaderList[x];
+}
+
+// Loads a texture (and adds to list if not there) from a file
+Texture ResourceManager::loadTexture(const char * file, bool alpha, std::string name)
+{
+	int x = 0;
+	bool found = false; // if texture was foudn in texturelist
+
+	// go through the list and find the texure
+	for (; x < textureList.size(); ++x)
+	{
+		// check if correct texture
+		if (!textureList[x].getName().compare(name))
+		{
+			found = true;
+			break;
+		}
+	}
+
+	// if the texure was not foundin hte list, add it in
+	if (!found)
+	{
+		x = addTexture(Texture(name));
+	}
+
+	// load the texture from the file to the correct texture
+	loadTextureFromFile(file, alpha, x);
+	
+	return textureList[x];
 }
 
 // Gets a stored shader

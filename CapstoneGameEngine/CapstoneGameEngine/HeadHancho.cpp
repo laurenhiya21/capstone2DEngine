@@ -24,10 +24,10 @@ HeadHancho::HeadHancho()
 	mainWindow.makeWindow();
 
 	// not sure if I need these opengl configureations or not?--------------------------------------
-	//glViewport(0, 0, mainWindow.getWidth(), mainWindow.getHeight());
-	//glEnable(GL_CULL_FACE);
-	//glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glViewport(0, 0, mainWindow.getWidth(), mainWindow.getHeight());
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// add the different systems to headHancho's list
 	sysList[sysNames::INPUT] = new Input();

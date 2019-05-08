@@ -34,6 +34,7 @@ class Object
 		bool getActive();
 		glm::vec2 getPosition();
 		glm::vec2 getSize();
+		glm::vec3 getColour();
 		float getRotation();
 
 		// setters

@@ -3,11 +3,40 @@
 #include "HeadHancho.h"
 #include "Shader.h"
 
+// initialize the rendering data that openGL uses
+void Graphics::initRenderData()
+{
+	// Configure VAO/VBO
+	unsigned VBO;
+	float vertices[] = {
+		// Pos      // Tex
+		0.0f, 1.0f, 0.0f, 1.0f,
+		1.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 0.0f,
+
+		0.0f, 1.0f, 0.0f, 1.0f,
+		1.0f, 1.0f, 1.0f, 1.0f,
+		1.0f, 0.0f, 1.0f, 0.0f
+	};
+
+	glGenVertexArrays(1, &vArrayID);
+	glGenBuffers(1, &VBO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glBindVertexArray(vArrayID);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+}
+
 // itilize graphics things
 Graphics::Graphics()
 {
-	// Before we call any more gl functions, we have to init glew
-	glewInit();
+	glewExperimental = GL_TRUE; // make sure to allow all aviable glew functionality
+	glewInit(); // initilize glew before using
 
 	// Check for any errors from init glew
 	glGetError();
@@ -22,11 +51,16 @@ Graphics::Graphics()
 	// ---------------------------?????------------------------------------
 	sysHeadHancho.RManager.getShader("sprite").use().setInteger("image", 0);
 	sysHeadHancho.RManager.getShader("sprite").setMatrix4("projection", projection);
+
+	// initialize the render data used by openGL
+	initRenderData();
 }
 
 // run/update the graphics system
 void Graphics::run()
 {
+	// render all visable objects
+	sysHeadHancho.RManager.renderVisable();
 }
 
 // draw a sprite on the screen (add texture later)
@@ -52,7 +86,12 @@ void Graphics::drawSprite(Object& obj)
 	//--------------------?? not super sure-----------------------------------------------------------
 	sShader.setMatrix4("model", model);
 
-	
+	// Render textured quad-------------------------------------------------
+	sShader.SetVector3f("spriteColor", obj.getColour());
+
+	glBindVertexArray(vArrayID);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glBindVertexArray(0);
 
 	// some more stuff in spriterenderer::draw sprite but don't know atm
 
@@ -63,43 +102,3 @@ Graphics::~Graphics()
 {
 
 }
-
-//TEMPPppppppppppppppppppppppppp
-
-/*
-// renders the screen
-int render()
-{
-	// render loop
-	// -----------
-	while (!glfwWindowShouldClose(sysHeadHancho.mainWindow.windowPtr))
-	{
-		// input
-		// -----
-		processInput(sysHeadHancho.mainWindow.windowPtr);
-
-		// render
-		// ------
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		// render all the visable objects
-		sysHeadHancho.RManager.renderVisable();
-
-		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-		// -------------------------------------------------------------------------------
-		glfwSwapBuffers(sysHeadHancho.mainWindow.windowPtr);
-		glfwPollEvents();
-	}
-
-	return 0;
-}
-
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
-void processInput(GLFWwindow *window)
-{
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
-}
-*/

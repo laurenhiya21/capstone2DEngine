@@ -16,6 +16,9 @@
 class Graphics: public System
 {
 	private:
+		unsigned vArrayID; // ID of OpenGL vertix array object (a simple square that sprites are based off of)
+
+		void initRenderData(); // initialize the rendering data that openGL uses
 
 	public:
 		// constructor

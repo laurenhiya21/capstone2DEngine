@@ -103,14 +103,21 @@ void Shader::checkCompileErrors(int object, std::string type)
 
 // comments are hard???==============--------------------------------------------------------------------
 
-void Shader::setInteger(const char * n, float value, bool useShader)
+void Shader::setInteger(const char* n, float value, bool useShader)
 {
 	if (useShader)
 		use();
 	glUniform1i(glGetUniformLocation(ID, n), value);
 }
 
-void Shader::setMatrix4(const char * n, const glm::mat4 & matrix, bool useShader)
+void Shader::SetVector3f(const char* n, const glm::vec3 & value, bool useShader)
+{
+	if (useShader)
+		use();
+	glUniform3f(glGetUniformLocation(this->ID, n), value.x, value.y, value.z);
+}
+
+void Shader::setMatrix4(const char* n, const glm::mat4 & matrix, bool useShader)
 {
 	if (useShader)
 		use();

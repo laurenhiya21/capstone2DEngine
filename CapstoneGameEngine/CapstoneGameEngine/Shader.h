@@ -37,6 +37,7 @@ class Shader
 
 		//-----------------??
 		void setInteger(const char* n, float value, bool useShader = false);
+		void SetVector3f(const char* n, const glm::vec3 &value, bool useShader = false);
 		void setMatrix4(const char* n, const glm::mat4& matrix, bool useShader = false);
 
 };

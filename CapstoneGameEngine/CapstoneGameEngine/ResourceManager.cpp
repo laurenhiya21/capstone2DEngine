@@ -10,7 +10,7 @@
 ResourceManager::ResourceManager()
 {
 	// just add an object with default values? let's seeee---------------------------
-	addObject(new Object);
+	addObject(Object());
 }
 
 // removes all zombies from object list (private function)
@@ -29,7 +29,7 @@ void ResourceManager::killAllZombies()
 }
 
 // Retrieves the vertex and fragment shader code from file and complie
-Shader ResourceManager::loadShaderFromFile(const char* vShaderFile, const char* fShaderFile)
+void ResourceManager::loadShaderFromFile(const char* vShaderFile, const char* fShaderFile, unsigned position)
 {
 	// the source code from the file for the shaders
 	std::string vertexCode;
@@ -67,10 +67,7 @@ Shader ResourceManager::loadShaderFromFile(const char* vShaderFile, const char* 
 	const char* fShaderCode = fragmentCode.c_str();
 
 	// create the shader object from source code
-	Shader newShader;
-	newShader.compile(vShaderCode, fShaderCode);
-
-	return newShader;
+	shaderList[position].compile(vShaderCode, fShaderCode);
 }
 
 // add an object to the manager
@@ -189,7 +186,7 @@ Shader ResourceManager::LoadShader(const char* vShaderFile, const char* fShaderF
 	}
 
 	// load the shader from the file to the correct spot
-	shaderList[x] = loadShaderFromFile(vShaderFile, fShaderFile);
+	loadShaderFromFile(vShaderFile, fShaderFile, x);
 
 	return shaderList[x];
 }
@@ -201,27 +198,19 @@ Shader& ResourceManager::getShader(std::string name)
 	for (int x = 0; x < shaderList.size(); ++x)
 	{
 		// check if correct shader
-		if (shaderList[x].getName() == name)
+		if (!shaderList[x].getName().compare(name))
 		{
 			return shaderList[x];
 		}
 	}
 
-	// couldn't find so return empty shader?------------------------------
-	return Shader();
+	// couldn't find so just return first shader
+	return shaderList[0];
 }
 
 // deconstructor
 // not sure if need/want yet to delete objects here? unsure--------------------------
 ResourceManager::~ResourceManager()
 {
-	// go through all the objects
-	for (int x = 0; x < objectList.size(); ++x)
-	{
-		// delete the object---------------------------------------- not sure on this way of deletion?
-		delete &objectList[x];
 
-		// set with nullptr
-		objectList[x] = nullptr;
-	}
 }

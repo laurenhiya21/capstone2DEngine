@@ -16,7 +16,7 @@ class ResourceManager
 		void killAllZombies();
 
 		// Retrieves the vertex and fragment shader code from file and complie
-		Shader loadShaderFromFile(const char* vShaderFile, const char* fShaderFile);
+		void loadShaderFromFile(const char* vShaderFile, const char* fShaderFile, unsigned position);
 
 	public:
 

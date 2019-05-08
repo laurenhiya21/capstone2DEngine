@@ -54,6 +54,11 @@ glm::vec2 Object::getSize()
 	return size;
 }
 
+glm::vec3 Object::getColour()
+{
+	return colour;
+}
+
 float Object::getRotation()
 {
 	return rotation;

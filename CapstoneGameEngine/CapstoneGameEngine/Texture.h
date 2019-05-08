@@ -1,5 +1,6 @@
 #pragma once
 #include <glew.h>
+#include <string>
 
 // Stores a texture for an Object and any texture related functions
 class Texture
@@ -14,9 +15,14 @@ class Texture
 		unsigned filterMin; //filter mode if texter pixels < screen pixels
 		unsigned filterMax; //filter mode if texture pixels > screen pixels
 
+		std::string name; //name of the texture
+
 	public:
 
 		// constructor
 		Texture(unsigned w = 0, unsigned h = 0, unsigned iFmt = GL_RGB, unsigned ws = GL_REPEAT, unsigned wt = GL_REPEAT, unsigned filtMin = GL_LINEAR, unsigned filtMax = GL_LINEAR);
+
+		// gettors
+		std::string getName();
 
 };

@@ -14,3 +14,9 @@ Texture::Texture(unsigned w, unsigned h, unsigned iFmt, unsigned ws, unsigned wt
 	// generates the texture on the openGl side and sets the id
 	glGenTextures(1, &ID);
 }
+
+// get the name of the texutre name
+std::string Texture::getName()
+{
+	return name;
+}

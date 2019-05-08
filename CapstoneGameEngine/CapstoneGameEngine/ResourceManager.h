@@ -4,6 +4,7 @@
 
 #include "Object.h"
 #include "Shader.h"
+#include "Texture.h"
 
 // Manages the objects created
 class ResourceManager
@@ -11,6 +12,7 @@ class ResourceManager
 	private:
 		std::vector<Object> objectList; // the list of objects
 		std::vector<Shader> shaderList; // the list of shaders
+		std::vector<Texture> textureList; // the list of textures
 
 		// removes all zombies from object list
 		void killAllZombies();
@@ -23,9 +25,10 @@ class ResourceManager
 		// constructor
 		ResourceManager();
 
-		// add a new object/shader
+		// add a new object/shader/texture
 		void addObject(Object newObj);
-		unsigned addShader(Shader newShad);
+		unsigned addShader(Shader newShad); // returns position of added shader
+		unsigned addTexture(Texture newText); 
 
 		// sets an object to be removed, given its id
 		void removeObject(unsigned);
@@ -46,8 +49,9 @@ class ResourceManager
 		// Loads a shader from a vertex and fragment shader's code, 
 		Shader LoadShader(const char* vShaderFile, const char* fShaderFile, std::string name);
 
-		// Gets a stored shader
+		// Gets a stored shader/texure
 		Shader& getShader(std::string name);
+		Texture& getTexture(std::string name);
 
 		// deconstructor
 		~ResourceManager();

@@ -91,6 +91,16 @@ unsigned ResourceManager::addShader(Shader newShad)
 	return shaderList.size() - 1;
 }
 
+// adds a new texture to the texture list
+unsigned ResourceManager::addTexture(Texture newText)
+{
+	// push new texture to the end of the list
+	textureList.push_back(newText);
+
+	// return the position of the newly added texture (not multi-thread safe!)
+	return textureList.size() - 1;
+}
+
 // makes an object to be removed, given its id
 void ResourceManager::removeObject(unsigned objID)
 {
@@ -210,6 +220,23 @@ Shader& ResourceManager::getShader(std::string name)
 
 	// couldn't find so just return first shader
 	return shaderList[0];
+}
+
+// Get a stored texture from the list
+Texture& ResourceManager::getTexture(std::string name)
+{
+	// find the texture from the texture list
+	for (int x = 0; x < textureList.size(); ++x)
+	{
+		// check if correct shader
+		if (!textureList[x].getName().compare(name))
+		{
+			return textureList[x];
+		}
+	}
+
+	// couldn't find so just return first shader
+	return textureList[0];
 }
 
 // deconstructor

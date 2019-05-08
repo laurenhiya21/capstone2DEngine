@@ -83,6 +83,23 @@ void Object::setActive(bool a)
 	active = a;
 }
 
+void Object::setPosition(float x, float y)
+{
+	position.x = x;
+	position.y = y;
+}
+
+void Object::setSize(float x, float y)
+{
+	size.x = x;
+	size.y = y;
+}
+
+void Object::setRotation(float r)
+{
+	rotation = r;
+}
+
 // deconstructor
 Object::~Object()
 {

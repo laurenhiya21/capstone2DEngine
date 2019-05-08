@@ -41,6 +41,9 @@ class Object
 		void setZombie(bool);
 		void setVisable(bool);
 		void setActive(bool);
+		void setPosition(float x, float y);
+		void setSize(float x, float y);
+		void setRotation(float r);
 
 		// deconstructor
 		~Object();

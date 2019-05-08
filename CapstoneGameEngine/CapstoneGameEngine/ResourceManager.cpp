@@ -10,7 +10,11 @@
 ResourceManager::ResourceManager()
 {
 	// just add an object with default values? let's seeee---------------------------
-	addObject(Object());
+
+	Object test;
+	test.setPosition(10,10);
+	test.setSize(20, 20);
+	addObject(test);
 }
 
 // removes all zombies from object list (private function)

@@ -23,6 +23,10 @@ class ResourceManager
 		// retrive texture from the file
 		void loadTextureFromFile(const char* file, bool alpha, unsigned position);
 
+		// attempts to find the shader, if not, adds to the shaderList
+		// returns the position of the shader
+		unsigned addOrFindShader(std::string name);
+
 	public:
 
 		// constructor
@@ -53,7 +57,7 @@ class ResourceManager
 		Shader LoadShader(const char* vShaderFile, const char* fShaderFile, std::string name);
 
 		// Loads a texture (and adds to list if not there) from a file
-		Texture loadTexture(const char* file, bool alpha, std::string name);
+		Texture loadTexture(const char* file, bool alpha, std::string name, unsigned objID);
 
 		// Gets a stored shader/texure
 		Shader& getShader(std::string name);

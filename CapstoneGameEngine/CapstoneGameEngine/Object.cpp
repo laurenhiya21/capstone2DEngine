@@ -105,6 +105,11 @@ void Object::setRotation(float r)
 	rotation = r;
 }
 
+void Object::setSprite(Texture s)
+{
+	sprite = s;
+}
+
 // deconstructor
 Object::~Object()
 {

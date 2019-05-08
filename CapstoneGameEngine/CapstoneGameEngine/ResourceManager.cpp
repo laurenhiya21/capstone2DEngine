@@ -16,6 +16,8 @@ ResourceManager::ResourceManager()
 	test.setPosition(10,10);
 	test.setSize(20, 20);
 	addObject(test);
+	int pos = findObject(test.getID());
+	loadTexture("../assets/awesomeface.png", GL_TRUE, "face", pos);
 }
 
 // removes all zombies from object list (private function)
@@ -95,6 +97,35 @@ void ResourceManager::loadTextureFromFile(const char * file, bool alpha, unsigne
 	// free image data
 	SOIL_free_image_data(image);
 
+}
+
+// attempts to find the shader, if not, adds to the shaderList
+// returns the position of the shader
+unsigned ResourceManager::addOrFindShader(std::string name)
+{
+	int x = 0;
+	bool found = false; // if the shader was found in the shaderlist
+
+						// find the shader from the shader list
+	for (; x < shaderList.size(); ++x)
+	{
+		// check if correct shader
+		if (!shaderList[x].getName().compare(name))
+		{
+			// correct shader was found so stop
+			found = true;
+			break;
+		}
+	}
+
+	// if the shader was not found in the list, add it to the list
+	if (!found)
+	{
+		// add the shader
+		x = addShader(Shader(name));
+	}
+
+	return x;
 }
 
 // add an object to the manager
@@ -200,27 +231,7 @@ void ResourceManager::updateActiveObjects()
 // if shader isn't already in the shader list, add it to the list
 Shader ResourceManager::LoadShader(const char* vShaderFile, const char* fShaderFile, std::string name)
 {
-	int x = 0;
-	bool found = false; // if the shader was found in the shaderlist
-
-	// find the shader from the shader list
-	for (; x < shaderList.size(); ++x)
-	{
-		// check if correct shader
-		if (!shaderList[x].getName().compare(name))
-		{
-			// correct shader was found so stop
-			found = true;
-			break;
-		}
-	}
-
-	// if the shader was not found in the list, add it to the list
-	if (!found)
-	{
-		// add the shader
-		x = addShader(Shader(name));
-	}
+	int x = addOrFindShader(name);
 
 	// load the shader from the file to the correct spot
 	loadShaderFromFile(vShaderFile, fShaderFile, x);
@@ -229,8 +240,12 @@ Shader ResourceManager::LoadShader(const char* vShaderFile, const char* fShaderF
 }
 
 // Loads a texture (and adds to list if not there) from a file
-Texture ResourceManager::loadTexture(const char * file, bool alpha, std::string name)
+// texture needs to associate with an object so it also needs to find the object
+Texture ResourceManager::loadTexture(const char * file, bool alpha, std::string name, unsigned objID)
 {
+	// find the associated object
+	int objPos = findObject(objID);
+
 	int x = 0;
 	bool found = false; // if texture was foudn in texturelist
 
@@ -250,6 +265,9 @@ Texture ResourceManager::loadTexture(const char * file, bool alpha, std::string 
 	{
 		x = addTexture(Texture(name));
 	}
+
+	// set the object to the associated sprite
+	objectList[objPos].setSprite(textureList[x]);
 
 	// load the texture from the file to the correct texture
 	loadTextureFromFile(file, alpha, x);

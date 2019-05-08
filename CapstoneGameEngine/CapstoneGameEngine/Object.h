@@ -46,6 +46,7 @@ class Object
 		void setPosition(float x, float y);
 		void setSize(float x, float y);
 		void setRotation(float r);
+		void setSprite(Texture s);
 
 		// deconstructor
 		~Object();

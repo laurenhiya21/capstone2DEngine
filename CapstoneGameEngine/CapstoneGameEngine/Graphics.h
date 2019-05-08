@@ -27,7 +27,7 @@ class Graphics: public System
 		// run/update the graphics system
 		void run();
 
-		// draw a sprite on the screen (add texture later)
+		// draw a sprite on the screen with texture
 		void drawSprite(Object& obj);
 
 		// deconstructor

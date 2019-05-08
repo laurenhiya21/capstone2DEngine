@@ -89,6 +89,10 @@ void Graphics::drawSprite(Object& obj)
 	// Render textured quad-------------------------------------------------
 	sShader.SetVector3f("spriteColor", obj.getColour());
 
+	// set the active texture to draw it
+	glActiveTexture(GL_TEXTURE0);
+	obj.getSprite().bind();
+
 	glBindVertexArray(vArrayID);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glBindVertexArray(0);

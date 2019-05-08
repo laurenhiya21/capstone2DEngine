@@ -37,6 +37,12 @@ void Texture::generate(unsigned w, unsigned h, unsigned char * data)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+// binds the texture as the cuurent opengl texture object
+void Texture::bind() const
+{
+	glBindTexture(GL_TEXTURE_2D, ID);
+}
+
 //--------------Gettors---------------------------------------------------------------------------------
 
 std::string Texture::getName()

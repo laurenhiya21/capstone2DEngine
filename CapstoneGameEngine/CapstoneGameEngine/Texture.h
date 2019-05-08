@@ -26,6 +26,9 @@ class Texture
 		// generates texture from image data
 		void generate(unsigned w, unsigned h, unsigned char* data);
 
+		// binds the texture as the cuurent opengl texture object
+		void bind() const;
+
 		// gettors
 		std::string getName();
 		unsigned getImageFormat();

@@ -5,6 +5,7 @@
 //const bool DEFAULT_VISABLE = false;
 
 #include <glm/glm.hpp> // vectors/matricies
+#include "Texture.h" // texture of the object
 
 class Object
 {
@@ -20,7 +21,7 @@ class Object
 		glm::vec2 size; // size of object (w x h)
 		glm::vec3 colour; // colour of object
 		float rotation; // rotation of object (0.0f if none)
-		// texture
+		Texture sprite; // texture/sprite of the object
 		
 	public:
 
@@ -36,6 +37,7 @@ class Object
 		glm::vec2 getSize();
 		glm::vec3 getColour();
 		float getRotation();
+		Texture& getSprite();
 
 		// setters
 		void setZombie(bool);

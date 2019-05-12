@@ -56,9 +56,17 @@ Graphics::Graphics()
 	initRenderData();
 }
 
+bool once = true;
+
 // run/update the graphics system
 void Graphics::run()
 {
+	if (once)
+	{
+		sysHeadHancho.RManager.createTestObj();
+		once = false;
+	}
+
 	// render all visable objects
 	sysHeadHancho.RManager.renderVisable();
 }
@@ -91,7 +99,7 @@ void Graphics::drawSprite(Object& obj)
 
 	// set the active texture to draw it
 	glActiveTexture(GL_TEXTURE0);
-	obj.getSprite().bind();
+	glBindTexture(GL_TEXTURE_2D, obj.getSpriteID());
 
 	glBindVertexArray(vArrayID);
 	glDrawArrays(GL_TRIANGLES, 0, 6);

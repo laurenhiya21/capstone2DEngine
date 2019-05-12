@@ -134,7 +134,6 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\inc\SOIL.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="HeadHancho.h" />
     <ClInclude Include="Input.h" />

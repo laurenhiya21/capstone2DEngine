@@ -64,9 +64,9 @@ float Object::getRotation()
 	return rotation;
 }
 
-Texture& Object::getSprite()
+unsigned Object::getSpriteID()
 {
-	return sprite;
+	return spriteID;
 }
 
 //----------------------------------------------------------------------------------
@@ -105,9 +105,9 @@ void Object::setRotation(float r)
 	rotation = r;
 }
 
-void Object::setSprite(Texture s)
+void Object::setSpriteID(unsigned i)
 {
-	sprite = s;
+	spriteID = i;
 }
 
 // deconstructor

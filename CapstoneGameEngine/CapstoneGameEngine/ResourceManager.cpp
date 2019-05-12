@@ -10,10 +10,13 @@
 // might not need this for later but using to add objects for testing!------------------
 ResourceManager::ResourceManager()
 {
-	// just add an object with default values? let's seeee---------------------------
+}
 
+void ResourceManager::createTestObj()
+{
+	// just add an object with default values? let's seeee---------------------------
 	Object test;
-	test.setPosition(10,10);
+	test.setPosition(10, 10);
 	test.setSize(20, 20);
 	addObject(test);
 	int pos = findObject(test.getID());
@@ -267,7 +270,7 @@ Texture ResourceManager::loadTexture(const char * file, bool alpha, std::string 
 	}
 
 	// set the object to the associated sprite
-	objectList[objPos].setSprite(textureList[x]);
+	objectList[objPos].setSpriteID(textureList[x].getID());
 
 	// load the texture from the file to the correct texture
 	loadTextureFromFile(file, alpha, x);
@@ -315,3 +318,4 @@ ResourceManager::~ResourceManager()
 {
 
 }
+

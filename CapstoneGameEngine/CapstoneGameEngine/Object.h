@@ -21,7 +21,7 @@ class Object
 		glm::vec2 size; // size of object (w x h)
 		glm::vec3 colour; // colour of object
 		float rotation; // rotation of object (0.0f if none)
-		Texture sprite; // texture/sprite of the object
+		unsigned spriteID; // ID of texture/sprite of the object
 		
 	public:
 
@@ -37,7 +37,7 @@ class Object
 		glm::vec2 getSize();
 		glm::vec3 getColour();
 		float getRotation();
-		Texture& getSprite();
+		unsigned getSpriteID();
 
 		// setters
 		void setZombie(bool);
@@ -46,7 +46,7 @@ class Object
 		void setPosition(float x, float y);
 		void setSize(float x, float y);
 		void setRotation(float r);
-		void setSprite(Texture s);
+		void setSpriteID(unsigned i);
 
 		// deconstructor
 		~Object();

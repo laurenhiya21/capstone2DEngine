@@ -65,4 +65,7 @@ class ResourceManager
 
 		// deconstructor
 		~ResourceManager();
+
+		// For testing
+		void createTestObj();
 };

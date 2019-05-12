@@ -45,6 +45,11 @@ void Texture::bind() const
 
 //--------------Gettors---------------------------------------------------------------------------------
 
+unsigned Texture::getID()
+{
+	return ID;
+}
+
 std::string Texture::getName()
 {
 	return name;

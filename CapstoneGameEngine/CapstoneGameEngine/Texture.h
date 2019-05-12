@@ -30,6 +30,7 @@ class Texture
 		void bind() const;
 
 		// gettors
+		unsigned getID();
 		std::string getName();
 		unsigned getImageFormat();
 

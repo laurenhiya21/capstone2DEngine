@@ -2,6 +2,7 @@
 #include <sstream> // stringstream
 #include <fstream> // ifstream
 #include <SOIL.h> // load image files
+#include <Windows.h> // finding files
 #include "ResourceManager.h"
 #include "HeadHancho.h"
 #include "Graphics.h"
@@ -18,9 +19,8 @@ void ResourceManager::createTestObj()
 	Object test;
 	test.setPosition(10, 10);
 	test.setSize(20, 20);
+	test.setSpriteID(1);
 	addObject(test);
-	int pos = findObject(test.getID());
-	loadTexture("../assets/awesomeface.png", GL_TRUE, "face", pos);
 }
 
 // removes all zombies from object list (private function)
@@ -244,11 +244,8 @@ Shader ResourceManager::LoadShader(const char* vShaderFile, const char* fShaderF
 
 // Loads a texture (and adds to list if not there) from a file
 // texture needs to associate with an object so it also needs to find the object
-Texture ResourceManager::loadTexture(const char * file, bool alpha, std::string name, unsigned objID)
+Texture ResourceManager::loadTexture(const char * file, bool alpha, std::string name)
 {
-	// find the associated object
-	int objPos = findObject(objID);
-
 	int x = 0;
 	bool found = false; // if texture was foudn in texturelist
 
@@ -269,13 +266,51 @@ Texture ResourceManager::loadTexture(const char * file, bool alpha, std::string 
 		x = addTexture(Texture(name));
 	}
 
-	// set the object to the associated sprite
-	objectList[objPos].setSpriteID(textureList[x].getID());
-
 	// load the texture from the file to the correct texture
 	loadTextureFromFile(file, alpha, x);
 	
 	return textureList[x];
+}
+
+// loads all textures from the texture folder
+void ResourceManager::loadAllTextures()
+{
+	// to get the name of the sprite files
+	WIN32_FIND_DATA spriteFile;
+
+	// gets the first file from where the textures are stored
+	HANDLE fileHandle = FindFirstFile("../assets/*", &spriteFile);
+
+	std::string fileType(".png");
+
+	// go through the folder until all files have been checked
+	do
+	{
+		// get a string version of the file name
+		std::string spriteFileName(spriteFile.cFileName);
+
+		// if the length of the file type is longer than the whole file name, file not what we want
+		// example: if file was a.h (len 3), it obviously can't be a .png (len 4) file
+		if (spriteFileName.length() < fileType.length())
+			continue;
+
+		// seperate out the name of the file and the file's extension
+		std::string spriteName = spriteFileName.substr(0, spriteFileName.length() - fileType.length());
+		std::string fileExt = spriteFileName.substr(spriteName.length(), fileType.length());
+
+		//if its not a .png file, then it's not a texture
+		if (fileExt.compare(fileType))
+			continue;
+
+		// file is something to be loaded at this point, so put together what we need to load
+		// (path + filename)
+		std::string spriteToLoad = "../assets/" + spriteFileName;
+
+		// load the texture, using the name of the file as the name of the texture
+		loadTexture(spriteToLoad.c_str(), GL_TRUE, spriteName.c_str());
+
+	} while (FindNextFile(fileHandle, &spriteFile));
+
 }
 
 // Gets a stored shader

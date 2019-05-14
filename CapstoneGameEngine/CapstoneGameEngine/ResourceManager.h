@@ -53,11 +53,14 @@ class ResourceManager
 		// including killing zombies
 		void updateActiveObjects();
 
-		// Loads a shader (and add to list if not there) from a vertex and fragment shader's code, 
+		// Loads a shader (and add to list if not there) from a vertex and fragment shader's code, ------------------------------------
 		Shader LoadShader(const char* vShaderFile, const char* fShaderFile, std::string name);
 
 		// Loads a texture (and adds to list if not there) from a file
-		Texture loadTexture(const char* file, bool alpha, std::string name, unsigned objID);
+		Texture loadTexture(const char* file, bool alpha, std::string name);
+
+		// loads all textures from the texture folder
+		void loadAllTextures();
 
 		// Gets a stored shader/texure
 		Shader& getShader(std::string name);

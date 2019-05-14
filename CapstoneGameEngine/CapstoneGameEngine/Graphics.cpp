@@ -54,6 +54,9 @@ Graphics::Graphics()
 
 	// initialize the render data used by openGL
 	initRenderData();
+
+	// load all of the used textures
+	sysHeadHancho.RManager.loadAllTextures();
 }
 
 bool once = true;

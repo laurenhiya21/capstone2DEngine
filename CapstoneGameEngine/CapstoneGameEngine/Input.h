@@ -20,12 +20,22 @@ class Input: public System
 		// and action associated with it
 		class InputKey
 		{
-			KeyState state; // state of the key (up, pressed, down, released)
-			int key; // int that corrosponds to the GLFW keyboard define
-			//action here
+			private:
+				int key; // int that corrosponds to the GLFW keyboard define
+				KeyState state; // state of the key (up, pressed, down, released)
+				//action here
+
+			public:
+
+				// constructor w/ parameter (defaily state == UP for now..)------------------------
+				InputKey(int k);
+
+				// gettors
+				KeyState getState();
+				int getKey();
 		};
 		
-		std::vector<KeyState> keyArray; // list of the keys used
+		std::vector<InputKey> keyArray; // list of the keys used
 
 		// someting for if keys dealt with
 		// mouse postion?
@@ -36,6 +46,11 @@ class Input: public System
 
 		// constructor
 		Input();
+
+		// add a key to the keyArray
+		// returns 0 if successful, -1 if already there
+		// for now just add the key in... maybe be able to add diff default state and action---------------
+		int addKey(int newKey);
 
 		// run/update the input system
 		void run();

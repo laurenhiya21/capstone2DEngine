@@ -4,6 +4,10 @@
 #include <vector> // used to contain keys + their states/actions
 
 // states that any key on the keyboard can be in
+// UP = key not being pressed down
+// PRESSED = change in state from UP to DOWN
+// DOWN = key is being pressed down
+// PRESSED = change in state from DOWN to UP
 enum KeyState
 {
 	UP,
@@ -33,6 +37,9 @@ class Input: public System
 				// gettors
 				KeyState getState();
 				int getKey();
+
+				// settors
+				void setState(KeyState newState);
 		};
 		
 		std::vector<InputKey> keyArray; // list of the keys used

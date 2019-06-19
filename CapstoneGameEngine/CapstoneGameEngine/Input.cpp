@@ -31,6 +31,60 @@ int Input::addKey(int newKey)
 // run/update the input system
 void Input::run()
 {
+	// go through all the possible inputs
+	for (int x = 0; x < keyArray.size(); ++x)
+	{
+		// if the key's state is currently at pressed,
+		// auto move onto down state (so pressed only ~1 frame)
+		if (keyArray[x].getState() == PRESSED)
+		{
+			keyArray[x].setState(DOWN);
+			continue; // move onto next key
+		}
+
+		// if the key's state is currently at released,
+		// auto move onto up state (so pressed only ~1 frame)
+		else if (keyArray[x].getState() == RELEASED)
+		{
+			keyArray[x].setState(UP);
+			continue; // move onto next key
+		}
+
+		// get the state key we're checking is currently in according to openGL
+		int openGLState = glfwGetKey(sysHeadHancho.mainWindow.windowPtr, keyArray[x].getKey());
+
+		// compare what openGL says key is doing with what key state is at
+		// if the key is not being pressed (key currently UP)
+		if (openGLState == GLFW_RELEASE)
+		{
+			// if the state changed from down to up (key was released)
+			// change the key's state to released
+			if (keyArray[x].getState() == DOWN)
+			{
+				keyArray[x].setState(RELEASED);
+
+				continue; // go to next key
+			}
+		}
+
+		// if the key is being pressed (key currently DOWN)
+		else
+		{
+			// if the state changed from up to down (key was pressed)
+			// change the key's state to pressed
+			if (keyArray[x].getState() == UP)
+			{
+				keyArray[x].setState(PRESSED);
+
+				continue; // go to next key
+			}
+		}
+
+		// if the states are the same, no need to do anything
+	}
+
+	//--------------------------------------------------------------------------------
+
 	//std::cout << "Space" << glfwGetKey(sysHeadHancho.mainWindow.windowPtr, GLFW_KEY_SPACE) << std::endl;
 
 	// mostly from old stuff cause simple and it's TEMPPPPPP----------------------------------------------
@@ -86,4 +140,9 @@ KeyState Input::InputKey::getState()
 int Input::InputKey::getKey()
 {
 	return key;
+}
+// settors----
+void Input::InputKey::setState(KeyState newState)
+{
+	state = newState;
 }

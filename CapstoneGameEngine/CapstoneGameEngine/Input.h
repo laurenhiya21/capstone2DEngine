@@ -2,6 +2,7 @@
 
 #include "HeadHancho.h"
 #include <vector> // used to contain keys + their states/actions
+#include "Logic.h"
 
 // states that any key on the keyboard can be in
 // UP = key not being pressed down
@@ -27,7 +28,7 @@ class Input: public System
 			private:
 				int key; // int that corrosponds to the GLFW keyboard define
 				KeyState state; // state of the key (up, pressed, down, released)
-				//action here
+				int keyAction; // the action the key corrosponds to
 
 			public:
 
@@ -35,14 +36,16 @@ class Input: public System
 				InputKey(int k);
 
 				// gettors
-				KeyState getState();
 				int getKey();
+				int getState();
+				int getAction();
 
 				// settors
 				void setState(KeyState newState);
+				void setAction(int newAction);
 		};
 		
-		std::vector<InputKey> keyArray; // list of the keys used
+		std::vector<InputKey> keyList; // list of the keys used
 
 		// someting for if keys dealt with
 		// mouse postion?
@@ -61,6 +64,9 @@ class Input: public System
 
 		// run/update the input system
 		void run();
+
+		int getState(int stateToGet);
+		int getAction(int actionToGet);
 
 		// deconstrutor
 		~Input();

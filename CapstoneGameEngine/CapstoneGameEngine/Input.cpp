@@ -12,18 +12,18 @@ Input::Input()
 int Input::addKey(int newKey)
 {
 	// attempt to find the given newKey
-	for (int x = 0; x < keyArray.size; ++x)
+	for (int x = 0; x < keyList.size; ++x)
 	{
 		// if the newKey is already in the container, stop
 		// don't add it twice
-		if (newKey == keyArray[x].getKey())
+		if (newKey == keyList[x].getKey())
 		{
 			return -1;
 		}
 	}
 
 	// if the key was not found in the container, add it
-	keyArray.push_back(InputKey(newKey));
+	keyList.push_back(InputKey(newKey));
 
 	return 0;
 }
@@ -32,26 +32,26 @@ int Input::addKey(int newKey)
 void Input::run()
 {
 	// go through all the possible inputs
-	for (int x = 0; x < keyArray.size(); ++x)
+	for (int x = 0; x < keyList.size(); ++x)
 	{
 		// if the key's state is currently at pressed,
 		// auto move onto down state (so pressed only ~1 frame)
-		if (keyArray[x].getState() == PRESSED)
+		if (getState(x) == PRESSED)
 		{
-			keyArray[x].setState(DOWN);
+			keyList[x].setState(DOWN);
 			continue; // move onto next key
 		}
 
 		// if the key's state is currently at released,
 		// auto move onto up state (so pressed only ~1 frame)
-		else if (keyArray[x].getState() == RELEASED)
+		else if (getState(x) == RELEASED)
 		{
-			keyArray[x].setState(UP);
+			keyList[x].setState(UP);
 			continue; // move onto next key
 		}
 
 		// get the state key we're checking is currently in according to openGL
-		int openGLState = glfwGetKey(sysHeadHancho.mainWindow.windowPtr, keyArray[x].getKey());
+		int openGLState = glfwGetKey(sysHeadHancho.mainWindow.windowPtr, keyList[x].getKey());
 
 		// compare what openGL says key is doing with what key state is at
 		// if the key is not being pressed (key currently UP)
@@ -59,9 +59,9 @@ void Input::run()
 		{
 			// if the state changed from down to up (key was released)
 			// change the key's state to released
-			if (keyArray[x].getState() == DOWN)
+			if (getState(x) == DOWN)
 			{
-				keyArray[x].setState(RELEASED);
+				keyList[x].setState(RELEASED);
 
 				continue; // go to next key
 			}
@@ -72,9 +72,9 @@ void Input::run()
 		{
 			// if the state changed from up to down (key was pressed)
 			// change the key's state to pressed
-			if (keyArray[x].getState() == UP)
+			if (getState(x) == UP)
 			{
-				keyArray[x].setState(PRESSED);
+				keyList[x].setState(PRESSED);
 
 				continue; // go to next key
 			}
@@ -82,37 +82,30 @@ void Input::run()
 
 		// if the states are the same, no need to do anything
 	}
+}
 
-	//--------------------------------------------------------------------------------
-
-	//std::cout << "Space" << glfwGetKey(sysHeadHancho.mainWindow.windowPtr, GLFW_KEY_SPACE) << std::endl;
-
-	// mostly from old stuff cause simple and it's TEMPPPPPP----------------------------------------------
-	if (glfwGetKey(sysHeadHancho.mainWindow.windowPtr, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+// get the state of given key
+// return -1 if invalid key passed
+int Input::getState(int stateToGet)
+{
+	// check if it's a valid key to get the state of
+	if (stateToGet < 0 || stateToGet >= keyList.size())
 	{
-		sysHeadHancho.exit();
-		//glfwSetWindowShouldClose(sysHeadHancho.mainWindow.windowPtr, GL_TRUE);
+		return -1;
 	}
 
-	if (glfwGetKey(sysHeadHancho.mainWindow.windowPtr, GLFW_KEY_W) == GLFW_PRESS)
+	return keyList[stateToGet].getState();
+}
+
+int Input::getAction(int actionToGet)
+{
+	// check if it's a valid key to get the state of
+	if (actionToGet < 0 || actionToGet >= keyList.size())
 	{
-		std::cout << "W Pressed!" << std::endl;
+		return -1;
 	}
 
-	if (glfwGetKey(sysHeadHancho.mainWindow.windowPtr, GLFW_KEY_S) == GLFW_PRESS)
-	{
-		std::cout << "S Pressed!" << std::endl;
-	}
-
-	if (glfwGetKey(sysHeadHancho.mainWindow.windowPtr, GLFW_KEY_A) == GLFW_PRESS)
-	{
-		std::cout << "A Pressed!" << std::endl;
-	}
-
-	if (glfwGetKey(sysHeadHancho.mainWindow.windowPtr, GLFW_KEY_D) == GLFW_PRESS)
-	{
-		std::cout << "D Pressed!" << std::endl;
-	}
+	return keyList[actionToGet].getAction();
 }
 
 // deconstructor
@@ -130,19 +123,26 @@ Input::InputKey::InputKey(int k = -1)
 	state = UP;
 }
 
-// get the keystate of the key
-KeyState Input::InputKey::getState()
-{
-	return state;
-}
-
 // get what the key is
 int Input::InputKey::getKey()
 {
 	return key;
 }
+int Input::InputKey::getState()
+{
+	return state;
+}
+int Input::InputKey::getAction()
+{
+	return keyAction;
+}
 // settors----
 void Input::InputKey::setState(KeyState newState)
 {
 	state = newState;
+}
+
+void Input::InputKey::setAction(int newAction)
+{
+	keyAction = newAction;
 }

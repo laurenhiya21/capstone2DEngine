@@ -9,22 +9,22 @@ Logic::Logic()
 	// all of them are going to be PRESSED for now but could be DOWN or something else later
 
 	// set trigger for ESCAPE
-	triggers[Action::ESCAPE] == (int)KeyState::PRESSED;
+	triggers[Action::ESCAPE] = KeyState::PRESSED;
 
 	// set trigger for LEFT
-	triggers[Action::LEFT] == (int)KeyState::PRESSED;
+	triggers[Action::LEFT] = KeyState::PRESSED;
 
 	// set trigger for RIGHT
-	triggers[Action::RIGHT] == (int)KeyState::PRESSED;
+	triggers[Action::RIGHT] = KeyState::PRESSED;
 
 	// set trigger for UP
-	triggers[Action::UP] == (int)KeyState::PRESSED;
+	triggers[Action::UP] = KeyState::PRESSED;
 
 	// set trigger for DOWN
-	triggers[Action::DOWN] == (int)KeyState::PRESSED;
+	triggers[Action::DOWN] = KeyState::PRESSED;
 
 	// set trigger for ACCEPT
-	triggers[Action::ACCEPT] == (int)KeyState::PRESSED;
+	triggers[Action::ACCEPT] = KeyState::PRESSED;
 
 	// don't set a trigger for total cause it should be referenced except for loops
 }

@@ -9,13 +9,16 @@
 // PRESSED = change in state from UP to DOWN
 // DOWN = key is being pressed down
 // PRESSED = change in state from DOWN to UP
-enum KeyState
+namespace KeyState
 {
-	UP,
-	PRESSED,
-	DOWN,
-	RELEASED
-};
+	enum
+	{
+		UP,
+		PRESSED,
+		DOWN,
+		RELEASED
+	};
+}
 
 // Handles all the inputs to the game
 class Input: public System
@@ -27,13 +30,15 @@ class Input: public System
 		{
 			private:
 				int key; // int that corrosponds to the GLFW keyboard define
-				KeyState state; // state of the key (up, pressed, down, released)
+				int state; // state of the key (up, pressed, down, released)
 				int keyAction; // the action the key corrosponds to
 
 			public:
 
-				// constructor w/ parameter (defaily state == UP for now..)------------------------
-				InputKey(int k);
+				// constructor w/ default parameters
+				// key default -1, state default UP, keyaction default -1
+				// should not be using defaults for very long and mostly just to make non-garbage
+				InputKey(int k, int s, int a);
 
 				// gettors
 				int getKey();
@@ -41,7 +46,7 @@ class Input: public System
 				int getAction();
 
 				// settors
-				void setState(KeyState newState);
+				void setState(int newState);
 				void setAction(int newAction);
 		};
 		
@@ -55,6 +60,8 @@ class Input: public System
 	public:
 
 		// constructor
+		// adds all the keys used and associates them with their actions
+		// needs to be manually done (at least for now?) for each since is specfic to each action
 		Input();
 
 		// add a key to the keyArray

@@ -4,6 +4,23 @@
 // constructor
 Input::Input()
 {
+	// add key for ESCAPE
+	keyList.push_back(InputKey(GLFW_KEY_ESCAPE, KeyState::UP, Action::ESCAPE));
+
+	// add key for LEFT (A in WASAD)
+	keyList.push_back(InputKey(GLFW_KEY_A, KeyState::UP, Action::LEFT));
+
+	// add key for RIGHT (D in WASAD)
+	keyList.push_back(InputKey(GLFW_KEY_D, KeyState::UP, Action::RIGHT));
+
+	// add key for UP in (W in WASAD)
+	keyList.push_back(InputKey(GLFW_KEY_W, KeyState::UP, Action::UP));
+
+	// add key for DOWN in (S in WASAD)
+	keyList.push_back(InputKey(GLFW_KEY_S, KeyState::UP, Action::DOWN));
+
+	// add key for ACCEPT (Enter for now?)
+	keyList.push_back(InputKey(GLFW_KEY_ENTER, KeyState::UP, Action::ACCEPT));
 }
 
 // add a key to the keyArray
@@ -12,7 +29,7 @@ Input::Input()
 int Input::addKey(int newKey)
 {
 	// attempt to find the given newKey
-	for (int x = 0; x < keyList.size; ++x)
+	for (int x = 0; x < keyList.size(); ++x)
 	{
 		// if the newKey is already in the container, stop
 		// don't add it twice
@@ -23,7 +40,8 @@ int Input::addKey(int newKey)
 	}
 
 	// if the key was not found in the container, add it
-	keyList.push_back(InputKey(newKey));
+	// temp stuff here??------------------------------------------
+	keyList.push_back(InputKey(newKey, KeyState::UP, -1));
 
 	return 0;
 }
@@ -36,17 +54,17 @@ void Input::run()
 	{
 		// if the key's state is currently at pressed,
 		// auto move onto down state (so pressed only ~1 frame)
-		if (getState(x) == PRESSED)
+		if (getState(x) == KeyState::PRESSED)
 		{
-			keyList[x].setState(DOWN);
+			keyList[x].setState(KeyState::DOWN);
 			continue; // move onto next key
 		}
 
 		// if the key's state is currently at released,
 		// auto move onto up state (so pressed only ~1 frame)
-		else if (getState(x) == RELEASED)
+		else if (getState(x) == KeyState::RELEASED)
 		{
-			keyList[x].setState(UP);
+			keyList[x].setState(KeyState::UP);
 			continue; // move onto next key
 		}
 
@@ -59,9 +77,9 @@ void Input::run()
 		{
 			// if the state changed from down to up (key was released)
 			// change the key's state to released
-			if (getState(x) == DOWN)
+			if (getState(x) == KeyState::DOWN)
 			{
-				keyList[x].setState(RELEASED);
+				keyList[x].setState(KeyState::RELEASED);
 
 				continue; // go to next key
 			}
@@ -72,15 +90,23 @@ void Input::run()
 		{
 			// if the state changed from up to down (key was pressed)
 			// change the key's state to pressed
-			if (getState(x) == UP)
+			if (getState(x) == KeyState::UP)
 			{
-				keyList[x].setState(PRESSED);
+				keyList[x].setState(KeyState::PRESSED);
 
 				continue; // go to next key
 			}
 		}
 
 		// if the states are the same, no need to do anything
+	}
+
+	// TEMP UNTIL GET ABOVE TO WORK YO----------------------------------------------------------
+	// want to actually be able to exit the darn thing ha
+	if (glfwGetKey(sysHeadHancho.mainWindow.windowPtr, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	{
+		sysHeadHancho.exit();
+		//glfwSetWindowShouldClose(sysHeadHancho.mainWindow.windowPtr, GL_TRUE);
 	}
 }
 
@@ -116,11 +142,12 @@ Input::~Input()
 
 //---------------------InputKey functions--------------------------------------------------
 
-// constructor w/ parameter
-Input::InputKey::InputKey(int k = -1)
+// constructor w/ parameters
+Input::InputKey::InputKey(int k = -1, int s = KeyState::UP, int a = -1)
 {
 	key = k;
-	state = UP;
+	state = s;
+	keyAction = a;
 }
 
 // get what the key is
@@ -137,7 +164,7 @@ int Input::InputKey::getAction()
 	return keyAction;
 }
 // settors----
-void Input::InputKey::setState(KeyState newState)
+void Input::InputKey::setState(int newState)
 {
 	state = newState;
 }

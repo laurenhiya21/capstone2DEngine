@@ -8,12 +8,12 @@ namespace Action
 { 
 	enum
 	{
+		ESCAPE,
 		LEFT,
 		RIGHT,
 		UP,
 		DOWN,
 		ACCEPT,
-		ESCAPE,
 		TOTAL
 	};
 }
@@ -26,6 +26,11 @@ class Logic: public System
 		int triggers[Action::TOTAL]; // the triggers accociated with each action
 
 	public:
+
+		// constructor
+		// just needs to set the triggers
+		// don't think triggers need to be set during runtime so just set at beginning for now?
+		Logic();
 
 		// run/update the logic system
 		void run();

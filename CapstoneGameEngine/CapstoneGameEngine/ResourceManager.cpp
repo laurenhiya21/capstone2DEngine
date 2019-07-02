@@ -13,16 +13,6 @@ ResourceManager::ResourceManager()
 {
 }
 
-void ResourceManager::createTestObj()
-{
-	// just add an object with default values? let's seeee---------------------------
-	Object test;
-	test.setPosition(10, 10);
-	test.setSize(20, 20);
-	test.setSpriteID(1);
-	addObject(test);
-}
-
 // removes all zombies from object list (private function)
 void ResourceManager::killAllZombies()
 {

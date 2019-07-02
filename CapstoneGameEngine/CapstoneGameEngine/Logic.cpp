@@ -52,8 +52,12 @@ void Logic::run()
 // create the player object
 void Logic::createPlayer()
 {
-	sysHeadHancho.RManager.createTestObj();
-
+	// just add an object with default values? let's seeee---------------------------
+	Object test;
+	test.setPosition(10, 10);
+	test.setSize(20, 20);
+	test.setSpriteID(1);
+	sysHeadHancho.RManager.addObject(test);
 }
 
 // get trigger for a specified action

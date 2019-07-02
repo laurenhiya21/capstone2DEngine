@@ -43,8 +43,8 @@ class ResourceManager
 		// get number of objects
 		unsigned getNumObjects(void);
 
-		// find object
-		int findObject(unsigned);
+		// find object given it's ID, returns Object*
+		Object* findObject(unsigned);
 
 		// render all the visable objects
 		void renderVisable();

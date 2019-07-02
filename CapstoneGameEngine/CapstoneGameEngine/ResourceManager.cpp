@@ -152,14 +152,14 @@ unsigned ResourceManager::addTexture(Texture newText)
 void ResourceManager::removeObject(unsigned objID)
 {
 	// find the object in the list (spot in vector)
-	int x = findObject(objID);
+	Object* temp = findObject(objID);
 
 	// if object was not found, don't do anything else
-	if (x == -1)
+	if (temp == nullptr)
 		return;
 
 	// set the object to be removed
-	objectList[x].setZombie(true);
+	temp->setZombie(true);
 }
 
 // get number of objects
@@ -169,18 +169,18 @@ unsigned ResourceManager::getNumObjects(void)
 }
 
 // find an object based on it's id
-int ResourceManager::findObject(unsigned objID)
+Object* ResourceManager::findObject(unsigned objID)
 {
 	// while still objects to check, check if found object
 	for (int x = 0; x < objectList.size(); ++x)
 	{
 		// return position of object if found
 		if (objectList[x].getID() == objID)
-			return x;
+			return &objectList[x];
 	}
 
 	// object was not found
-	return -1;
+	return nullptr;
 }
 
 // render all the visable objects

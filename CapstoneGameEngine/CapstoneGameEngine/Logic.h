@@ -35,6 +35,9 @@ class Logic: public System
 		// run/update the logic system
 		void run();
 
+		// create the player object
+		void createPlayer();
+
 		// get trigger for a specified action
 		int getTrigger(int triggerToGet);
 

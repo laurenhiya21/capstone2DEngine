@@ -1,5 +1,6 @@
 #include "Logic.h"
-#include "Input.h"
+#include "Input.h" // interact with keys that Actions are mapped to
+#include "ResourceManager.h" // interact with the Objects (change posisiton, destroy, etc).
 
 // constructor
 // just needs to set the triggers
@@ -29,14 +30,30 @@ Logic::Logic()
 	// don't set a trigger for total cause it should be referenced except for loops
 }
 
+bool once = true;
+
 // run/update the logic system
 void Logic::run()
 {
+	// only create the player once at start
+	if (once)
+	{
+		createPlayer();
+		once = false;
+	}
+
 	// update the active objects (and kill zombies)
 	sysHeadHancho.RManager.updateActiveObjects();
 
 	// check if any actions need to be run and run if necessary
 	checkActions();
+}
+
+// create the player object
+void Logic::createPlayer()
+{
+	sysHeadHancho.RManager.createTestObj();
+
 }
 
 // get trigger for a specified action

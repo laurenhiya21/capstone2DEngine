@@ -59,17 +59,9 @@ Graphics::Graphics()
 	sysHeadHancho.RManager.loadAllTextures();
 }
 
-bool once = true;
-
 // run/update the graphics system
 void Graphics::run()
 {
-	if (once)
-	{
-		sysHeadHancho.RManager.createTestObj();
-		once = false;
-	}
-
 	// render all visable objects
 	sysHeadHancho.RManager.renderVisable();
 }

@@ -20,6 +20,13 @@ Object::Object(bool z, bool v, bool a, glm::vec2 pos, glm::vec2 s, glm::vec3 c, 
 	rotation = r;
 }
 
+// update position by relative amount (instead of exact coordinate)
+void Object::updatePosition(int x, int y)
+{
+	position.x += x;
+	position.y += y;
+}
+
 //----------------------------------------------------------------------------------
 // Getters------------------------------------------------------------------------------
 // -----------------------------------------------------------------------------------

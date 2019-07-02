@@ -57,7 +57,7 @@ void Logic::createPlayer()
 	test.setPosition(10, 10);
 	test.setSize(20, 20);
 	test.setSpriteID(1);
-	sysHeadHancho.RManager.addObject(test);
+	sysHeadHancho.RManager.addObject(test); // this sets ID to 0 for some reason/???-------------------
 }
 
 // get trigger for a specified action
@@ -98,23 +98,41 @@ void Logic::checkActions()
 // run actions that have met their trigger
 void Logic::runAction(int actionToRun)
 {
+	Object* tempPlayer = sysHeadHancho.RManager.findObject(0); // kind of temp yo-----------------------------------------
+
 	// run the action
 	switch (actionToRun)
 	{
 		case Action::LEFT:
 			std::cout << "Go left!" << std::endl;
+
+			// temp moving
+			// get character
+			tempPlayer->updatePosition(-15, 0);
 			break;
 
 		case Action::RIGHT:
 			std::cout << "Go right!" << std::endl;
+
+			// temp moving
+			// get character
+			tempPlayer->updatePosition(15, 0);
 			break;
 
 		case Action::UP:
 			std::cout << "Go up!" << std::endl;
+
+			// temp moving
+			// get character
+			tempPlayer->updatePosition(0, -15);
 			break;
 
 		case Action::DOWN:
 			std::cout << "Go down!" << std::endl;
+
+			// temp moving
+			// get character
+			tempPlayer->updatePosition(0, 15);
 			break;
 
 		case Action::ACCEPT:

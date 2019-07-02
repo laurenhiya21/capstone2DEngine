@@ -63,6 +63,8 @@ Graphics::Graphics()
 void Graphics::run()
 {
 	// render all visable objects
+	// glClearColor(0.0f, 0.0f, 0.0f, 1.0f); //not sure if need this?
+	glClear(GL_COLOR_BUFFER_BIT); // clear old screen first
 	sysHeadHancho.RManager.renderVisable();
 }
 

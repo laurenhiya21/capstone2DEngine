@@ -28,6 +28,9 @@ class Object
 		// default constructor
 		Object(bool z = false, bool v = true, bool a = true, glm::vec2 pos = glm::vec2(0,0), glm::vec2 s = glm::vec2(1, 1), glm::vec3 c = glm::vec3(1.0f), float r = 0.0f);
 
+		// update position by relative amount (instead of exact coordinate)
+		void updatePosition(int x, int y);
+
 		// getters
 		bool getZombie();
 		bool getVisable();

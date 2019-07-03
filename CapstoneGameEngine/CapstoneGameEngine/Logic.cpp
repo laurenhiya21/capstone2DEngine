@@ -13,16 +13,16 @@ Logic::Logic()
 	triggers[Action::ESCAPE] = KeyState::PRESSED;
 
 	// set trigger for LEFT
-	triggers[Action::LEFT] = KeyState::PRESSED;
+	triggers[Action::LEFT] = KeyState::DOWN;
 
 	// set trigger for RIGHT
-	triggers[Action::RIGHT] = KeyState::PRESSED;
+	triggers[Action::RIGHT] = KeyState::DOWN;
 
 	// set trigger for UP
-	triggers[Action::UP] = KeyState::PRESSED;
+	triggers[Action::UP] = KeyState::DOWN;
 
 	// set trigger for DOWN
-	triggers[Action::DOWN] = KeyState::PRESSED;
+	triggers[Action::DOWN] = KeyState::DOWN;
 
 	// set trigger for ACCEPT
 	triggers[Action::ACCEPT] = KeyState::PRESSED;
@@ -42,6 +42,9 @@ void Logic::run()
 		once = false;
 	}
 
+	// check for any collisions betwen all Objects
+	doCollisions();
+
 	// update the active objects (and kill zombies)
 	sysHeadHancho.RManager.updateActiveObjects();
 
@@ -58,6 +61,63 @@ void Logic::createPlayer()
 	test.setSize(20, 20);
 	test.setSpriteID(1);
 	sysHeadHancho.RManager.addObject(test); // this sets ID to 0 for some reason/???-------------------
+
+	// another test Obj?
+	Object test2;
+	test2.setPosition(100, 50);
+	test2.setSize(30, 30);
+	test2.setSpriteID(2);
+	sysHeadHancho.RManager.addObject(test2);
+}
+
+// check for any collisions betwen all Objects
+void Logic::doCollisions()
+{
+	// total number of objects to check
+	int totalNumObjects = sysHeadHancho.RManager.getNumObjects();
+
+	// check all objects with the other objects (but try and minimize double checking)
+	for (int x = 0; x < totalNumObjects; ++x)
+	{
+		// get first object to check
+		Object* obj1 = sysHeadHancho.RManager.findObjectByPos(x);
+
+		for (int y = x; y < totalNumObjects; ++y) // setting y = x to minimizie duplication in checks
+		{
+			// get object to check against second
+			Object* obj2 = sysHeadHancho.RManager.findObjectByPos(y);
+
+			// check the collision between the two objects
+			bool isCollision = checkCollision(*obj1, *obj2);
+
+			// do a thing if there was collision between the objects--------------------------------------
+			if (isCollision)
+			{
+				std::cout << "Collision between Obj ID " << obj1->getID() << " and Obj ID " << obj2->getID() << std::endl;
+			}
+		}
+	}
+
+}
+
+// check collision between 2 Objects, return true if there was collision, false if none
+// Rectangle collision AABB - AABB
+bool Logic::checkCollision(Object& obj1, Object& obj2)
+{
+	// make sure that objects are not the same
+	if (obj1.getID() == obj2.getID())
+	{
+		return false;
+	}
+
+	// Is there collision on the x-axis?
+	bool collisionX = obj1.getPosition().x + obj1.getSize().x >= obj2.getPosition().x && obj2.getPosition().x + obj2.getSize().x >= obj1.getPosition().x;
+
+	// Is there collision on the y-axis?
+	bool collisionY = obj1.getPosition().y + obj1.getSize().y >= obj2.getPosition().y && obj2.getPosition().y + obj2.getSize().y >= obj1.getPosition().y;
+
+	// Collision only if on both axes
+	return collisionX && collisionY;
 }
 
 // get trigger for a specified action

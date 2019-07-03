@@ -183,6 +183,19 @@ Object* ResourceManager::findObject(unsigned objID)
 	return nullptr;
 }
 
+// find object given its position in vector, return Object*
+Object* ResourceManager::findObjectByPos(unsigned pos)
+{
+	// make sure given position is in bounds
+	if (pos >= objectList.size())
+	{
+		return nullptr;
+	}
+
+	// if spot is valid, return the Object*
+	return &objectList[pos];
+}
+
 // render all the visable objects
 void ResourceManager::renderVisable()
 {

@@ -38,6 +38,12 @@ class Logic: public System
 		// create the player object
 		void createPlayer();
 
+		// check for any collisions betwen all Objects
+		void doCollisions();
+
+		// check collision between 2 Objects, return true if there was collision, false if none
+		bool checkCollision(Object&, Object&);
+
 		// get trigger for a specified action
 		int getTrigger(int triggerToGet);
 

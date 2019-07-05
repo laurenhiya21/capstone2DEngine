@@ -66,16 +66,46 @@ void Logic::createPlayer()
 	//***********************************************
 	sysHeadHancho.RManager.addObject(test);
 
-	// another test Obj?
+	// 5 otters for testing
 	Object otter1;
 	otter1.setPosition(100, 50);
 	otter1.setSize(30, 30);
 	otter1.setSpriteID(2);
-	//***********************************************
 	otter1.setType(ObjectType::OTTER);
 	otter1.setCollisionFunction(otterCollision);
-	//***********************************************
 	sysHeadHancho.RManager.addObject(otter1);
+
+	Object otter2;
+	otter2.setPosition(500, 200);
+	otter2.setSize(30, 30);
+	otter2.setSpriteID(2);
+	otter2.setType(ObjectType::OTTER);
+	otter2.setCollisionFunction(otterCollision);
+	sysHeadHancho.RManager.addObject(otter2);
+
+	Object otter3;
+	otter3.setPosition(300, 250);
+	otter3.setSize(30, 30);
+	otter3.setSpriteID(2);
+	otter3.setType(ObjectType::OTTER);
+	otter3.setCollisionFunction(otterCollision);
+	sysHeadHancho.RManager.addObject(otter3);
+
+	Object otter4;
+	otter4.setPosition(300, 50);
+	otter4.setSize(30, 30);
+	otter4.setSpriteID(2);
+	otter4.setType(ObjectType::OTTER);
+	otter4.setCollisionFunction(otterCollision);
+	sysHeadHancho.RManager.addObject(otter4);
+
+	Object otter5;
+	otter5.setPosition(700, 550);
+	otter5.setSize(30, 30);
+	otter5.setSpriteID(2);
+	otter5.setType(ObjectType::OTTER);
+	otter5.setCollisionFunction(otterCollision);
+	sysHeadHancho.RManager.addObject(otter5);
 }
 
 // check for any collisions betwen all Objects
@@ -113,7 +143,7 @@ void Logic::doCollisions()
 
 				if (obj2->getCollisionPtr() != nullptr)
 				{
-					obj2Collision(obj1, obj2);
+					obj2Collision(obj2, obj1);
 				}
 			}
 		}

@@ -1,6 +1,7 @@
 #include "Logic.h"
 #include "Input.h" // interact with keys that Actions are mapped to
 #include "ResourceManager.h" // interact with the Objects (change posisiton, destroy, etc).
+#include "TestGame.h" // for assigning collision functions and update functions
 
 // constructor
 // just needs to set the triggers
@@ -72,6 +73,7 @@ void Logic::createPlayer()
 	otter1.setSpriteID(2);
 	//***********************************************
 	otter1.setType(ObjectType::OTTER);
+	otter1.setCollisionFunction(otterCollision);
 	//***********************************************
 	sysHeadHancho.RManager.addObject(otter1);
 }
@@ -99,7 +101,20 @@ void Logic::doCollisions()
 			// do a thing if there was collision between the objects--------------------------------------
 			if (isCollision)
 			{
-				std::cout << "Collision between Obj ID " << obj1->getID() << " and Obj ID " << obj2->getID() << std::endl;
+				// get the collision functions for each of the two objects
+				collisionFunction obj1Collision = obj1->getCollisionPtr();
+				collisionFunction obj2Collision = obj2->getCollisionPtr();
+
+				// run each of the two function's collision functions if they exist
+				if (obj1Collision != nullptr)
+				{
+					obj1Collision(obj1, obj2);
+				}
+
+				if (obj2->getCollisionPtr() != nullptr)
+				{
+					obj2Collision(obj1, obj2);
+				}
 			}
 		}
 	}

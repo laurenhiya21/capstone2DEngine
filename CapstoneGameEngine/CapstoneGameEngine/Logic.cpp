@@ -60,14 +60,20 @@ void Logic::createPlayer()
 	test.setPosition(10, 10);
 	test.setSize(20, 20);
 	test.setSpriteID(1);
-	sysHeadHancho.RManager.addObject(test); // this sets ID to 0 for some reason/???-------------------
+	//***********************************************
+	test.setType(ObjectType::PLAYER);
+	//***********************************************
+	sysHeadHancho.RManager.addObject(test);
 
 	// another test Obj?
-	Object test2;
-	test2.setPosition(100, 50);
-	test2.setSize(30, 30);
-	test2.setSpriteID(2);
-	sysHeadHancho.RManager.addObject(test2);
+	Object otter1;
+	otter1.setPosition(100, 50);
+	otter1.setSize(30, 30);
+	otter1.setSpriteID(2);
+	//***********************************************
+	otter1.setType(ObjectType::OTTER);
+	//***********************************************
+	sysHeadHancho.RManager.addObject(otter1);
 }
 
 // check for any collisions betwen all Objects
@@ -88,7 +94,7 @@ void Logic::doCollisions()
 			Object* obj2 = sysHeadHancho.RManager.findObjectByPos(y);
 
 			// check the collision between the two objects
-			bool isCollision = checkCollision(*obj1, *obj2);
+			bool isCollision = checkCollision(obj1, obj2);
 
 			// do a thing if there was collision between the objects--------------------------------------
 			if (isCollision)
@@ -102,19 +108,19 @@ void Logic::doCollisions()
 
 // check collision between 2 Objects, return true if there was collision, false if none
 // Rectangle collision AABB - AABB
-bool Logic::checkCollision(Object& obj1, Object& obj2)
+bool Logic::checkCollision(Object* obj1, Object* obj2)
 {
 	// make sure that objects are not the same
-	if (obj1.getID() == obj2.getID())
+	if (obj1->getID() == obj2->getID())
 	{
 		return false;
 	}
 
 	// Is there collision on the x-axis?
-	bool collisionX = obj1.getPosition().x + obj1.getSize().x >= obj2.getPosition().x && obj2.getPosition().x + obj2.getSize().x >= obj1.getPosition().x;
+	bool collisionX = obj1->getPosition().x + obj1->getSize().x >= obj2->getPosition().x && obj2->getPosition().x + obj2->getSize().x >= obj1->getPosition().x;
 
 	// Is there collision on the y-axis?
-	bool collisionY = obj1.getPosition().y + obj1.getSize().y >= obj2.getPosition().y && obj2.getPosition().y + obj2.getSize().y >= obj1.getPosition().y;
+	bool collisionY = obj1->getPosition().y + obj1->getSize().y >= obj2->getPosition().y && obj2->getPosition().y + obj2->getSize().y >= obj1->getPosition().y;
 
 	// Collision only if on both axes
 	return collisionX && collisionY;

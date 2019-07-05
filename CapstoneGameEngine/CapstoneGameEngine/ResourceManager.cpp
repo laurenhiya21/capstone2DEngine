@@ -17,7 +17,7 @@ ResourceManager::ResourceManager()
 void ResourceManager::killAllZombies()
 {
 	// while still objects to check, check if object needs to be removed
-	for (int x = 0; x < objectList.size(); ++x)
+	for (unsigned x = 0; x < objectList.size(); ++x)
 	{
 		// return position of object if found
 		if (objectList[x].getZombie() == true)
@@ -96,7 +96,7 @@ void ResourceManager::loadTextureFromFile(const char * file, bool alpha, unsigne
 // returns the position of the shader
 unsigned ResourceManager::addOrFindShader(std::string name)
 {
-	int x = 0;
+	unsigned x = 0;
 	bool found = false; // if the shader was found in the shaderlist
 
 						// find the shader from the shader list
@@ -172,7 +172,7 @@ unsigned ResourceManager::getNumObjects(void)
 Object* ResourceManager::findObject(unsigned objID)
 {
 	// while still objects to check, check if found object
-	for (int x = 0; x < objectList.size(); ++x)
+	for (unsigned x = 0; x < objectList.size(); ++x)
 	{
 		// return position of object if found
 		if (objectList[x].getID() == objID)
@@ -203,7 +203,7 @@ void ResourceManager::renderVisable()
 	Graphics* graphicsPtr = (Graphics*)sysHeadHancho.sysList[sysNames::GRAPHICS];
 
 	// while still objects to check, check if object visable
-	for (int x = 0; x < objectList.size(); ++x)
+	for (unsigned x = 0; x < objectList.size(); ++x)
 	{
 		// check if object is visable and actually should be rendereed
 		if (objectList[x].getVisable() == true)
@@ -219,7 +219,7 @@ void ResourceManager::renderVisable()
 void ResourceManager::updateActiveObjects()
 {
 	// go through all the objects
-	for (int x = 0; x < objectList.size(); ++x)
+	for (unsigned x = 0; x < objectList.size(); ++x)
 	{
 		// check if active
 		if (objectList[x].getActive() == true)
@@ -249,7 +249,7 @@ Shader ResourceManager::LoadShader(const char* vShaderFile, const char* fShaderF
 // texture needs to associate with an object so it also needs to find the object
 Texture ResourceManager::loadTexture(const char * file, bool alpha, std::string name)
 {
-	int x = 0;
+	unsigned x = 0;
 	bool found = false; // if texture was foudn in texturelist
 
 	// go through the list and find the texure
@@ -320,7 +320,7 @@ void ResourceManager::loadAllTextures()
 Shader& ResourceManager::getShader(std::string name)
 {
 	// find the shader from the shader list
-	for (int x = 0; x < shaderList.size(); ++x)
+	for (unsigned x = 0; x < shaderList.size(); ++x)
 	{
 		// check if correct shader
 		if (!shaderList[x].getName().compare(name))
@@ -337,7 +337,7 @@ Shader& ResourceManager::getShader(std::string name)
 Texture& ResourceManager::getTexture(std::string name)
 {
 	// find the texture from the texture list
-	for (int x = 0; x < textureList.size(); ++x)
+	for (unsigned x = 0; x < textureList.size(); ++x)
 	{
 		// check if correct shader
 		if (!textureList[x].getName().compare(name))

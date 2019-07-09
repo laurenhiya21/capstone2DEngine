@@ -76,11 +76,9 @@ class Object
 		glm::vec3 getColour();
 		float getRotation();
 		unsigned getSpriteID();
-
-		//*************************************************************
 		int getType();
 		collisionFunction getCollisionPtr();
-		//*************************************************************
+		updateFunction getUpdatePtr();
 
 		// setters
 		void setZombie(bool);
@@ -90,11 +88,10 @@ class Object
 		void setSize(float x, float y);
 		void setRotation(float r);
 		void setSpriteID(unsigned i);
-
-		//*************************************************************
 		void setType(unsigned);
 		void setCollisionFunction(collisionFunction newFunct);
-		//*************************************************************
+		void setUpdateFunction(updateFunction newFunct);
+
 
 		// deconstructor
 		~Object();

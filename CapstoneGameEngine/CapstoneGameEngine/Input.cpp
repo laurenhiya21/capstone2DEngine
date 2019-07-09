@@ -19,11 +19,13 @@ Input::Input()
 	// add key for DOWN in (S in WASAD)
 	keyList.push_back(InputKey(GLFW_KEY_S, KeyState::UP, Action::DOWN));
 
+	keyList.push_back(InputKey(GLFW_KEY_R, KeyState::UP, Action::DOWN));
+
 	// add key for ACCEPT (Enter for now?)
 	keyList.push_back(InputKey(GLFW_KEY_ENTER, KeyState::UP, Action::ACCEPT));
 }
 
-// add a key to the keyArray
+// add a key to the keyList
 // returns 0 if successful, -1 if already there
 // for now just add the key in... maybe be able to add diff default state and action---------------
 int Input::addKey(int newKey)
@@ -52,9 +54,11 @@ void Input::run()
 	// go through all the possible inputs
 	for (int x = 0; x < keyList.size(); ++x)
 	{
+		int curState = keyList[x].getState();
+
 		// if the key's state is currently at pressed,
 		// auto move onto down state (so pressed only ~1 frame)
-		if (getState(x) == KeyState::PRESSED)
+		if (curState == KeyState::PRESSED)
 		{
 			keyList[x].setState(KeyState::DOWN);
 			continue; // move onto next key
@@ -62,7 +66,7 @@ void Input::run()
 
 		// if the key's state is currently at released,
 		// auto move onto up state (so pressed only ~1 frame)
-		else if (getState(x) == KeyState::RELEASED)
+		else if (curState == KeyState::RELEASED)
 		{
 			keyList[x].setState(KeyState::UP);
 			continue; // move onto next key
@@ -77,7 +81,7 @@ void Input::run()
 		{
 			// if the state changed from down to up (key was released)
 			// change the key's state to released
-			if (getState(x) == KeyState::DOWN)
+			if (curState == KeyState::DOWN)
 			{
 				keyList[x].setState(KeyState::RELEASED);
 
@@ -90,7 +94,7 @@ void Input::run()
 		{
 			// if the state changed from up to down (key was pressed)
 			// change the key's state to pressed
-			if (getState(x) == KeyState::UP)
+			if (curState == KeyState::UP)
 			{
 				keyList[x].setState(KeyState::PRESSED);
 
@@ -110,17 +114,46 @@ void Input::run()
 	//}
 }
 
-// get the state of given key
+// get the state of given action
 // return -1 if invalid key passed
 int Input::getState(int stateToGet)
 {
+	/*
 	// check if it's a valid key to get the state of
 	if (stateToGet < 0 || stateToGet >= keyList.size())
 	{
 		return -1;
+	}*/
+
+	int state = KeyState::UP;
+
+	// go through all of the keys
+	for (int x = 0; x < keyList.size(); ++x)
+	{
+		// skip actions that don't match the action we are looking for
+		if (keyList[x].getAction() != stateToGet)
+		{
+			continue;
+		}
+
+		// get the state of tha current keybind
+		int newState = keyList[x].getState();
+
+		// update the state of the action
+		if (newState > state || newState == KeyState::DOWN)
+		{
+			state = newState;
+		}
+
+		// if the action is down, we can return early
+		if (state == KeyState::DOWN)
+		{
+			break;
+		}
 	}
 
-	return keyList[stateToGet].getState();
+	//return the state
+	return state;
 }
 
 int Input::getAction(int actionToGet)

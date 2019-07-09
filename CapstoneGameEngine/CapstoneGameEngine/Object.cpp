@@ -18,11 +18,8 @@ Object::Object(bool z, bool v, bool a, glm::vec2 pos, glm::vec2 s, glm::vec3 c, 
 	size = s;
 	colour = c;
 	rotation = r;
-
-	//***************************************************
-	// temp assignment need to fix alter---------------------------------------
 	collisionPtr = nullptr;
-	//***************************************************
+	updatePtr = nullptr;
 }
 
 // update position by relative amount (instead of exact coordinate)
@@ -92,6 +89,11 @@ collisionFunction Object::getCollisionPtr()
 	return collisionPtr;
 }
 
+updateFunction Object::getUpdatePtr()
+{
+	return updatePtr;
+}
+
 //***************************************************
 
 //----------------------------------------------------------------------------------
@@ -135,7 +137,6 @@ void Object::setSpriteID(unsigned i)
 	spriteID = i;
 }
 
-//***************************************************
 void Object::setType(unsigned t)
 {
 	//make sure given type is valid
@@ -149,7 +150,11 @@ void Object::setCollisionFunction(collisionFunction newFunct)
 {
 	collisionPtr = newFunct;
 }
-//***************************************************
+
+void Object::setUpdateFunction(updateFunction newFunct)
+{
+	updatePtr = newFunct;
+}
 
 // deconstructor
 Object::~Object()

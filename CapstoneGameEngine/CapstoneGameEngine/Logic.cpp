@@ -73,6 +73,7 @@ void Logic::createPlayer()
 	otter1.setSpriteID(2);
 	otter1.setType(ObjectType::OTTER);
 	otter1.setCollisionFunction(otterCollision);
+	otter1.setUpdateFunction(otterUpdate);
 	sysHeadHancho.RManager.addObject(otter1);
 
 	Object otter2;
@@ -81,6 +82,7 @@ void Logic::createPlayer()
 	otter2.setSpriteID(2);
 	otter2.setType(ObjectType::OTTER);
 	otter2.setCollisionFunction(otterCollision);
+	otter2.setUpdateFunction(otterUpdate);
 	sysHeadHancho.RManager.addObject(otter2);
 
 	Object otter3;
@@ -89,6 +91,7 @@ void Logic::createPlayer()
 	otter3.setSpriteID(2);
 	otter3.setType(ObjectType::OTTER);
 	otter3.setCollisionFunction(otterCollision);
+	otter3.setUpdateFunction(otterUpdate);
 	sysHeadHancho.RManager.addObject(otter3);
 
 	Object otter4;
@@ -97,6 +100,7 @@ void Logic::createPlayer()
 	otter4.setSpriteID(2);
 	otter4.setType(ObjectType::OTTER);
 	otter4.setCollisionFunction(otterCollision);
+	otter4.setUpdateFunction(otterUpdate);
 	sysHeadHancho.RManager.addObject(otter4);
 
 	Object otter5;
@@ -105,6 +109,7 @@ void Logic::createPlayer()
 	otter5.setSpriteID(2);
 	otter5.setType(ObjectType::OTTER);
 	otter5.setCollisionFunction(otterCollision);
+	otter5.setUpdateFunction(otterUpdate);
 	sysHeadHancho.RManager.addObject(otter5);
 }
 

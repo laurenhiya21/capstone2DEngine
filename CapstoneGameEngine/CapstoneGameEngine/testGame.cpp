@@ -1,8 +1,9 @@
 #include "TestGame.h"
+
 #include <iostream>
 
-// a player's score for testing
-int score = 0;
+int score = 0; // a player's score for testing
+int winScore = 0; // score player needs to win (based on number of otters to collect)
 
 // Collision behaviour between an otter an another object
 // assumption that obj1 is an otter
@@ -19,8 +20,25 @@ void otterCollision(Object* obj1, Object* obj2)
 	}
 
 	// tell user won if they got all the otters
-	if (score == 5)
+	if (score == winScore)
 	{
 		std::cout << "You win!" << std::endl;
+	}
+}
+
+// Update behaviour between an otter and another object
+// update type can be on creation, run time, or on deletion
+void otterUpdate(Object * otter, Update::Type t)
+{
+	// if an otter was created, add 1 to the needed score to win
+	if (t == Update::CREATED)
+	{
+		++winScore;
+	}
+
+	// just to test if the destroy update actually gets called
+	if (t == Update::DESTROYED)
+	{
+		std::cout << "#" << otter->getID() << ": You gots me!" <<  std::endl;
 	}
 }

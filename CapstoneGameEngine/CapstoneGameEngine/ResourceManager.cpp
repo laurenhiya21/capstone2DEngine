@@ -22,6 +22,14 @@ void ResourceManager::killAllZombies()
 		// return position of object if found
 		if (objectList[x].getZombie() == true)
 		{
+			// run the Object's on deletion update function (if it has one)
+			updateFunction updatePtr = objectList[x].getUpdatePtr();
+
+			if (updatePtr != nullptr)
+			{
+				updatePtr(&objectList[x], Update::DESTROYED);
+			}
+
 			// remove the object from the list
 			objectList.erase(objectList.begin() + x);
 		}		
@@ -126,6 +134,14 @@ void ResourceManager::addObject(Object newObj)
 {
 	// push new object to end of the list
 	objectList.push_back(newObj);
+
+	// run the on creation update for the new object (if the update function exists)
+	updateFunction updatePtr = objectList.back().getUpdatePtr();
+
+	if (updatePtr != nullptr)
+	{
+		updatePtr(&newObj, Update::CREATED);
+	}
 }
 
 // add a new shader to the manager, returns position of shader

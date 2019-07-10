@@ -234,19 +234,25 @@ void ResourceManager::renderVisable()
 // updates all objects that need to be updated, including killing zombies
 void ResourceManager::updateActiveObjects()
 {
+	// kill the zombies
+	killAllZombies();
+
 	// go through all the objects
 	for (unsigned x = 0; x < objectList.size(); ++x)
 	{
-		// check if active
+		// check if active, and update the object if it is
 		if (objectList[x].getActive() == true)
 		{
-			// update here
+			// get the update function of the object and run it if it exists
+			updateFunction updatePtr = objectList[x].getUpdatePtr();
+
+			if (updatePtr != nullptr)
+			{
+				updatePtr(&objectList[x], Update::UPDATED);
+			}
 		}
 
 	}
-
-	// kill the zombies
-	killAllZombies();
 }
 
 // Loads a shader from a vertex and fragment shader's code, 

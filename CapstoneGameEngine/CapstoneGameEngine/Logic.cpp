@@ -61,9 +61,7 @@ void Logic::createPlayer()
 	test.setPosition(10, 10);
 	test.setSize(20, 20);
 	test.setSpriteID(1);
-	//***********************************************
 	test.setType(ObjectType::PLAYER);
-	//***********************************************
 	sysHeadHancho.RManager.addObject(test);
 
 	// 5 otters for testing

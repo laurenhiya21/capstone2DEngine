@@ -12,6 +12,7 @@
 
 #include "System.h"
 #include "Object.h" // for drawing the objects
+#include "TextRenderer.h" // rendering text
 
 class Graphics: public System
 {
@@ -21,6 +22,8 @@ class Graphics: public System
 		void initRenderData(); // initialize the rendering data that openGL uses
 
 	public:
+		TextRenderer* tRender; 
+
 		// constructor
 		Graphics();
 

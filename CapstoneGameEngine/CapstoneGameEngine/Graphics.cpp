@@ -41,7 +41,7 @@ Graphics::Graphics()
 	// Check for any errors from init glew
 	glGetError();
 
-	// Load sprite shader
+	// Load sprite shader from the files (and adds it in if it's not already there)
 	sysHeadHancho.RManager.LoadShader("../shaders/sprite.vs", "../shaders/sprite.frag", "sprite");
 
 	// Configure shaders
@@ -57,6 +57,12 @@ Graphics::Graphics()
 
 	// load all of the used textures
 	sysHeadHancho.RManager.loadAllTextures();
+
+	// start up the text renderer
+	tRender = new TextRenderer(800,600);
+
+	// load the font(s)
+	tRender->load("../fonts/OCRAEXT.TTF", 24);
 }
 
 // run/update the graphics system
@@ -66,6 +72,9 @@ void Graphics::run()
 	// glClearColor(0.0f, 0.0f, 0.0f, 1.0f); //not sure if need this?
 	glClear(GL_COLOR_BUFFER_BIT); // clear old screen first
 	sysHeadHancho.RManager.renderVisable();
+
+	// temp draw test text-------------------------------------------------------------------!!!!!!
+	tRender->renderText("test text!", 250.0f, 300.0f, 1.0f);
 }
 
 // draw a sprite on the screen (add texture later)
@@ -109,5 +118,6 @@ void Graphics::drawSprite(Object& obj)
 // deconstructor
 Graphics::~Graphics()
 {
-
+	// clean up the textRenderer
+	delete tRender;
 }

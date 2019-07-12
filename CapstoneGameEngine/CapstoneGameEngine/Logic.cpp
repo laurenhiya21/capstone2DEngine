@@ -48,9 +48,6 @@ void Logic::run()
 
 	// update the active objects (and kill zombies)
 	sysHeadHancho.RManager.updateActiveObjects();
-
-	// check if any actions need to be run and run if necessary
-	checkActions();
 }
 
 // create the player object
@@ -62,6 +59,7 @@ void Logic::createPlayer()
 	test.setSize(20, 20);
 	test.setSpriteID(1);
 	test.setType(ObjectType::PLAYER);
+	test.setUpdateFunction(playerUpdate);
 	sysHeadHancho.RManager.addObject(test);
 
 	// 5 otters for testing
@@ -172,89 +170,4 @@ bool Logic::checkCollision(Object* obj1, Object* obj2)
 
 	// Collision only if on both axes
 	return collisionX && collisionY;
-}
-
-// get trigger for a specified action
-// -1 if invalid trigger
-int Logic::getTrigger(int triggerToGet)
-{
-	// make sure that input is for a valid action
-	if (triggerToGet < 0 || triggerToGet >= Action::TOTAL)
-	{
-		return -1;
-	}
-
-	return triggers[triggerToGet];
-}
-// checks which actions needs to be run and runs them
-void Logic::checkActions()
-{
-	// check all the actions
-	for (int x = 0; x < Action::TOTAL; ++x)
-	{
-		// get the input system to get the states of the action keys
-		Input* inputPtr = (Input*)sysHeadHancho.sysList[sysNames::INPUT];
-
-		// get key state for action
-		int curKeyState = inputPtr->getState(x);
-
-		// check if key state matches trigger state
-		// run action if it matches
-		if (curKeyState == getTrigger(x))
-		{
-			runAction(x);
-		}
-
-		// don't do anything if action should not be run
-	}
-}
-
-// run actions that have met their trigger
-void Logic::runAction(int actionToRun)
-{
-	Object* tempPlayer = sysHeadHancho.RManager.findObject(0); // kind of temp yo-----------------------------------------
-
-	// run the action
-	switch (actionToRun)
-	{
-		case Action::LEFT:
-			std::cout << "Go left!" << std::endl;
-
-			// temp moving
-			// get character
-			tempPlayer->updatePosition(-15, 0);
-			break;
-
-		case Action::RIGHT:
-			std::cout << "Go right!" << std::endl;
-
-			// temp moving
-			// get character
-			tempPlayer->updatePosition(15, 0);
-			break;
-
-		case Action::UP:
-			std::cout << "Go up!" << std::endl;
-
-			// temp moving
-			// get character
-			tempPlayer->updatePosition(0, -15);
-			break;
-
-		case Action::DOWN:
-			std::cout << "Go down!" << std::endl;
-
-			// temp moving
-			// get character
-			tempPlayer->updatePosition(0, 15);
-			break;
-
-		case Action::ACCEPT:
-			std::cout << "Accept!" << std::endl;
-			break;
-
-		case Action::ESCAPE:
-			sysHeadHancho.exit();
-			break;
-	}
 }

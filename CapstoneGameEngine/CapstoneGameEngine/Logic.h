@@ -47,11 +47,5 @@ class Logic: public System
 		bool checkCollision(Object*, Object*);
 
 		// get trigger for a specified action
-		int getTrigger(int triggerToGet);
-
-		// checks which actions needs to be run and runs them
-		void checkActions();
-
-		// run action that have met their trigger
-		void runAction(int actionToRun);
+		//int getTrigger(int triggerToGet);
 };

@@ -74,7 +74,7 @@ void Graphics::run()
 	sysHeadHancho.RManager.renderVisable();
 
 	// temp draw test text-------------------------------------------------------------------!!!!!!
-	tRender->renderText("test text!", 250.0f, 300.0f, 1.0f);
+	tRender->renderText("test text!", 250.0f, 300.0f, 1.0f, glm::vec3(0.5f, 0.8f, 0.2f));
 }
 
 // draw a sprite on the screen (add texture later)

@@ -1,6 +1,7 @@
 #include "TestGame.h"
 
 #include <iostream>
+#include "Input.h" // moving player
 
 int score = 0; // a player's score for testing
 int winScore = 0; // score player needs to win (based on number of otters to collect)
@@ -40,5 +41,58 @@ void otterUpdate(Object * otter, Update::Type t)
 	if (t == Update::DESTROYED)
 	{
 		std::cout << "#" << otter->getID() << ": You gots me!" <<  std::endl;
+	}
+}
+
+// Update behaviour between an player and another object
+// update type can be on creation, run time, or on deletion
+void playerUpdate(Object* player, Update::Type t)
+{
+	// update the player while it is still not dead
+	if (t == Update::UPDATED)
+	{
+		Input* inputPtr = (Input*)sysHeadHancho.sysList[sysNames::INPUT];
+
+		// run the action
+		if (inputPtr->getState(Action::LEFT) == KeyState::DOWN)
+		{
+			std::cout << "Go left!" << std::endl;
+			// temp moving
+			// get character
+			player->updatePosition(-15, 0);
+		}
+
+		if (inputPtr->getState(Action::RIGHT) == KeyState::DOWN)
+		{
+			std::cout << "Go right!" << std::endl;
+
+			// temp moving
+			// get character
+			player->updatePosition(15, 0);
+		}
+
+		if (inputPtr->getState(Action::UP) == KeyState::DOWN)
+		{
+			std::cout << "Go up!" << std::endl;
+
+			// temp moving
+			// get character
+			player->updatePosition(0, -15);
+		}
+
+		if (inputPtr->getState(Action::DOWN) == KeyState::DOWN)
+		{
+			std::cout << "Go down!" << std::endl;
+
+			// temp moving
+			// get character
+			player->updatePosition(0, 15);
+		}
+
+		// temp escape-----------------------------------------------
+		if (inputPtr->getState(Action::ESCAPE) == KeyState::DOWN)
+		{
+			sysHeadHancho.exit();
+		}
 	}
 }

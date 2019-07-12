@@ -234,9 +234,6 @@ void ResourceManager::renderVisable()
 // updates all objects that need to be updated, including killing zombies
 void ResourceManager::updateActiveObjects()
 {
-	// kill the zombies
-	killAllZombies();
-
 	// go through all the objects
 	for (unsigned x = 0; x < objectList.size(); ++x)
 	{
@@ -253,6 +250,9 @@ void ResourceManager::updateActiveObjects()
 		}
 
 	}
+
+	// kill the zombies
+	killAllZombies();
 }
 
 // Loads a shader from a vertex and fragment shader's code, 

@@ -10,7 +10,7 @@
 class ResourceManager
 {
 	private:
-		std::vector<Object> objectList; // the list of objects
+		std::vector<Object*> objectList; // the list of objects
 		std::vector<Shader> shaderList; // the list of shaders
 		std::vector<Texture> textureList; // the list of textures
 

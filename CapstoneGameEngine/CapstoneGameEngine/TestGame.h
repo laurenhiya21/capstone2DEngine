@@ -11,6 +11,17 @@ void otterCollision(Object* otter, Object* obj2);
 // update type can be on creation, run time, or on deletion
 void otterUpdate(Object* otter, Update::Type t);
 
+// Collision behaviour between an player an another object
+// assumption that obj1 is a player
+void playerCollision(Object* player, Object* obj2);
+
 // Update behaviour between an player and another object
 // update type can be on creation, run time, or on deletion
 void playerUpdate(Object* player, Update::Type t);
+
+class PlayerData : public ObjectData
+{
+	public:
+		int hp;
+
+};

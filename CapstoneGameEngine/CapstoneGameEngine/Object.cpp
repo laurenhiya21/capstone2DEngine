@@ -20,6 +20,7 @@ Object::Object(bool z, bool v, bool a, glm::vec2 pos, glm::vec2 s, glm::vec3 c, 
 	rotation = r;
 	collisionPtr = nullptr;
 	updatePtr = nullptr;
+	objDataPtr = nullptr;
 }
 
 // update position by relative amount (instead of exact coordinate)
@@ -94,6 +95,11 @@ updateFunction Object::getUpdatePtr()
 	return updatePtr;
 }
 
+ObjectData* Object::getObjectDataPtr()
+{
+	return objDataPtr;
+}
+
 //***************************************************
 
 //----------------------------------------------------------------------------------
@@ -156,7 +162,18 @@ void Object::setUpdateFunction(updateFunction newFunct)
 	updatePtr = newFunct;
 }
 
+void Object::setObjectDataPtr(ObjectData* newData)
+{
+	objDataPtr = newData;
+}
+
 // deconstructor
 Object::~Object()
 {
+	// remove any exisitng object data
+	if (objDataPtr != nullptr)
+	{
+		delete objDataPtr;
+		objDataPtr = nullptr;
+	}
 }

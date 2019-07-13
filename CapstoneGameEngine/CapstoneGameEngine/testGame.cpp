@@ -44,10 +44,33 @@ void otterUpdate(Object * otter, Update::Type t)
 	}
 }
 
+// Collision behaviour between an player an another object
+// assumption that obj1 is a player
+void playerCollision(Object* player, Object * obj2)
+{
+	// if the player collided with a otter, decrease life and display it
+	if (obj2->getType() == ObjectType::OTTER)
+	{
+		PlayerData* pData = (PlayerData*)player->getObjectDataPtr();
+		pData->hp -= 10;
+
+		std::cout << "Total HP: " << pData->hp << std::endl;
+	}
+}
+
 // Update behaviour between an player and another object
 // update type can be on creation, run time, or on deletion
 void playerUpdate(Object* player, Update::Type t)
 {
+	// create the player specfic data
+	// this is auto deleted in the Object deconstrucor
+	if (t == Update::CREATED)
+	{
+		PlayerData* pData = new PlayerData;
+		pData->hp = 200;
+		player->setObjectDataPtr(pData);
+	}
+
 	// update the player while it is still not dead
 	if (t == Update::UPDATED)
 	{

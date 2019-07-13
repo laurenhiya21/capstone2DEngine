@@ -6,9 +6,8 @@
 
 #include <glm/glm.hpp> // vectors/matricies
 #include "Texture.h" // texture of the object
-
-//*************************************************************
 #include "Update.h" // update types
+#include "ObjectData.h" 
 
 // Types of Objects that exist
 // Used for checking if certain updates should be done
@@ -57,6 +56,8 @@ class Object
 		updateFunction updatePtr; // the function used to update the object
 		collisionFunction collisionPtr; // the function used to figure out collision behaviour with other objects
 		//*************************************************************
+
+		ObjectData* objDataPtr;
 		
 	public:
 
@@ -80,6 +81,8 @@ class Object
 		collisionFunction getCollisionPtr();
 		updateFunction getUpdatePtr();
 
+		ObjectData* getObjectDataPtr();
+
 		// setters
 		void setZombie(bool);
 		void setVisable(bool);
@@ -92,6 +95,7 @@ class Object
 		void setCollisionFunction(collisionFunction newFunct);
 		void setUpdateFunction(updateFunction newFunct);
 
+		void setObjectDataPtr(ObjectData* newData);
 
 		// deconstructor
 		~Object();

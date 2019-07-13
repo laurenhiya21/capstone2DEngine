@@ -20,14 +20,14 @@ void ResourceManager::killAllZombies()
 	for (unsigned x = 0; x < objectList.size(); ++x)
 	{
 		// return position of object if found
-		if (objectList[x].getZombie() == true)
+		if (objectList[x]->getZombie() == true)
 		{
 			// run the Object's on deletion update function (if it has one)
-			updateFunction updatePtr = objectList[x].getUpdatePtr();
+			updateFunction updatePtr = objectList[x]->getUpdatePtr();
 
 			if (updatePtr != nullptr)
 			{
-				updatePtr(&objectList[x], Update::DESTROYED);
+				updatePtr(objectList[x], Update::DESTROYED);
 			}
 
 			// remove the object from the list
@@ -130,17 +130,19 @@ unsigned ResourceManager::addOrFindShader(std::string name)
 }
 
 // add an object to the manager
-void ResourceManager::addObject(Object newObj)
+void ResourceManager::addObject(Object tempObj)
 {
+	Object* newObj = new Object(tempObj);
+
 	// push new object to end of the list
 	objectList.push_back(newObj);
 
 	// run the on creation update for the new object (if the update function exists)
-	updateFunction updatePtr = objectList.back().getUpdatePtr();
+	updateFunction updatePtr = newObj->getUpdatePtr();
 
 	if (updatePtr != nullptr)
 	{
-		updatePtr(&newObj, Update::CREATED);
+		updatePtr(newObj, Update::CREATED);
 	}
 }
 
@@ -191,8 +193,8 @@ Object* ResourceManager::findObject(unsigned objID)
 	for (unsigned x = 0; x < objectList.size(); ++x)
 	{
 		// return position of object if found
-		if (objectList[x].getID() == objID)
-			return &objectList[x];
+		if (objectList[x]->getID() == objID)
+			return objectList[x];
 	}
 
 	// object was not found
@@ -209,7 +211,7 @@ Object* ResourceManager::findObjectByPos(unsigned pos)
 	}
 
 	// if spot is valid, return the Object*
-	return &objectList[pos];
+	return objectList[pos];
 }
 
 // render all the visable objects
@@ -222,10 +224,10 @@ void ResourceManager::renderVisable()
 	for (unsigned x = 0; x < objectList.size(); ++x)
 	{
 		// check if object is visable and actually should be rendereed
-		if (objectList[x].getVisable() == true)
+		if (objectList[x]->getVisable() == true)
 		{
 			//render the object
-			graphicsPtr->drawSprite(objectList[x]);
+			graphicsPtr->drawSprite(*objectList[x]);
 		}
 			
 	}
@@ -238,14 +240,14 @@ void ResourceManager::updateActiveObjects()
 	for (unsigned x = 0; x < objectList.size(); ++x)
 	{
 		// check if active, and update the object if it is
-		if (objectList[x].getActive() == true)
+		if (objectList[x]->getActive() == true)
 		{
 			// get the update function of the object and run it if it exists
-			updateFunction updatePtr = objectList[x].getUpdatePtr();
+			updateFunction updatePtr = objectList[x]->getUpdatePtr();
 
 			if (updatePtr != nullptr)
 			{
-				updatePtr(&objectList[x], Update::UPDATED);
+				updatePtr(objectList[x], Update::UPDATED);
 			}
 		}
 

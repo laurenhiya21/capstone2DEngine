@@ -60,6 +60,7 @@ void Logic::createPlayer()
 	test.setSpriteID(1);
 	test.setType(ObjectType::PLAYER);
 	test.setUpdateFunction(playerUpdate);
+	test.setCollisionFunction(playerCollision);
 	sysHeadHancho.RManager.addObject(test);
 
 	// 5 otters for testing

@@ -2,6 +2,7 @@
 
 #include <glm/gtc/matrix_transform.hpp> // mathy tranformation stuff
 #include "HeadHancho.h" // get the resource manager to add shaders
+#include "CoreObjects.h" //text contents
 
 #include "ft2build.h" // freeType library: for rendering the text on screen
 #include FT_FREETYPE_H
@@ -103,25 +104,31 @@ void TextRenderer::load(std::string font, unsigned fontSize)
 }
 
 // Renders a string of text using the precompiled list of characters
-void TextRenderer::renderText(std::string text, float x, float y, float scale, glm::vec3 color)
+//
+void TextRenderer::renderText(Object& textToRender)
 {
+	// gets the text that needs to be rendered
+	TextData* textData = (TextData*)textToRender.getObjectDataPtr();
+	float x = textToRender.getPosition().x;
+
+	//std::string text, float x, float y, float scale, glm::vec3 color
 	// set up the shader to use
 	sysHeadHancho.RManager.getShader("text").use();
-	sysHeadHancho.RManager.getShader("text").SetVector3f("textColor", color);
+	sysHeadHancho.RManager.getShader("text").SetVector3f("textColor", textToRender.getColour());
 	glActiveTexture(GL_TEXTURE0);
 	glBindVertexArray(VAO);
 
 	// Iterate through all characters
 	std::string::const_iterator c;
-	for (c = text.begin(); c != text.end(); c++)
+	for (c = textData->data.begin(); c != textData->data.end(); c++)
 	{
 		Character ch = characterList[*c];
 
-		float xpos = x + ch.bearing.x * scale;
-		float ypos = y + (characterList['H'].bearing.y - ch.bearing.y) * scale;
+		float xpos = x + ch.bearing.x * textToRender.getSize().x;
+		float ypos = textToRender.getPosition().y + (characterList['H'].bearing.y - ch.bearing.y) * textToRender.getSize().y;
 
-		float w = ch.size.x * scale;
-		float h = ch.size.y * scale;
+		float w = ch.size.x * textToRender.getSize().x;
+		float h = ch.size.y * textToRender.getSize().y;
 
 		// Update VBO for each character
 		float vertices[6][4] = {
@@ -143,7 +150,7 @@ void TextRenderer::renderText(std::string text, float x, float y, float scale, g
 		// Render quad
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		// Now advance cursors for next glyph
-		x += (ch.advance >> 6) * scale; // Bitshift by 6 to get value in pixels (1/64th times 2^6 = 64)
+		x += (ch.advance >> 6) * textToRender.getSize().x; // Bitshift by 6 to get value in pixels (1/64th times 2^6 = 64)
 	}
 	glBindVertexArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);

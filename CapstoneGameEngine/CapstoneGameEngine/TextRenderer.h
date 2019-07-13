@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 
 #include <map>
+#include "Object.h"
 
 // Holds all state information relevant to a character as loaded using FreeType
 struct Character 
@@ -32,5 +33,6 @@ class TextRenderer
 		void load(std::string font, unsigned fontSize);
 
 		// Renders a string of text using the precompiled list of characters
-		void renderText(std::string text, float x, float y, float scale, glm::vec3 color = glm::vec3(1.0f));
+		// object is assumed to be a text type
+		void renderText(Object&);
 };

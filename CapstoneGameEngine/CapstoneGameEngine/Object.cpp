@@ -152,6 +152,11 @@ void Object::setType(unsigned t)
 	type = t;
 }
 
+void Object::setColour(glm::vec3 newColour)
+{
+	colour = newColour;
+}
+
 void Object::setCollisionFunction(collisionFunction newFunct)
 {
 	collisionPtr = newFunct;

@@ -101,5 +101,8 @@
     <ClInclude Include="ObjectData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CoreObjects.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

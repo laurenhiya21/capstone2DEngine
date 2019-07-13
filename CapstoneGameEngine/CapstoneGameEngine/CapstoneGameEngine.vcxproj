@@ -136,6 +136,7 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CoreObjects.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="HeadHancho.h" />
     <ClInclude Include="Input.h" />

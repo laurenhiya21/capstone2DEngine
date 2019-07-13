@@ -18,6 +18,7 @@ namespace ObjectType
 	{
 		PLAYER,
 		OTTER,
+		TEXT,
 		TOTAL
 	};
 }
@@ -92,9 +93,9 @@ class Object
 		void setRotation(float r);
 		void setSpriteID(unsigned i);
 		void setType(unsigned);
+		void setColour(glm::vec3);
 		void setCollisionFunction(collisionFunction newFunct);
 		void setUpdateFunction(updateFunction newFunct);
-
 		void setObjectDataPtr(ObjectData* newData);
 
 		// deconstructor

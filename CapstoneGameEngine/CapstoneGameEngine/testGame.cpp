@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "Input.h" // moving player
+#include "CoreObjects.h" // text object data
 
 int score = 0; // a player's score for testing
 int winScore = 0; // score player needs to win (based on number of otters to collect)
@@ -118,4 +119,36 @@ void playerUpdate(Object* player, Update::Type t)
 			sysHeadHancho.exit();
 		}
 	}
+}
+
+// Update behaviour on text given the type of update
+// update type can be on creation, run time, or on deletion
+void textUpdate(Object * text, Update::Type t)
+{
+	// create the text specfic data
+	// this is auto deleted in the Object deconstrucor
+	if (t == Update::CREATED)
+	{
+		TextData* tData = new TextData;
+		tData->data = "test text";
+		text->setObjectDataPtr(tData);
+	}
+
+	if (t == Update::UPDATED)
+	{
+		TextData* tData = (TextData*)text->getObjectDataPtr();
+
+		if (score != winScore)
+		{
+			tData->data = std::to_string(score);
+		}
+
+		else
+		{
+			tData->data = "Otters are the best! You win";
+		}
+		
+
+	}
+
 }

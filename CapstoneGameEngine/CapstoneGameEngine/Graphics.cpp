@@ -72,9 +72,6 @@ void Graphics::run()
 	// glClearColor(0.0f, 0.0f, 0.0f, 1.0f); //not sure if need this?
 	glClear(GL_COLOR_BUFFER_BIT); // clear old screen first
 	sysHeadHancho.RManager.renderVisable();
-
-	// temp draw test text-------------------------------------------------------------------!!!!!!
-	tRender->renderText("test text!", 250.0f, 300.0f, 1.0f, glm::vec3(0.5f, 0.8f, 0.2f));
 }
 
 // draw a sprite on the screen (add texture later)

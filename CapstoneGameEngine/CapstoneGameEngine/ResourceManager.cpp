@@ -226,8 +226,17 @@ void ResourceManager::renderVisable()
 		// check if object is visable and actually should be rendereed
 		if (objectList[x]->getVisable() == true)
 		{
-			//render the object
-			graphicsPtr->drawSprite(*objectList[x]);
+			// make sure to call text rendering function isntead if it's text
+			if (objectList[x]->getType() == ObjectType::TEXT)
+			{
+				graphicsPtr->tRender->renderText(*objectList[x]);
+			}
+
+			// render the object (for objects with textures)
+			else
+			{
+				graphicsPtr->drawSprite(*objectList[x]);
+			}
 		}
 			
 	}

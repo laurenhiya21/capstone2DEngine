@@ -107,7 +107,19 @@ void Logic::createPlayer()
 	otter5.setType(ObjectType::OTTER);
 	otter5.setCollisionFunction(otterCollision);
 	otter5.setUpdateFunction(otterUpdate);
+	otter5.setColour(glm::vec3(0.5, 0.8, 0.2));
 	sysHeadHancho.RManager.addObject(otter5);
+
+	//
+	//tRender->renderText("test text!", 250.0f, 300.0f, 1.0f, glm::vec3(0.5f, 0.8f, 0.2f));
+
+	Object testText;
+	testText.setPosition(250, 300);
+	testText.setSize(1, 1);
+	testText.setColour(glm::vec3(0.5, 0.8, 0.2));
+	testText.setType(ObjectType::TEXT);
+	testText.setUpdateFunction(textUpdate);
+	sysHeadHancho.RManager.addObject(testText);
 }
 
 // check for any collisions betwen all Objects

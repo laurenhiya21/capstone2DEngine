@@ -125,6 +125,7 @@
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="HeadHancho.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Level.cpp" />
     <ClCompile Include="Logic.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="main.cpp" />

@@ -13,26 +13,34 @@ ResourceManager::ResourceManager()
 {
 }
 
-// removes all zombies from object list (private function)
+// removes all zombies from all of the levels (private function)
 void ResourceManager::killAllZombies()
 {
-	// while still objects to check, check if object needs to be removed
-	for (unsigned x = 0; x < objectList.size(); ++x)
+	// while there are still levels to check, go through them
+	for (int curLevelPos = 0; curLevelPos < levelList.size(); ++curLevelPos)
 	{
-		// return position of object if found
-		if (objectList[x]->getZombie() == true)
+		// while still objects to check, check if object needs to be removed
+		for (int curObjPos = 0; curObjPos < levelList[curLevelPos].getNumObjects(); ++curObjPos)
 		{
-			// run the Object's on deletion update function (if it has one)
-			updateFunction updatePtr = objectList[x]->getUpdatePtr();
+			// get the current object
+			Object* curObj = levelList[curLevelPos].getObjectByPos(curObjPos);
 
-			if (updatePtr != nullptr)
+			// check if curObj is a zombie
+			if (curObj->getZombie() == true)
 			{
-				updatePtr(objectList[x], Update::DESTROYED);
-			}
+				// get the curObj's update function
+				updateFunction updatePtr = curObj->getUpdatePtr();
 
-			// remove the object from the list
-			objectList.erase(objectList.begin() + x);
-		}		
+				// if it exists, run the update on obj destruction
+				if (updatePtr != nullptr)
+				{
+					updatePtr(curObj, Update::DESTROYED);
+				}
+
+				// remove the object from the list
+				levelList[curLevelPos].removeObject(curObjPos);
+			}
+		}
 	}
 }
 
@@ -107,7 +115,7 @@ unsigned ResourceManager::addOrFindShader(std::string name)
 	unsigned x = 0;
 	bool found = false; // if the shader was found in the shaderlist
 
-						// find the shader from the shader list
+	// find the shader from the shader list
 	for (; x < shaderList.size(); ++x)
 	{
 		// check if correct shader
@@ -127,23 +135,6 @@ unsigned ResourceManager::addOrFindShader(std::string name)
 	}
 
 	return x;
-}
-
-// add an object to the manager
-void ResourceManager::addObject(Object tempObj)
-{
-	Object* newObj = new Object(tempObj);
-
-	// push new object to end of the list
-	objectList.push_back(newObj);
-
-	// run the on creation update for the new object (if the update function exists)
-	updateFunction updatePtr = newObj->getUpdatePtr();
-
-	if (updatePtr != nullptr)
-	{
-		updatePtr(newObj, Update::CREATED);
-	}
 }
 
 // add a new shader to the manager, returns position of shader
@@ -166,6 +157,16 @@ unsigned ResourceManager::addTexture(Texture newText)
 	return textureList.size() - 1;
 }
 
+// adds a new level to the level list and returns a ptr to the level added
+Level* ResourceManager::addLevel(Level newLevel)
+{
+	// push new level to the end of the list
+	levelList.push_back(newLevel);
+
+	// return ptr of newly added level (not multi-thread safe!)
+	return &levelList[levelList.size() - 1];
+}
+
 // makes an object to be removed, given its id
 void ResourceManager::removeObject(unsigned objID)
 {
@@ -180,21 +181,39 @@ void ResourceManager::removeObject(unsigned objID)
 	temp->setZombie(true);
 }
 
-// get number of objects
+// get number of objects across all levels
 unsigned ResourceManager::getNumObjects(void)
 {
-	return objectList.size();
+	// holds the number of objects across all of the levels
+	unsigned numObjects = 0;
+
+	// go through all of the levels and count the number of objects in each
+	for (int x = 0; x < levelList.size(); ++x)
+	{
+		numObjects += levelList[x].getNumObjects();
+	}
+
+	return numObjects;
 }
 
 // find an object based on it's id
 Object* ResourceManager::findObject(unsigned objID)
 {
-	// while still objects to check, check if found object
-	for (unsigned x = 0; x < objectList.size(); ++x)
+	// go through all of the levels, while there aer still levels to check
+	for (int curLevelPos = 0; curLevelPos < levelList.size(); ++curLevelPos)
 	{
-		// return position of object if found
-		if (objectList[x]->getID() == objID)
-			return objectList[x];
+		// go through all objects in the level and check their id
+		for (int curObjPos = 0; curObjPos < levelList[curLevelPos].getNumObjects(); ++curObjPos)
+		{
+			// get the current object we are checking
+			Object* curObj = levelList[curLevelPos].getObjectByPos(curObjPos);
+
+			// return the Object* if the id matches what we are looking for
+			if (curObj->getID() == objID)
+			{
+				return curObj;
+			}
+		}
 	}
 
 	// object was not found
@@ -204,14 +223,47 @@ Object* ResourceManager::findObject(unsigned objID)
 // find object given its position in vector, return Object*
 Object* ResourceManager::findObjectByPos(unsigned pos)
 {
-	// make sure given position is in bounds
-	if (pos >= objectList.size())
+	// make sure given position is valid
+	if (pos >= sysHeadHancho.RManager.getNumObjects())
 	{
 		return nullptr;
 	}
 
-	// if spot is valid, return the Object*
-	return objectList[pos];
+	unsigned numObjects = 0; // to figure out how many objects we've come across so far
+	unsigned curLevel = 0; // level that object is in
+	unsigned objPos = 0; // to figure out the position of the object in the level
+
+	// if spot is valid, figure out which level is is for
+	for (; curLevel < levelList.size(); ++curLevel)
+	{
+		// add the objects in the current level to the counter
+		numObjects += levelList[curLevel].getNumObjects();
+
+		// if the position is < the numObjects encountered
+		// then the object with that position must be in that level
+		if (pos < numObjects)
+		{
+			// get the position of the object in the level
+
+			// if the object wasn't on the 0th level
+			// need to adjust position (since pos resets for each lvl)
+			if (curLevel != 0)
+			{
+				objPos = numObjects - pos;
+			}
+
+			// if the object was on the first level, don't need to change anything
+			else
+			{
+				objPos = pos;
+			}
+
+			break;
+		}
+	}
+
+	// return the object that was found
+	return levelList[curLevel].getObjectByPos(objPos);
 }
 
 // render all the visable objects
@@ -220,49 +272,64 @@ void ResourceManager::renderVisable()
 	// get the graphics sytstem to draw the objects
 	Graphics* graphicsPtr = (Graphics*)sysHeadHancho.sysList[sysNames::GRAPHICS];
 
-	// while still objects to check, check if object visable
-	for (unsigned x = 0; x < objectList.size(); ++x)
+	// go through all of the levels
+	for (int curLevelPos = 0; curLevelPos < levelList.size(); ++curLevelPos)
 	{
-		// check if object is visable and actually should be rendereed
-		if (objectList[x]->getVisable() == true)
+		// go through all of the objects in the current level
+		for (int curObjPos = 0; curObjPos < levelList[curLevelPos].getNumObjects(); ++curObjPos)
 		{
-			// make sure to call text rendering function isntead if it's text
-			if (objectList[x]->getType() == ObjectType::TEXT)
-			{
-				graphicsPtr->tRender->renderText(*objectList[x]);
-			}
+			// get the curObj
+			Object* curObj = levelList[curLevelPos].getObjectByPos(curObjPos);
 
-			// render the object (for objects with textures)
-			else
+			// check if object is visable and should be rendered
+			if (curObj->getVisable() == true)
 			{
-				graphicsPtr->drawSprite(*objectList[x]);
+				// if it is text, use the special text renderer
+				if (curObj->getType() == ObjectType::TEXT)
+				{
+					graphicsPtr->tRender->renderText(*curObj);
+				}
+
+				// otherwise render the object as normal
+				else
+				{
+					graphicsPtr->drawSprite(*curObj);
+				}
+
 			}
 		}
-			
+
 	}
 }
 
 // updates all objects that need to be updated, including killing zombies
 void ResourceManager::updateActiveObjects()
 {
-	// go through all the objects
-	for (unsigned x = 0; x < objectList.size(); ++x)
+	// go through all the levels
+	for (int curLevelPos = 0; curLevelPos < levelList.size(); ++curLevelPos)
 	{
-		// check if active, and update the object if it is
-		if (objectList[x]->getActive() == true)
+		// go through all the objects in a level
+		for (int curObjPos = 0; curObjPos < levelList[curLevelPos].getNumObjects(); ++curObjPos)
 		{
-			// get the update function of the object and run it if it exists
-			updateFunction updatePtr = objectList[x]->getUpdatePtr();
+			// get the current object
+			Object* curObj = levelList[curLevelPos].getObjectByPos(curObjPos);
 
-			if (updatePtr != nullptr)
+			// check if object is active (aka it still needs to update)
+			if (curObj->getActive() == true)
 			{
-				updatePtr(objectList[x], Update::UPDATED);
+				// get the update function of the curObj
+				updateFunction updatePtr = curObj->getUpdatePtr();
+
+				// if the update function exists, run it
+				if (updatePtr != nullptr)
+				{
+					updatePtr(curObj, Update::UPDATED);
+				}
 			}
 		}
-
 	}
 
-	// kill the zombies
+	// kill the zombies for clean up
 	killAllZombies();
 }
 

@@ -53,6 +53,9 @@ void Logic::run()
 // create the player object
 void Logic::createPlayer()
 {
+	Level level1;
+	Level* level1Ptr = sysHeadHancho.RManager.addLevel(level1);
+
 	// just add an object with default values? let's seeee---------------------------
 	Object test;
 	test.setPosition(10, 10);
@@ -61,7 +64,8 @@ void Logic::createPlayer()
 	test.setType(ObjectType::PLAYER);
 	test.setUpdateFunction(playerUpdate);
 	test.setCollisionFunction(playerCollision);
-	sysHeadHancho.RManager.addObject(test);
+	level1Ptr->addObject(test);
+	//sysHeadHancho.RManager.addObject(test);
 
 	// 5 otters for testing
 	Object otter1;
@@ -71,7 +75,8 @@ void Logic::createPlayer()
 	otter1.setType(ObjectType::OTTER);
 	otter1.setCollisionFunction(otterCollision);
 	otter1.setUpdateFunction(otterUpdate);
-	sysHeadHancho.RManager.addObject(otter1);
+	level1Ptr->addObject(otter1);
+	//sysHeadHancho.RManager.addObject(otter1);
 
 	Object otter2;
 	otter2.setPosition(500, 200);
@@ -80,7 +85,8 @@ void Logic::createPlayer()
 	otter2.setType(ObjectType::OTTER);
 	otter2.setCollisionFunction(otterCollision);
 	otter2.setUpdateFunction(otterUpdate);
-	sysHeadHancho.RManager.addObject(otter2);
+	level1Ptr->addObject(otter2);
+	//sysHeadHancho.RManager.addObject(otter2);
 
 	Object otter3;
 	otter3.setPosition(300, 250);
@@ -89,7 +95,8 @@ void Logic::createPlayer()
 	otter3.setType(ObjectType::OTTER);
 	otter3.setCollisionFunction(otterCollision);
 	otter3.setUpdateFunction(otterUpdate);
-	sysHeadHancho.RManager.addObject(otter3);
+	level1Ptr->addObject(otter3);
+	//sysHeadHancho.RManager.addObject(otter3);
 
 	Object otter4;
 	otter4.setPosition(300, 50);
@@ -98,7 +105,8 @@ void Logic::createPlayer()
 	otter4.setType(ObjectType::OTTER);
 	otter4.setCollisionFunction(otterCollision);
 	otter4.setUpdateFunction(otterUpdate);
-	sysHeadHancho.RManager.addObject(otter4);
+	level1Ptr->addObject(otter4);
+	//sysHeadHancho.RManager.addObject(otter4);
 
 	Object otter5;
 	otter5.setPosition(700, 550);
@@ -108,7 +116,8 @@ void Logic::createPlayer()
 	otter5.setCollisionFunction(otterCollision);
 	otter5.setUpdateFunction(otterUpdate);
 	otter5.setColour(glm::vec3(0.5, 0.8, 0.2));
-	sysHeadHancho.RManager.addObject(otter5);
+	level1Ptr->addObject(otter5);
+	//sysHeadHancho.RManager.addObject(otter5);
 
 	//
 	//tRender->renderText("test text!", 250.0f, 300.0f, 1.0f, glm::vec3(0.5f, 0.8f, 0.2f));
@@ -119,13 +128,14 @@ void Logic::createPlayer()
 	testText.setColour(glm::vec3(0.5, 0.8, 0.2));
 	testText.setType(ObjectType::TEXT);
 	testText.setUpdateFunction(textUpdate);
-	sysHeadHancho.RManager.addObject(testText);
+	level1Ptr->addObject(testText);
+	//sysHeadHancho.RManager.addObject(testText);
 }
 
 // check for any collisions betwen all Objects
 void Logic::doCollisions()
 {
-	// total number of objects to check
+	// total number of objects (across all levels) to check
 	int totalNumObjects = sysHeadHancho.RManager.getNumObjects();
 
 	// check all objects with the other objects (but try and minimize double checking)

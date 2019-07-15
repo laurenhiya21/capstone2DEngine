@@ -5,14 +5,15 @@
 #include "Object.h"
 #include "Shader.h"
 #include "Texture.h"
+#include "Level.h"
 
 // Manages the objects created
 class ResourceManager
 {
 	private:
-		std::vector<Object*> objectList; // the list of objects
 		std::vector<Shader> shaderList; // the list of shaders
 		std::vector<Texture> textureList; // the list of textures
+		std::vector<Level> levelList; // list of levels
 
 		// removes all zombies from object list
 		void killAllZombies();
@@ -32,10 +33,10 @@ class ResourceManager
 		// constructor
 		ResourceManager();
 
-		// add a new object/shader/texture
-		void addObject(Object newObj);
+		// add a new shader/texture/level
 		unsigned addShader(Shader newShad); // returns position of added shader
-		unsigned addTexture(Texture newText); 
+		unsigned addTexture(Texture newText);
+		Level* addLevel(Level newLevel); // returns ptr to level added
 
 		// sets an object to be removed, given its id
 		void removeObject(unsigned);

@@ -104,14 +104,6 @@ void Input::run()
 
 		// if the states are the same, no need to do anything
 	}
-
-	// TEMP UNTIL GET ABOVE TO WORK YO----------------------------------------------------------
-	// want to actually be able to exit the darn thing ha
-	//if (glfwGetKey(sysHeadHancho.mainWindow.windowPtr, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-	//{
-		//sysHeadHancho.exit();
-		//glfwSetWindowShouldClose(sysHeadHancho.mainWindow.windowPtr, GL_TRUE);
-	//}
 }
 
 // get the state of given action

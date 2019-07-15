@@ -25,13 +25,10 @@ namespace Action
 class Logic: public System
 {
 	private:
-		int triggers[Action::TOTAL]; // the triggers accociated with each action
 
 	public:
 
 		// constructor
-		// just needs to set the triggers
-		// don't think triggers need to be set during runtime so just set at beginning for now?
 		Logic();
 
 		// run/update the logic system
@@ -45,7 +42,4 @@ class Logic: public System
 
 		// check collision between 2 Objects, return true if there was collision, false if none
 		bool checkCollision(Object*, Object*);
-
-		// get trigger for a specified action
-		//int getTrigger(int triggerToGet);
 };

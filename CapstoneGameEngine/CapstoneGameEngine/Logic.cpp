@@ -8,27 +8,6 @@
 // don't think triggers need to be set during runtime so just set at beginning for now?
 Logic::Logic()
 {
-	// all of them are going to be PRESSED for now but could be DOWN or something else later
-
-	// set trigger for ESCAPE
-	triggers[Action::ESCAPE] = KeyState::PRESSED;
-
-	// set trigger for LEFT
-	triggers[Action::LEFT] = KeyState::DOWN;
-
-	// set trigger for RIGHT
-	triggers[Action::RIGHT] = KeyState::DOWN;
-
-	// set trigger for UP
-	triggers[Action::UP] = KeyState::DOWN;
-
-	// set trigger for DOWN
-	triggers[Action::DOWN] = KeyState::DOWN;
-
-	// set trigger for ACCEPT
-	triggers[Action::ACCEPT] = KeyState::PRESSED;
-
-	// don't set a trigger for total cause it should be referenced except for loops
 }
 
 bool once = true;

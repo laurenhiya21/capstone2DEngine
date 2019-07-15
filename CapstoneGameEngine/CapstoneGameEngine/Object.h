@@ -51,12 +51,9 @@ class Object
 		glm::vec3 colour; // colour of object
 		float rotation; // rotation of object (0.0f if none)
 		unsigned spriteID; // ID of texture/sprite of the object
-
-		//*************************************************************
 		int type; // associated with ObjectType, used for checking object updates and collisions
 		updateFunction updatePtr; // the function used to update the object
 		collisionFunction collisionPtr; // the function used to figure out collision behaviour with other objects
-		//*************************************************************
 
 		ObjectData* objDataPtr;
 		

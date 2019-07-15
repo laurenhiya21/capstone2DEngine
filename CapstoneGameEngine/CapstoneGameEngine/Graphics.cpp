@@ -48,7 +48,7 @@ Graphics::Graphics()
 	// creates projection matrix to scale, rotate, translate objects
 	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(sysHeadHancho.mainWindow.getWidth()), static_cast<GLfloat>(sysHeadHancho.mainWindow.getHeight()), 0.0f, -1.0f, 1.0f); //-----------not sure which include?
 
-	// ---------------------------?????------------------------------------
+	// moer openGL shader shenanigans
 	sysHeadHancho.RManager.getShader("sprite").use().setInteger("image", 0);
 	sysHeadHancho.RManager.getShader("sprite").setMatrix4("projection", projection);
 
@@ -93,11 +93,9 @@ void Graphics::drawSprite(Object& obj)
 	model = glm::translate(model, glm::vec3(-0.5f * obj.getSize().x, -0.5f * obj.getSize().y, 0.0f)); // move origin back
 
 	model = glm::scale(model, glm::vec3(obj.getSize(), 1.0f)); // scale sprite
-
-	//--------------------?? not super sure-----------------------------------------------------------
 	sShader.setMatrix4("model", model);
 
-	// Render textured quad-------------------------------------------------
+	// Render textured quad
 	sShader.SetVector3f("spriteColor", obj.getColour());
 
 	// set the active texture to draw it

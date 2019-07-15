@@ -23,7 +23,7 @@ HeadHancho::HeadHancho()
 	// create the main window
 	mainWindow.makeWindow();
 
-	// not sure if I need these opengl configureations or not?--------------------------------------
+	// more openGL configuration stuff
 	glViewport(0, 0, mainWindow.getWidth(), mainWindow.getHeight());
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_BLEND);

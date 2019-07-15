@@ -17,7 +17,7 @@ int Window::makeWindow()
 {
 	// glfw window creation
 	// --------------------
-	windowPtr = glfwCreateWindow(screenWidth, screenHeight, "LearnOpenGL", NULL, NULL);
+	windowPtr = glfwCreateWindow(screenWidth, screenHeight, "Capstone Game Engine", NULL, NULL);
 	if (windowPtr == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;

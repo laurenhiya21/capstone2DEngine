@@ -7,7 +7,17 @@
 #include "ft2build.h" // freeType library: for rendering the text on screen
 #include FT_FREETYPE_H
 
-// constructor (not sure what w and h should be???)------------------------
+/************************************************************************
+**	This code is part of the Learn OpenGL Breakout tutorial
+**	It is free to redistribute and/or modify under the
+**	CC BY-NC 4.0 license as published by Creative Commons.
+**
+**	Original Author: Joey de Vries (@JoeyDeVriez)
+**	Licence info:	https://creativecommons.org/licenses/by-nc/4.0/
+**	Link to source: https://learnopengl.com/In-Practice/2D-Game/Render-text
+**	Modified?: No
+*************************************************************************/
+// constructor
 TextRenderer::TextRenderer(int width, int height)
 {
 	// Load sprite shader from the files (and adds it in if it's not already there)
@@ -17,7 +27,7 @@ TextRenderer::TextRenderer(int width, int height)
 	sysHeadHancho.RManager.getShader("text").setMatrix4("projection", glm::ortho(0.0f, static_cast<float>(width), static_cast<float>(height), 0.0f), true);
 	sysHeadHancho.RManager.getShader("text").setInteger("text", 0);
 
-	// Configure VAO/VBO for texture quads-----------------
+	// Configure VAO/VBO for texture quads
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glBindVertexArray(VAO);
@@ -29,6 +39,16 @@ TextRenderer::TextRenderer(int width, int height)
 	glBindVertexArray(0);
 }
 
+/************************************************************************
+**	This code is part of the Learn OpenGL Breakout tutorial
+**	It is free to redistribute and/or modify under the
+**	CC BY-NC 4.0 license as published by Creative Commons.
+**
+**	Original Author: Joey de Vries (@JoeyDeVriez)
+**	Licence info:	https://creativecommons.org/licenses/by-nc/4.0/
+**	Link to source: https://learnopengl.com/In-Practice/2D-Game/Render-text
+**	Modified?: No
+*************************************************************************/
 // pre-compiles a list of cahracters given a font
 void TextRenderer::load(std::string font, unsigned fontSize)
 {
@@ -103,8 +123,17 @@ void TextRenderer::load(std::string font, unsigned fontSize)
 	FT_Done_FreeType(ft);
 }
 
+/************************************************************************
+**	This code is part of the Learn OpenGL Breakout tutorial
+**	It is free to redistribute and/or modify under the
+**	CC BY-NC 4.0 license as published by Creative Commons.
+**
+**	Original Author: Joey de Vries (@JoeyDeVriez)
+**	Licence info:	https://creativecommons.org/licenses/by-nc/4.0/
+**	Link to source: https://learnopengl.com/In-Practice/2D-Game/Render-text
+**	Modified?: No
+*************************************************************************/
 // Renders a string of text using the precompiled list of characters
-//
 void TextRenderer::renderText(Object& textToRender)
 {
 	// gets the text that needs to be rendered

@@ -131,7 +131,7 @@ void Logic::doCollisions()
 			// check the collision between the two objects
 			bool isCollision = checkCollision(obj1, obj2);
 
-			// do a thing if there was collision between the objects--------------------------------------
+			// do a thing if there was collision between the objects
 			if (isCollision)
 			{
 				// get the collision functions for each of the two objects
@@ -154,6 +154,18 @@ void Logic::doCollisions()
 
 }
 
+/************************************************************************
+**	This code is part of the Learn OpenGL Breakout tutorial
+**	It is free to redistribute and/or modify under the 
+**	CC BY-NC 4.0 license as published by Creative Commons.
+**	
+**	Original Author: Joey de Vries (@JoeyDeVriez)
+**	Liscence info:	https://creativecommons.org/licenses/by-nc/4.0/
+**	Link to source: https://learnopengl.com/In-Practice/2D-Game/Collisions/Collision-detection
+**	Modified?: Yes. Added check that two Objects are not the same, 
+**			change parameters from two GameObjects (created type from tutorial) 
+			to Object (self created type), additional comments added
+*************************************************************************/
 // check collision between 2 Objects, return true if there was collision, false if none
 // Rectangle collision AABB - AABB
 bool Logic::checkCollision(Object* obj1, Object* obj2)

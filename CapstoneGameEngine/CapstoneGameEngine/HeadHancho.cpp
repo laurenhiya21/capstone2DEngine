@@ -1,7 +1,5 @@
 #include "HeadHancho.h"
 
-#include <iostream> //temp-------------------------------
-
 #include "Input.h"
 #include "Logic.h"
 #include "Graphics.h"
@@ -15,9 +13,18 @@ HeadHancho::HeadHancho()
 	runGame = true;
 
 	// glfw: configure openGL's intial settings
-	glfwInit();
+	if (!glfwInit())
+	{
+		// Initialization failed
+		std::cout << "GLFW  failed to init" << std::endl;
+		return;
+	}
+
+	// set the version of glfw
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+
+	// set the profile to be core as we don't care about backwards compat
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// create the main window
@@ -53,16 +60,12 @@ void HeadHancho::run()
 			sysList[x]->run();
 		}
 
-		// might need to do this or somewhere else but not sure------------
-		// but it swaps the front and back buffer to minimize flicker
+		// swaps the front and back buffer to minimize flicker
 		glfwSwapBuffers(sysHeadHancho.mainWindow.windowPtr);
-
-		// need more conditions here?------------------------------------
-		//break;
 	}
 }
 
-// mark the game as ready to exit (right no no real checks...)
+// mark the game as ready to exit
 void HeadHancho::exit()
 {
 	runGame = false;
@@ -81,9 +84,5 @@ HeadHancho::~HeadHancho()
 	}
 
 	// glfw: terminate, clearing all previously allocated GLFW resources.
-	// ------------------------------------------------------------------
 	glfwTerminate();
-
-
-	// end the WindowsInterface system
 }

@@ -16,7 +16,6 @@ Window::Window(unsigned w, unsigned h)
 int Window::makeWindow()
 {
 	// glfw window creation
-	// --------------------
 	windowPtr = glfwCreateWindow(screenWidth, screenHeight, "Capstone Game Engine", NULL, NULL);
 	if (windowPtr == NULL)
 	{

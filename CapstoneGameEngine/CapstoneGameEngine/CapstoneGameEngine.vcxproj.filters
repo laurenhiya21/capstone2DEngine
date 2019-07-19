@@ -21,9 +21,6 @@
     <ClCompile Include="HeadHancho.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\inc\glad.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

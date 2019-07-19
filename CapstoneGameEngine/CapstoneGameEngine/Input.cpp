@@ -42,7 +42,6 @@ int Input::addKey(int newKey)
 	}
 
 	// if the key was not found in the container, add it
-	// temp stuff here??------------------------------------------
 	keyList.push_back(InputKey(newKey, KeyState::UP, -1));
 
 	return 0;
@@ -110,16 +109,11 @@ void Input::run()
 // return -1 if invalid key passed
 int Input::getState(int stateToGet)
 {
-	/*
-	// check if it's a valid key to get the state of
-	if (stateToGet < 0 || stateToGet >= keyList.size())
-	{
-		return -1;
-	}*/
-
 	int state = KeyState::UP;
 
-	// go through all of the keys
+	// go through all of the keys, find the action we want and get the state
+	// DOWN has highest priority so automatically quit the loop if
+	// any one of the action's states is DOWN (can have multiple keys set to one action)
 	for (int x = 0; x < keyList.size(); ++x)
 	{
 		// skip actions that don't match the action we are looking for
@@ -131,13 +125,15 @@ int Input::getState(int stateToGet)
 		// get the state of tha current keybind
 		int newState = keyList[x].getState();
 
-		// update the state of the action
+		// update the state of the action if it's DOWN
+		// or if it's a different state at all
 		if (newState > state || newState == KeyState::DOWN)
 		{
 			state = newState;
 		}
 
 		// if the action is down, we can return early
+		// since DOWN is most important
 		if (state == KeyState::DOWN)
 		{
 			break;

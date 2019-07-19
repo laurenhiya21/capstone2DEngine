@@ -38,6 +38,16 @@ Shader& Shader::use()
 	return *this;
 }
 
+/************************************************************************
+**	This code is part of the Learn OpenGL Breakout tutorial
+**	It is free to redistribute and/or modify under the
+**	CC BY-NC 4.0 license as published by Creative Commons.
+**
+**	Original Author: Joey de Vries (@JoeyDeVriez)
+**	Licence info:	https://creativecommons.org/licenses/by-nc/4.0/
+**	Link to source: https://learnopengl.com/In-Practice/2D-Game/Rendering-Sprites
+**	Modified?: Yes. Removed the option to compile geometry shaders.
+*************************************************************************/
 // compiles the shader given the source code
 void Shader::compile(const char * vSource, const char * fSource)
 {
@@ -63,6 +73,16 @@ void Shader::compile(const char * vSource, const char * fSource)
 	glDeleteShader(sFragment);
 }
 
+/************************************************************************
+**	This code is part of the Learn OpenGL Breakout tutorial
+**	It is free to redistribute and/or modify under the
+**	CC BY-NC 4.0 license as published by Creative Commons.
+**
+**	Original Author: Joey de Vries (@JoeyDeVriez)
+**	Licence info:	https://creativecommons.org/licenses/by-nc/4.0/
+**	Link to source: https://learnopengl.com/In-Practice/2D-Game/Rendering-Sprites
+**	Modified?: Added additional comments
+*************************************************************************/
 // checks the shader for compile errors
 void Shader::checkCompileErrors(int object, std::string type)
 {
@@ -101,8 +121,16 @@ void Shader::checkCompileErrors(int object, std::string type)
 
 }
 
-// comments are hard???==============--------------------------------------------------------------------
-
+/************************************************************************
+**	This code is part of the Learn OpenGL Breakout tutorial
+**	It is free to redistribute and/or modify under the
+**	CC BY-NC 4.0 license as published by Creative Commons.
+**
+**	Original Author: Joey de Vries (@JoeyDeVriez)
+**	Licence info:	https://creativecommons.org/licenses/by-nc/4.0/
+**	Link to source: https://learnopengl.com/In-Practice/2D-Game/Rendering-Sprites
+**	Modified?: No
+*************************************************************************/
 void Shader::setInteger(const char* n, float value, bool useShader)
 {
 	if (useShader)
@@ -110,6 +138,16 @@ void Shader::setInteger(const char* n, float value, bool useShader)
 	glUniform1i(glGetUniformLocation(ID, n), value);
 }
 
+/************************************************************************
+**	This code is part of the Learn OpenGL Breakout tutorial
+**	It is free to redistribute and/or modify under the
+**	CC BY-NC 4.0 license as published by Creative Commons.
+**
+**	Original Author: Joey de Vries (@JoeyDeVriez)
+**	Licence info:	https://creativecommons.org/licenses/by-nc/4.0/
+**	Link to source: https://learnopengl.com/In-Practice/2D-Game/Rendering-Sprites
+**	Modified?: No
+*************************************************************************/
 void Shader::SetVector3f(const char* n, const glm::vec3 & value, bool useShader)
 {
 	if (useShader)
@@ -117,6 +155,16 @@ void Shader::SetVector3f(const char* n, const glm::vec3 & value, bool useShader)
 	glUniform3f(glGetUniformLocation(this->ID, n), value.x, value.y, value.z);
 }
 
+/************************************************************************
+**	This code is part of the Learn OpenGL Breakout tutorial
+**	It is free to redistribute and/or modify under the
+**	CC BY-NC 4.0 license as published by Creative Commons.
+**
+**	Original Author: Joey de Vries (@JoeyDeVriez)
+**	Licence info:	https://creativecommons.org/licenses/by-nc/4.0/
+**	Link to source: https://learnopengl.com/In-Practice/2D-Game/Rendering-Sprites
+**	Modified?: No
+*************************************************************************/
 void Shader::setMatrix4(const char* n, const glm::mat4 & matrix, bool useShader)
 {
 	if (useShader)
@@ -124,6 +172,16 @@ void Shader::setMatrix4(const char* n, const glm::mat4 & matrix, bool useShader)
 	glUniformMatrix4fv(glGetUniformLocation(ID, n), 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
+/************************************************************************
+**	This code is part of the Learn OpenGL Breakout tutorial
+**	It is free to redistribute and/or modify under the
+**	CC BY-NC 4.0 license as published by Creative Commons.
+**
+**	Original Author: Joey de Vries (@JoeyDeVriez)
+**	Licence info:	https://creativecommons.org/licenses/by-nc/4.0/
+**	Link to source: https://learnopengl.com/In-Practice/2D-Game/Rendering-Sprites
+**	Modified?: No
+*************************************************************************/
 // make the shader given the source code
 int Shader::makeShader(GLenum shaderType, const char* source)
 {

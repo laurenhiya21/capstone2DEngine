@@ -66,7 +66,6 @@ class Input: public System
 
 		// add a key to the keyArray
 		// returns 0 if successful, -1 if already there
-		// for now just add the key in... maybe be able to add diff default state and action---------------
 		int addKey(int newKey);
 
 		// run/update the input system

@@ -121,7 +121,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\inc\glad.c" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="HeadHancho.cpp" />
     <ClCompile Include="Input.cpp" />

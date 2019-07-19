@@ -17,6 +17,16 @@ Texture::Texture(std::string n, unsigned w, unsigned h, unsigned intFmt, unsigne
 	glGenTextures(1, &ID);
 }
 
+/************************************************************************
+**	This code is part of the Learn OpenGL Breakout tutorial
+**	It is free to redistribute and/or modify under the
+**	CC BY-NC 4.0 license as published by Creative Commons.
+**
+**	Original Author: Joey de Vries (@JoeyDeVriez)
+**	Licence info:	https://creativecommons.org/licenses/by-nc/4.0/
+**	Link to source: https://learnopengl.com/In-Practice/2D-Game/Rendering-Sprites
+**	Modified?: Only minor edits to the width and height to match convention I use
+*************************************************************************/
 // generates texture from image data
 void Texture::generate(unsigned w, unsigned h, unsigned char * data)
 {

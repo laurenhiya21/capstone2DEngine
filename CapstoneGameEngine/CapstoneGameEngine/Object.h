@@ -34,8 +34,6 @@ typedef void(*updateFunction)(Object*, Update::Type);
 // takes in a ptr to the object that was collided with
 typedef void(*collisionFunction)(Object*, Object*);
 
-//*************************************************************
-
 class Object
 {
 	protected:

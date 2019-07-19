@@ -77,39 +77,31 @@ void playerUpdate(Object* player, Update::Type t)
 	{
 		Input* inputPtr = (Input*)sysHeadHancho.sysList[sysNames::INPUT];
 
-		// run the action
+		// If left button was pressed, move player left
 		if (inputPtr->getState(Action::LEFT) == KeyState::DOWN)
 		{
 			std::cout << "Go left!" << std::endl;
-			// temp moving
-			// get character
 			player->updatePosition(-15, 0);
 		}
 
+		// If right button was pressed, move player right
 		if (inputPtr->getState(Action::RIGHT) == KeyState::DOWN)
 		{
 			std::cout << "Go right!" << std::endl;
-
-			// temp moving
-			// get character
 			player->updatePosition(15, 0);
 		}
 
+		// If up button was pressed, move player up
 		if (inputPtr->getState(Action::UP) == KeyState::DOWN)
 		{
 			std::cout << "Go up!" << std::endl;
-
-			// temp moving
-			// get character
 			player->updatePosition(0, -15);
 		}
 
+		// If dowbn button was pressed, move player down
 		if (inputPtr->getState(Action::DOWN) == KeyState::DOWN)
 		{
 			std::cout << "Go down!" << std::endl;
-
-			// temp moving
-			// get character
 			player->updatePosition(0, 15);
 		}
 

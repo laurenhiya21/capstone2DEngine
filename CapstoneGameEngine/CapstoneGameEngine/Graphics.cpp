@@ -3,6 +3,16 @@
 #include "HeadHancho.h"
 #include "Shader.h"
 
+/************************************************************************
+**	This code is part of the Learn OpenGL Breakout tutorial
+**	It is free to redistribute and/or modify under the
+**	CC BY-NC 4.0 license as published by Creative Commons.
+**
+**	Original Author: Joey de Vries (@JoeyDeVriez)
+**	Liscence info:	https://creativecommons.org/licenses/by-nc/4.0/
+**	Link to source: https://learnopengl.com/In-Practice/2D-Game/Rendering-Sprites
+**	Modified?: No.
+*************************************************************************/
 // initialize the rendering data that openGL uses
 void Graphics::initRenderData()
 {
@@ -46,7 +56,7 @@ Graphics::Graphics()
 
 	// Configure shaders
 	// creates projection matrix to scale, rotate, translate objects
-	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(sysHeadHancho.mainWindow.getWidth()), static_cast<GLfloat>(sysHeadHancho.mainWindow.getHeight()), 0.0f, -1.0f, 1.0f); //-----------not sure which include?
+	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(sysHeadHancho.mainWindow.getWidth()), static_cast<GLfloat>(sysHeadHancho.mainWindow.getHeight()), 0.0f, -1.0f, 1.0f);
 
 	// moer openGL shader shenanigans
 	sysHeadHancho.RManager.getShader("sprite").use().setInteger("image", 0);
@@ -69,12 +79,24 @@ Graphics::Graphics()
 void Graphics::run()
 {
 	// render all visable objects
-	// glClearColor(0.0f, 0.0f, 0.0f, 1.0f); //not sure if need this?
 	glClear(GL_COLOR_BUFFER_BIT); // clear old screen first
 	sysHeadHancho.RManager.renderVisable();
 }
 
-// draw a sprite on the screen (add texture later)
+/************************************************************************
+**	This code is part of the Learn OpenGL Breakout tutorial
+**	It is free to redistribute and/or modify under the
+**	CC BY-NC 4.0 license as published by Creative Commons.
+**
+**	Original Author: Joey de Vries (@JoeyDeVriez)
+**	Liscence info:	https://creativecommons.org/licenses/by-nc/4.0/
+**	Link to source: https://learnopengl.com/In-Practice/2D-Game/Rendering-Sprites
+**	Modified?: Yes. Changed parameters from texture, position, size, rotate, and color
+		 to an Object (which has all of this information inside it,
+		 some minor changes to allow it to work with my shader system,
+		 modified some comments for clarity
+*************************************************************************/
+// draw a sprite on the screen
 void Graphics::drawSprite(Object& obj)
 {
 	// get the sprite shader & set to use
@@ -105,9 +127,6 @@ void Graphics::drawSprite(Object& obj)
 	glBindVertexArray(vArrayID);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glBindVertexArray(0);
-
-	// some more stuff in spriterenderer::draw sprite but don't know atm
-
 }
 
 // deconstructor

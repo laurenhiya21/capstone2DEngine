@@ -35,7 +35,7 @@ class HeadHancho: public System
 		// continue running the engine's systems
 		void run();
 
-		// mark the game as ready to exit (right no no real checks...)
+		// mark the game as ready to exit
 		void exit();
 
 		// end the engine's systems

@@ -8,7 +8,6 @@
 #include "Graphics.h"
 
 // constructor
-// might not need this for later but using to add objects for testing!------------------
 ResourceManager::ResourceManager()
 {
 }
@@ -43,7 +42,17 @@ void ResourceManager::killAllZombies()
 		}
 	}
 }
-
+/************************************************************************
+**	This code is part of the Learn OpenGL Breakout tutorial
+**	It is free to redistribute and/or modify under the
+**	CC BY-NC 4.0 license as published by Creative Commons.
+**
+**	Original Author: Joey de Vries (@JoeyDeVriez)
+**	Licence info:	https://creativecommons.org/licenses/by-nc/4.0/
+**	Link to source: https://learnopengl.com/In-Practice/2D-Game/Setting-up
+**	Modified?: Removed option for loading geometry shader,
+		Added position so shader can be compiled without having to return it
+*************************************************************************/
 // Retrieves the vertex and fragment shader code from file and complie
 void ResourceManager::loadShaderFromFile(const char* vShaderFile, const char* fShaderFile, unsigned position)
 {
@@ -86,6 +95,16 @@ void ResourceManager::loadShaderFromFile(const char* vShaderFile, const char* fS
 	shaderList[position].compile(vShaderCode, fShaderCode);
 }
 
+/************************************************************************
+**	This code is part of the Learn OpenGL Breakout tutorial
+**	It is free to redistribute and/or modify under the
+**	CC BY-NC 4.0 license as published by Creative Commons.
+**
+**	Original Author: Joey de Vries (@JoeyDeVriez)
+**	Licence info:	https://creativecommons.org/licenses/by-nc/4.0/
+**	Link to source: https://learnopengl.com/In-Practice/2D-Game/Setting-up
+**	Modified?: Minor edits to have function work with naming convention
+*************************************************************************/
 // retrive texture from the file
 void ResourceManager::loadTextureFromFile(const char * file, bool alpha, unsigned position)
 {
@@ -451,9 +470,7 @@ Texture& ResourceManager::getTexture(std::string name)
 }
 
 // deconstructor
-// not sure if need/want yet to delete objects here? unsure--------------------------
 ResourceManager::~ResourceManager()
 {
 
 }
-

@@ -29,3 +29,11 @@ class PlayerData : public ObjectData
 // Update behaviour on text given the type of update
 // update type can be on creation, run time, or on deletion
 void textUpdate(Object* text, Update::Type t);
+
+// Update behaviour on level1 given the type of update
+// update type can be on creation, run time, or on deletion
+void level1Update(Object*, Update::Type);
+
+// Update behaviour on level2 given the type of update
+// update type can be on creation, run time, or on deletion
+void level2Update(Object*, Update::Type);

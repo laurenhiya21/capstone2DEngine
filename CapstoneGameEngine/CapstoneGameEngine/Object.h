@@ -19,6 +19,7 @@ namespace ObjectType
 		PLAYER,
 		OTTER,
 		TEXT,
+		LEVEL,
 		TOTAL
 	};
 }
@@ -41,6 +42,7 @@ class Object
 
 	private:
 		unsigned ID; // unique ID for object
+		std::string name; // name of object (not necessarily unique)
 		bool zombie; // is object to be deleted?
 		bool visable; // is object visable?
 		bool active; // does object need to be updated?
@@ -64,6 +66,7 @@ class Object
 		void updatePosition(int x, int y);
 
 		// getters
+		std::string getName();
 		bool getZombie();
 		bool getVisable();
 		unsigned getID();
@@ -80,6 +83,7 @@ class Object
 		ObjectData* getObjectDataPtr();
 
 		// setters
+		void setName(std::string);
 		void setZombie(bool);
 		void setVisable(bool);
 		void setActive(bool);

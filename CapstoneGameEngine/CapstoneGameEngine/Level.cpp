@@ -1,5 +1,11 @@
 #include "Level.h"
 
+// constructor
+Level::Level()
+{
+	isActive = false;
+}
+
 // get the number of objects in the level
 unsigned Level::getNumObjects()
 {
@@ -32,7 +38,7 @@ void Level::removeObject(unsigned pos)
 }
 
 // add an object to the manager
-void Level::addObject(Object tempObj)
+Object* Level::addObject(Object tempObj)
 {
 	Object* newObj = new Object(tempObj);
 
@@ -42,8 +48,48 @@ void Level::addObject(Object tempObj)
 	// run the on creation update for the new object (if the update function exists)
 	updateFunction updatePtr = newObj->getUpdatePtr();
 
-	if (updatePtr != nullptr)
+	// don't auto call creation update for levels because levels are created at the start
+	// dont' really want multiple levels being created on top of each other
+	if (updatePtr != nullptr && newObj->getType() != ObjectType::LEVEL)
 	{
 		updatePtr(newObj, Update::CREATED);
 	}
+
+	return newObj;
+}
+
+Object* Level::getObject(std::string name)
+{
+	// go through elvel and find obejct
+	for (int x = 0; objectList.size(); ++x)
+	{
+		// check if found the object (same name)
+		if (!objectList[x]->getName().compare(name))
+		{
+			return objectList[x];
+		}
+	}
+
+	// didn't find the object
+	return nullptr;
+}
+
+std::string Level::getName()
+{
+	return levelName;
+}
+
+bool Level::getActive()
+{
+	return isActive;
+}
+
+void Level::setName(std::string newName)
+{
+	levelName = newName;
+}
+
+void Level::setActive(bool newActiveState)
+{
+	isActive = newActiveState;
 }

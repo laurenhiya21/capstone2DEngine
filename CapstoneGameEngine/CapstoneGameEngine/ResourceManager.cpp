@@ -19,10 +19,10 @@ void ResourceManager::killAllZombies()
 	for (int curLevelPos = 0; curLevelPos < levelList.size(); ++curLevelPos)
 	{
 		// while still objects to check, check if object needs to be removed
-		for (int curObjPos = 0; curObjPos < levelList[curLevelPos].getNumObjects(); ++curObjPos)
+		for (int curObjPos = 0; curObjPos < levelList[curLevelPos]->getNumObjects(); ++curObjPos)
 		{
 			// get the current object
-			Object* curObj = levelList[curLevelPos].getObjectByPos(curObjPos);
+			Object* curObj = levelList[curLevelPos]->getObjectByPos(curObjPos);
 
 			// check if curObj is a zombie
 			if (curObj->getZombie() == true)
@@ -37,7 +37,7 @@ void ResourceManager::killAllZombies()
 				}
 
 				// remove the object from the list
-				levelList[curLevelPos].removeObject(curObjPos);
+				levelList[curLevelPos]->removeObject(curObjPos);
 			}
 		}
 	}
@@ -177,13 +177,16 @@ unsigned ResourceManager::addTexture(Texture newText)
 }
 
 // adds a new level to the level list and returns a ptr to the level added
-Level* ResourceManager::addLevel(Level newLevel)
+Level* ResourceManager::addLevel(std::string name)
 {
+	Level* newLevel = new Level;
+	newLevel->setName(name);
+
 	// push new level to the end of the list
 	levelList.push_back(newLevel);
 
 	// return ptr of newly added level (not multi-thread safe!)
-	return &levelList[levelList.size() - 1];
+	return newLevel;
 }
 
 // makes an object to be removed, given its id
@@ -200,6 +203,23 @@ void ResourceManager::removeObject(unsigned objID)
 	temp->setZombie(true);
 }
 
+// removes a level, given its name
+void ResourceManager::removeLevel(std::string name)
+{
+	// go through the level list while there are still levels to check
+	for (int x = 0; x < levelList.size(); ++x)
+	{
+		// remove from levelList if names match
+		// names should be unique so stop if level found
+		if (!levelList[x]->getName().compare(name))
+		{
+			delete levelList[x];
+			levelList.erase(levelList.begin() + x);
+			return;
+		}
+	}
+}
+
 // get number of objects across all levels
 unsigned ResourceManager::getNumObjects(void)
 {
@@ -209,7 +229,7 @@ unsigned ResourceManager::getNumObjects(void)
 	// go through all of the levels and count the number of objects in each
 	for (int x = 0; x < levelList.size(); ++x)
 	{
-		numObjects += levelList[x].getNumObjects();
+		numObjects += levelList[x]->getNumObjects();
 	}
 
 	return numObjects;
@@ -222,10 +242,10 @@ Object* ResourceManager::findObject(unsigned objID)
 	for (int curLevelPos = 0; curLevelPos < levelList.size(); ++curLevelPos)
 	{
 		// go through all objects in the level and check their id
-		for (int curObjPos = 0; curObjPos < levelList[curLevelPos].getNumObjects(); ++curObjPos)
+		for (int curObjPos = 0; curObjPos < levelList[curLevelPos]->getNumObjects(); ++curObjPos)
 		{
 			// get the current object we are checking
-			Object* curObj = levelList[curLevelPos].getObjectByPos(curObjPos);
+			Object* curObj = levelList[curLevelPos]->getObjectByPos(curObjPos);
 
 			// return the Object* if the id matches what we are looking for
 			if (curObj->getID() == objID)
@@ -239,6 +259,22 @@ Object* ResourceManager::findObject(unsigned objID)
 	return nullptr;
 }
 
+Level* ResourceManager::getLevel(std::string name)
+{
+	// go through the levels until it is found
+	for (int x = 0; levelList.size(); ++x)
+	{
+		// check if names are the same
+		if (!levelList[x]->getName().compare(name))
+		{
+			return levelList[x];
+		}
+	}
+
+	// level not found
+	return nullptr;
+}
+
 // find object given its position in vector, return Object*
 Object* ResourceManager::findObjectByPos(unsigned pos)
 {
@@ -249,6 +285,7 @@ Object* ResourceManager::findObjectByPos(unsigned pos)
 	}
 
 	unsigned numObjects = 0; // to figure out how many objects we've come across so far
+	unsigned prevNumObjects = 0; // the number of objects in the levels before the cur one
 	unsigned curLevel = 0; // level that object is in
 	unsigned objPos = 0; // to figure out the position of the object in the level
 
@@ -256,7 +293,7 @@ Object* ResourceManager::findObjectByPos(unsigned pos)
 	for (; curLevel < levelList.size(); ++curLevel)
 	{
 		// add the objects in the current level to the counter
-		numObjects += levelList[curLevel].getNumObjects();
+		numObjects += levelList[curLevel]->getNumObjects();
 
 		// if the position is < the numObjects encountered
 		// then the object with that position must be in that level
@@ -268,7 +305,7 @@ Object* ResourceManager::findObjectByPos(unsigned pos)
 			// need to adjust position (since pos resets for each lvl)
 			if (curLevel != 0)
 			{
-				objPos = numObjects - pos;
+				objPos = pos - prevNumObjects;
 			}
 
 			// if the object was on the first level, don't need to change anything
@@ -279,10 +316,13 @@ Object* ResourceManager::findObjectByPos(unsigned pos)
 
 			break;
 		}
+
+		// keep track of the previous number tottal objects
+		prevNumObjects = numObjects;
 	}
 
 	// return the object that was found
-	return levelList[curLevel].getObjectByPos(objPos);
+	return levelList[curLevel]->getObjectByPos(objPos);
 }
 
 // render all the visable objects
@@ -294,11 +334,17 @@ void ResourceManager::renderVisable()
 	// go through all of the levels
 	for (int curLevelPos = 0; curLevelPos < levelList.size(); ++curLevelPos)
 	{
+		// make sure that level is actually active before checking its objects
+		if (levelList[curLevelPos]->getActive() == false)
+		{
+			continue;
+		}
+
 		// go through all of the objects in the current level
-		for (int curObjPos = 0; curObjPos < levelList[curLevelPos].getNumObjects(); ++curObjPos)
+		for (int curObjPos = 0; curObjPos < levelList[curLevelPos]->getNumObjects(); ++curObjPos)
 		{
 			// get the curObj
-			Object* curObj = levelList[curLevelPos].getObjectByPos(curObjPos);
+			Object* curObj = levelList[curLevelPos]->getObjectByPos(curObjPos);
 
 			// check if object is visable and should be rendered
 			if (curObj->getVisable() == true)
@@ -327,11 +373,17 @@ void ResourceManager::updateActiveObjects()
 	// go through all the levels
 	for (int curLevelPos = 0; curLevelPos < levelList.size(); ++curLevelPos)
 	{
+		// make sure that level is actually active before checking its objects
+		if (levelList[curLevelPos]->getActive() == false)
+		{
+			continue;
+		}
+
 		// go through all the objects in a level
-		for (int curObjPos = 0; curObjPos < levelList[curLevelPos].getNumObjects(); ++curObjPos)
+		for (int curObjPos = 0; curObjPos < levelList[curLevelPos]->getNumObjects(); ++curObjPos)
 		{
 			// get the current object
-			Object* curObj = levelList[curLevelPos].getObjectByPos(curObjPos);
+			Object* curObj = levelList[curLevelPos]->getObjectByPos(curObjPos);
 
 			// check if object is active (aka it still needs to update)
 			if (curObj->getActive() == true)

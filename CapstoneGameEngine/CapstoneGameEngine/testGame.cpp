@@ -20,12 +20,6 @@ void otterCollision(Object* obj1, Object* obj2)
 		std::cout << "Score is: " << score << std::endl;
 		obj1->setZombie(true);
 	}
-
-	// tell user won if they got all the otters
-	if (score == winScore)
-	{
-		std::cout << "You win!" << std::endl;
-	}
 }
 
 // Update behaviour between an otter and another object
@@ -139,8 +133,207 @@ void textUpdate(Object * text, Update::Type t)
 		{
 			tData->data = "Otters are the best! You win";
 		}
-		
 
 	}
 
+}
+
+// Update behaviour on level1 given the type of update
+// update type can be on creation, run time, or on deletion
+void level1Update(Object* level1, Update::Type t)
+{
+	// add objects to the level on creation
+	if (t == Update::CREATED)
+	{
+		Level* level1Ptr = sysHeadHancho.RManager.addLevel("LEVEL1");
+		level1Ptr->setActive(true);
+
+		Object test; //player
+		test.setPosition(10, 10);
+		test.setSize(20, 20);
+		test.setSpriteID(1);
+		test.setType(ObjectType::PLAYER);
+		test.setUpdateFunction(playerUpdate);
+		test.setCollisionFunction(playerCollision);
+		test.setName("Player");
+		level1Ptr->addObject(test);
+
+		// 5 otters for testing
+		Object otter1;
+		otter1.setPosition(100, 50);
+		otter1.setSize(30, 30);
+		otter1.setSpriteID(2);
+		otter1.setType(ObjectType::OTTER);
+		otter1.setCollisionFunction(otterCollision);
+		otter1.setUpdateFunction(otterUpdate);
+		otter1.setName("Otter1");
+		level1Ptr->addObject(otter1);
+
+		Object otter2;
+		otter2.setPosition(500, 200);
+		otter2.setSize(30, 30);
+		otter2.setSpriteID(2);
+		otter2.setType(ObjectType::OTTER);
+		otter2.setCollisionFunction(otterCollision);
+		otter2.setUpdateFunction(otterUpdate);
+		otter2.setName("Otter2");
+		level1Ptr->addObject(otter2);
+
+		Object otter3;
+		otter3.setPosition(300, 250);
+		otter3.setSize(30, 30);
+		otter3.setSpriteID(2);
+		otter3.setType(ObjectType::OTTER);
+		otter3.setCollisionFunction(otterCollision);
+		otter3.setUpdateFunction(otterUpdate);
+		otter3.setName("Otter3");
+		level1Ptr->addObject(otter3);
+
+		Object otter4;
+		otter4.setPosition(300, 50);
+		otter4.setSize(30, 30);
+		otter4.setSpriteID(2);
+		otter4.setType(ObjectType::OTTER);
+		otter4.setCollisionFunction(otterCollision);
+		otter4.setUpdateFunction(otterUpdate);
+		otter4.setName("Otter4");
+		level1Ptr->addObject(otter4);
+
+		Object otter5;
+		otter5.setPosition(700, 550);
+		otter5.setSize(30, 30);
+		otter5.setSpriteID(2);
+		otter5.setType(ObjectType::OTTER);
+		otter5.setCollisionFunction(otterCollision);
+		otter5.setUpdateFunction(otterUpdate);
+		otter5.setColour(glm::vec3(0.5, 0.8, 0.2));
+		otter5.setName("Otter5");
+		level1Ptr->addObject(otter5);
+
+		Object testText;
+		testText.setPosition(250, 300);
+		testText.setSize(1, 1);
+		testText.setColour(glm::vec3(0.5, 0.8, 0.2));
+		testText.setType(ObjectType::TEXT);
+		testText.setUpdateFunction(textUpdate);
+		testText.setName("WinText");
+		level1Ptr->addObject(testText);
+	}
+
+	if (t == Update::UPDATED)
+	{
+		// tell user won if they got all the otters
+		// move onto the next level
+		if (score == winScore)
+		{
+			std::cout << "You win!" << std::endl;
+			winScore = 0;
+			score = 0;
+			level1->getUpdatePtr()(level1, Update::DESTROYED);
+
+			// create the next level
+			Level* globalLvPtr = sysHeadHancho.RManager.getLevel("GLOBAL_LEVEL");
+
+			// check if it's valid before using
+			// should never get this
+			if (globalLvPtr == nullptr)
+			{
+				std::cout << "Reall bad stuff! Couldn't find global level oh no!" << std::endl;
+				return;
+			}
+
+			// get the level2 object so that level 2 can be created
+			Object* level2Obj = globalLvPtr->getObject("LEVEL2");
+
+			// make sure it was valid
+			// should never get this
+			if (level2Obj == nullptr)
+			{
+				std::cout << "Reall bad stuff! Couldn't find level 2 object oh no!" << std::endl;
+				return;
+			}
+
+			// create level 2 so it can be used
+			level2Obj->getUpdatePtr()(level2Obj, Update::CREATED);
+		}
+	}
+
+	if (t == Update::DESTROYED)
+	{
+		sysHeadHancho.RManager.removeLevel("LEVEL1");
+	}
+}
+
+// Update behaviour on level2 given the type of update
+// update type can be on creation, run time, or on deletion
+void level2Update(Object* level1, Update::Type t)
+{
+	// add objects to the level on creation
+	if (t == Update::CREATED)
+	{
+		Level* level2Ptr = sysHeadHancho.RManager.addLevel("LEVEL2");
+		level2Ptr->setActive(true);
+
+		Object test; //player
+		test.setPosition(10, 10);
+		test.setSize(20, 20);
+		test.setSpriteID(1);
+		test.setType(ObjectType::PLAYER);
+		test.setUpdateFunction(playerUpdate);
+		test.setCollisionFunction(playerCollision);
+		test.setName("Player");
+		level2Ptr->addObject(test);
+
+		// 5 otters for testing
+		Object otter1;
+		otter1.setPosition(100, 50);
+		otter1.setSize(30, 30);
+		otter1.setSpriteID(2);
+		otter1.setType(ObjectType::OTTER);
+		otter1.setCollisionFunction(otterCollision);
+		otter1.setUpdateFunction(otterUpdate);
+		otter1.setName("Otter1");
+		level2Ptr->addObject(otter1);
+
+		Object otter3;
+		otter3.setPosition(150, 250);
+		otter3.setSize(30, 30);
+		otter3.setSpriteID(2);
+		otter3.setType(ObjectType::OTTER);
+		otter3.setCollisionFunction(otterCollision);
+		otter3.setUpdateFunction(otterUpdate);
+		otter3.setName("Otter3");
+		level2Ptr->addObject(otter3);
+
+		Object otter4;
+		otter4.setPosition(300, 70);
+		otter4.setSize(30, 30);
+		otter4.setSpriteID(2);
+		otter4.setType(ObjectType::OTTER);
+		otter4.setCollisionFunction(otterCollision);
+		otter4.setUpdateFunction(otterUpdate);
+		otter4.setColour(glm::vec3(1, 0, 0));
+		otter4.setName("Otter4");
+		level2Ptr->addObject(otter4);
+
+		Object otter5;
+		otter5.setPosition(700, 550);
+		otter5.setSize(30, 30);
+		otter5.setSpriteID(2);
+		otter5.setType(ObjectType::OTTER);
+		otter5.setCollisionFunction(otterCollision);
+		otter5.setUpdateFunction(otterUpdate);
+		otter5.setColour(glm::vec3(0.5, 0.8, 0.2));
+		otter5.setName("Otter5");
+		level2Ptr->addObject(otter5);
+
+		Object testText;
+		testText.setPosition(250, 300);
+		testText.setSize(1, 1);
+		testText.setColour(glm::vec3(0.5, 0.8, 0.2));
+		testText.setType(ObjectType::TEXT);
+		testText.setUpdateFunction(textUpdate);
+		testText.setName("WinText");
+		level2Ptr->addObject(testText);
+	}
 }

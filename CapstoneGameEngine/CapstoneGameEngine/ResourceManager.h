@@ -13,7 +13,7 @@ class ResourceManager
 	private:
 		std::vector<Shader> shaderList; // the list of shaders
 		std::vector<Texture> textureList; // the list of textures
-		std::vector<Level> levelList; // list of levels
+		std::vector<Level*> levelList; // list of levels
 
 		// removes all zombies from object list
 		void killAllZombies();
@@ -36,16 +36,22 @@ class ResourceManager
 		// add a new shader/texture/level
 		unsigned addShader(Shader newShad); // returns position of added shader
 		unsigned addTexture(Texture newText);
-		Level* addLevel(Level newLevel); // returns ptr to level added
+		Level* addLevel(std::string); // takes in name, returns ptr to level added
 
 		// sets an object to be removed, given its id
 		void removeObject(unsigned);
+
+		// removes a level, given its name
+		void removeLevel(std::string);
 
 		// get number of objects
 		unsigned getNumObjects(void);
 
 		// find object given its ID, returns Object*
 		Object* findObject(unsigned);
+
+		// get a level given it's name
+		Level* getLevel(std::string);
 
 		// find object given its position in vector, return Object*
 		Object* findObjectByPos(unsigned);

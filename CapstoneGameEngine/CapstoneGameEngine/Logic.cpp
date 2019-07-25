@@ -32,83 +32,27 @@ void Logic::run()
 // create the player object
 void Logic::createPlayer()
 {
-	Level level1;
-	Level* level1Ptr = sysHeadHancho.RManager.addLevel(level1);
+	Level* globalLvPtr = sysHeadHancho.RManager.addLevel("GLOBAL_LEVEL");
+	globalLvPtr->setActive(true);
 
-	// just add an object with default values? let's seeee---------------------------
-	Object test;
-	test.setPosition(10, 10);
-	test.setSize(20, 20);
-	test.setSpriteID(1);
-	test.setType(ObjectType::PLAYER);
-	test.setUpdateFunction(playerUpdate);
-	test.setCollisionFunction(playerCollision);
-	level1Ptr->addObject(test);
-	//sysHeadHancho.RManager.addObject(test);
+	Object level1Obj;
+	level1Obj.setType(ObjectType::LEVEL);
+	level1Obj.setUpdateFunction(level1Update);
+	level1Obj.setVisable(false);
+	level1Obj.setName("LEVEL1");
 
-	// 5 otters for testing
-	Object otter1;
-	otter1.setPosition(100, 50);
-	otter1.setSize(30, 30);
-	otter1.setSpriteID(2);
-	otter1.setType(ObjectType::OTTER);
-	otter1.setCollisionFunction(otterCollision);
-	otter1.setUpdateFunction(otterUpdate);
-	level1Ptr->addObject(otter1);
-	//sysHeadHancho.RManager.addObject(otter1);
+	// only for the first level, call creation update function
+	// (don't want multiple levls being created at once)
+	Object* level1Ptr = globalLvPtr->addObject(level1Obj);
+	level1Ptr->getUpdatePtr()(level1Ptr, Update::CREATED);
 
-	Object otter2;
-	otter2.setPosition(500, 200);
-	otter2.setSize(30, 30);
-	otter2.setSpriteID(2);
-	otter2.setType(ObjectType::OTTER);
-	otter2.setCollisionFunction(otterCollision);
-	otter2.setUpdateFunction(otterUpdate);
-	level1Ptr->addObject(otter2);
-	//sysHeadHancho.RManager.addObject(otter2);
-
-	Object otter3;
-	otter3.setPosition(300, 250);
-	otter3.setSize(30, 30);
-	otter3.setSpriteID(2);
-	otter3.setType(ObjectType::OTTER);
-	otter3.setCollisionFunction(otterCollision);
-	otter3.setUpdateFunction(otterUpdate);
-	level1Ptr->addObject(otter3);
-	//sysHeadHancho.RManager.addObject(otter3);
-
-	Object otter4;
-	otter4.setPosition(300, 50);
-	otter4.setSize(30, 30);
-	otter4.setSpriteID(2);
-	otter4.setType(ObjectType::OTTER);
-	otter4.setCollisionFunction(otterCollision);
-	otter4.setUpdateFunction(otterUpdate);
-	level1Ptr->addObject(otter4);
-	//sysHeadHancho.RManager.addObject(otter4);
-
-	Object otter5;
-	otter5.setPosition(700, 550);
-	otter5.setSize(30, 30);
-	otter5.setSpriteID(2);
-	otter5.setType(ObjectType::OTTER);
-	otter5.setCollisionFunction(otterCollision);
-	otter5.setUpdateFunction(otterUpdate);
-	otter5.setColour(glm::vec3(0.5, 0.8, 0.2));
-	level1Ptr->addObject(otter5);
-	//sysHeadHancho.RManager.addObject(otter5);
-
-	//
-	//tRender->renderText("test text!", 250.0f, 300.0f, 1.0f, glm::vec3(0.5f, 0.8f, 0.2f));
-
-	Object testText;
-	testText.setPosition(250, 300);
-	testText.setSize(1, 1);
-	testText.setColour(glm::vec3(0.5, 0.8, 0.2));
-	testText.setType(ObjectType::TEXT);
-	testText.setUpdateFunction(textUpdate);
-	level1Ptr->addObject(testText);
-	//sysHeadHancho.RManager.addObject(testText);
+	Object level2Obj;
+	level2Obj.setType(ObjectType::LEVEL);
+	level2Obj.setUpdateFunction(level2Update);
+	level2Obj.setVisable(false);
+	level2Obj.setName("LEVEL2");
+	globalLvPtr->addObject(level2Obj);
+	
 }
 
 // check for any collisions betwen all Objects

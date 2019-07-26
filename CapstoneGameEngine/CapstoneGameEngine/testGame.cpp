@@ -231,7 +231,7 @@ void level1Update(Object* level1, Update::Type t)
 			score = 0;
 			level1->getUpdatePtr()(level1, Update::DESTROYED);
 
-			// create the next level
+			// get the global level to access the level objects (for creating next level)
 			Level* globalLvPtr = sysHeadHancho.RManager.getLevel("GLOBAL_LEVEL");
 
 			// check if it's valid before using
@@ -260,6 +260,13 @@ void level1Update(Object* level1, Update::Type t)
 
 	if (t == Update::DESTROYED)
 	{
+		// get global level ptr to access level 1 ptr
+		Level* globalLvPtr = sysHeadHancho.RManager.getLevel("GLOBAL_LEVEL");
+
+		// get the level1 object and set it to inactive
+		Object* level1Obj = globalLvPtr->getObject("LEVEL1");
+		level1Obj->setActive(false);
+
 		sysHeadHancho.RManager.removeLevel("LEVEL1");
 	}
 }

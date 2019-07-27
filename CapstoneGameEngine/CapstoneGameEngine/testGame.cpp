@@ -74,28 +74,28 @@ void playerUpdate(Object* player, Update::Type t)
 		// If left button was pressed, move player left
 		if (inputPtr->getState(Action::LEFT) == KeyState::DOWN)
 		{
-			std::cout << "Go left!" << std::endl;
+			//std::cout << "Go left!" << std::endl;
 			player->updatePosition(-15, 0);
 		}
 
 		// If right button was pressed, move player right
 		if (inputPtr->getState(Action::RIGHT) == KeyState::DOWN)
 		{
-			std::cout << "Go right!" << std::endl;
+			//std::cout << "Go right!" << std::endl;
 			player->updatePosition(15, 0);
 		}
 
 		// If up button was pressed, move player up
 		if (inputPtr->getState(Action::UP) == KeyState::DOWN)
 		{
-			std::cout << "Go up!" << std::endl;
+			//std::cout << "Go up!" << std::endl;
 			player->updatePosition(0, -15);
 		}
 
 		// If dowbn button was pressed, move player down
 		if (inputPtr->getState(Action::DOWN) == KeyState::DOWN)
 		{
-			std::cout << "Go down!" << std::endl;
+			//std::cout << "Go down!" << std::endl;
 			player->updatePosition(0, 15);
 		}
 
@@ -151,18 +151,26 @@ void level1Update(Object* level1, Update::Type t)
 		Object test; //player
 		test.setPosition(10, 10);
 		test.setSize(20, 20);
-		test.setSpriteID(1);
 		test.setType(ObjectType::PLAYER);
 		test.setUpdateFunction(playerUpdate);
 		test.setCollisionFunction(playerCollision);
 		test.setName("Player");
+
+		Texture playerTexture = sysHeadHancho.RManager.getTexture("player");
+		test.setSpriteID(playerTexture.getID());
+
 		level1Ptr->addObject(test);
 
 		// 5 otters for testing
+
+		// first get the texture id (same texture used for all otters)
+		Texture otterTexture = sysHeadHancho.RManager.getTexture("otter");
+		unsigned otterID = otterTexture.getID();
+
 		Object otter1;
 		otter1.setPosition(100, 50);
 		otter1.setSize(30, 30);
-		otter1.setSpriteID(2);
+		otter1.setSpriteID(otterID);
 		otter1.setType(ObjectType::OTTER);
 		otter1.setCollisionFunction(otterCollision);
 		otter1.setUpdateFunction(otterUpdate);
@@ -172,7 +180,7 @@ void level1Update(Object* level1, Update::Type t)
 		Object otter2;
 		otter2.setPosition(500, 200);
 		otter2.setSize(30, 30);
-		otter2.setSpriteID(2);
+		otter2.setSpriteID(otterID);
 		otter2.setType(ObjectType::OTTER);
 		otter2.setCollisionFunction(otterCollision);
 		otter2.setUpdateFunction(otterUpdate);
@@ -182,7 +190,7 @@ void level1Update(Object* level1, Update::Type t)
 		Object otter3;
 		otter3.setPosition(300, 250);
 		otter3.setSize(30, 30);
-		otter3.setSpriteID(2);
+		otter3.setSpriteID(otterID);
 		otter3.setType(ObjectType::OTTER);
 		otter3.setCollisionFunction(otterCollision);
 		otter3.setUpdateFunction(otterUpdate);
@@ -192,7 +200,7 @@ void level1Update(Object* level1, Update::Type t)
 		Object otter4;
 		otter4.setPosition(300, 50);
 		otter4.setSize(30, 30);
-		otter4.setSpriteID(2);
+		otter4.setSpriteID(otterID);
 		otter4.setType(ObjectType::OTTER);
 		otter4.setCollisionFunction(otterCollision);
 		otter4.setUpdateFunction(otterUpdate);
@@ -202,7 +210,7 @@ void level1Update(Object* level1, Update::Type t)
 		Object otter5;
 		otter5.setPosition(700, 550);
 		otter5.setSize(30, 30);
-		otter5.setSpriteID(2);
+		otter5.setSpriteID(otterID);
 		otter5.setType(ObjectType::OTTER);
 		otter5.setCollisionFunction(otterCollision);
 		otter5.setUpdateFunction(otterUpdate);
@@ -284,18 +292,25 @@ void level2Update(Object* level1, Update::Type t)
 		Object test; //player
 		test.setPosition(10, 10);
 		test.setSize(20, 20);
-		test.setSpriteID(1);
 		test.setType(ObjectType::PLAYER);
 		test.setUpdateFunction(playerUpdate);
 		test.setCollisionFunction(playerCollision);
 		test.setName("Player");
+
+		Texture playerTexture = sysHeadHancho.RManager.getTexture("player");
+		test.setSpriteID(playerTexture.getID());
+
 		level2Ptr->addObject(test);
 
-		// 5 otters for testing
+		// a few otters for testing
+		// first get the texture id (same texture used for all otters)
+		Texture otterTexture = sysHeadHancho.RManager.getTexture("otter");
+		unsigned otterID = otterTexture.getID();
+
 		Object otter1;
 		otter1.setPosition(100, 50);
 		otter1.setSize(30, 30);
-		otter1.setSpriteID(2);
+		otter1.setSpriteID(otterID);
 		otter1.setType(ObjectType::OTTER);
 		otter1.setCollisionFunction(otterCollision);
 		otter1.setUpdateFunction(otterUpdate);
@@ -305,7 +320,7 @@ void level2Update(Object* level1, Update::Type t)
 		Object otter3;
 		otter3.setPosition(150, 250);
 		otter3.setSize(30, 30);
-		otter3.setSpriteID(2);
+		otter3.setSpriteID(otterID);
 		otter3.setType(ObjectType::OTTER);
 		otter3.setCollisionFunction(otterCollision);
 		otter3.setUpdateFunction(otterUpdate);
@@ -315,7 +330,7 @@ void level2Update(Object* level1, Update::Type t)
 		Object otter4;
 		otter4.setPosition(300, 70);
 		otter4.setSize(30, 30);
-		otter4.setSpriteID(2);
+		otter4.setSpriteID(otterID);
 		otter4.setType(ObjectType::OTTER);
 		otter4.setCollisionFunction(otterCollision);
 		otter4.setUpdateFunction(otterUpdate);
@@ -326,7 +341,7 @@ void level2Update(Object* level1, Update::Type t)
 		Object otter5;
 		otter5.setPosition(700, 550);
 		otter5.setSize(30, 30);
-		otter5.setSpriteID(2);
+		otter5.setSpriteID(otterID);
 		otter5.setType(ObjectType::OTTER);
 		otter5.setCollisionFunction(otterCollision);
 		otter5.setUpdateFunction(otterUpdate);
@@ -334,6 +349,7 @@ void level2Update(Object* level1, Update::Type t)
 		otter5.setName("Otter5");
 		level2Ptr->addObject(otter5);
 
+		// text for displaying win/score
 		Object testText;
 		testText.setPosition(250, 300);
 		testText.setSize(1, 1);
@@ -342,5 +358,138 @@ void level2Update(Object* level1, Update::Type t)
 		testText.setUpdateFunction(textUpdate);
 		testText.setName("WinText");
 		level2Ptr->addObject(testText);
+
+		// collision box to move to space invaders level
+		Object spaceInvadersCollision;
+		spaceInvadersCollision.setPosition(750, 300);
+		spaceInvadersCollision.setSize(30, 70);
+		spaceInvadersCollision.setType(ObjectType::TO_SPACE_INVADERS);
+		spaceInvadersCollision.setName("ToSpaceInvaders");
+		spaceInvadersCollision.setCollisionFunction(toSpaceInvadersCollision);
+		
+		Texture collisionTexture = sysHeadHancho.RManager.getTexture("collisionBox");
+		spaceInvadersCollision.setSpriteID(collisionTexture.getID());
+
+		level2Ptr->addObject(spaceInvadersCollision);
 	}
+
+	if (t == Update::DESTROYED)
+	{
+		// get global level ptr to access level 2 ptr
+		Level* globalLvPtr = sysHeadHancho.RManager.getLevel("GLOBAL_LEVEL");
+
+		// get the level1 object and set it to inactive
+		Object* level2Obj = globalLvPtr->getObject("LEVEL2");
+		level2Obj->setActive(false);
+
+		sysHeadHancho.RManager.removeLevel("LEVEL2");
+	}
+}
+
+// Collision behaviour between the object that transitions to the space invader level 
+	// and an another object
+// Transitions to the space invaders level when player collides with object
+void toSpaceInvadersCollision(Object* collisonObj, Object* obj2)
+{
+	// only transition to the space invader level if the player collided with it
+	if (obj2->getType() == ObjectType::PLAYER)
+	{
+		std::cout << "Go to space invaders!" << std::endl;
+
+		// get the global level to access the level objects
+		// for destorying level 2 and creating next levvel
+		Level* globalLvPtr = sysHeadHancho.RManager.getLevel("GLOBAL_LEVEL");
+
+		// get the level2 object to level 2 can be destryoed
+		Object* level2Obj = globalLvPtr->getObject("LEVEL2");
+
+		// destory level 2
+		level2Obj->getUpdatePtr()(level2Obj, Update::DESTROYED);
+
+		// get space invader level
+		Object* levelSpaceObj = globalLvPtr->getObject("LEVEL_SPACE_INVADERS");
+
+		// create the space invader level
+		levelSpaceObj->getUpdatePtr()(levelSpaceObj, Update::CREATED);
+	}
+}
+
+// Update behaviour on space invaders level given the type of update
+// update type can be on creation, run time, or on deletion
+void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
+{
+	// add level to list and create objects
+	if (t == Update::CREATED)
+	{
+		Level* levelSpacePtr = sysHeadHancho.RManager.addLevel("LEVEL_SPACE_INVADERS");
+		levelSpacePtr->setActive(true);
+
+		// load carrot spaceship
+		createCarrot(levelSpacePtr);
+
+		// load bullets (don't need to here anymore yo)---------------
+		createBullet(levelSpacePtr, ObjectType::PLAYER_BULLET);
+		createBullet(levelSpacePtr, ObjectType::ENEMY_BULLET);
+	}
+}
+
+// Creates the carrot ship with default starting position
+// Takes in the level to create it on
+void createCarrot(Level* spawnLevel)
+{
+	Texture carrotTexture = sysHeadHancho.RManager.getTexture("carrot");
+	unsigned carrotID = carrotTexture.getID();
+
+	Object carrot;
+	carrot.setPosition(300, 550);
+	carrot.setSize(20, 40);
+	carrot.setSpriteID(carrotID);
+	carrot.setType(ObjectType::CARROT);
+	//carrot.setCollisionFunction(otterCollision);
+	//carrot.setUpdateFunction(otterUpdate);
+	carrot.setName("Carrot");
+	spawnLevel->addObject(carrot);
+}
+
+// Creates a bullet (set to inactive and not visable right now)
+// Takes in level to create it on and the type of bullet it is
+// Type can be PLAYER_BULLET or ENEMEY_BULLET"
+// returns ptr to new bullets
+Object* createBullet(Level* spawnLevel, ObjectType::Type bulletType)
+{
+	// load bullet texture
+	Texture bulletTexture = sysHeadHancho.RManager.getTexture("bullet");
+	unsigned bulletID = bulletTexture.getID();
+
+	// set parameters same to all bullets
+	Object newBullet;
+	newBullet.setSize(5, 10);
+	newBullet.setSpriteID(bulletID);
+
+	if (bulletType == ObjectType::PLAYER_BULLET)
+	{
+		newBullet.setType(ObjectType::PLAYER_BULLET);
+		//playerBullet.setCollisionFunction();
+		//carrot.setUpdateFunction(otterUpdate);
+		newBullet.setName("PlayerBullet");
+		newBullet.setColour(glm::vec3(0.3, 0.89, 1)); // blue bullet
+	}
+
+	else if (bulletType == ObjectType::ENEMY_BULLET)
+	{
+		newBullet.setType(ObjectType::ENEMY_BULLET);
+		//playerBullet.setCollisionFunction();
+		//carrot.setUpdateFunction(otterUpdate);
+		newBullet.setName("EnemyBullet");
+		newBullet.setColour(glm::vec3(1, 0, 0)); // red bullet
+	}
+
+	else
+	{
+		std::cout << "Oh no! Wrong bullet type??" << std::endl;
+		return nullptr;
+	}
+
+	// add the bullet to the level and return ptr to it
+	return spawnLevel->addObject(newBullet);
 }

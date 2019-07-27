@@ -52,6 +52,13 @@ void Logic::createPlayer()
 	level2Obj.setVisable(false);
 	level2Obj.setName("LEVEL2");
 	globalLvPtr->addObject(level2Obj);
+
+	Object spaceInvadersLevelObj;
+	spaceInvadersLevelObj.setType(ObjectType::LEVEL);
+	spaceInvadersLevelObj.setUpdateFunction(levelSpaceInvadersUpdate);
+	spaceInvadersLevelObj.setVisable(false);
+	spaceInvadersLevelObj.setName("LEVEL_SPACE_INVADERS");
+	globalLvPtr->addObject(spaceInvadersLevelObj);
 	
 }
 
@@ -67,10 +74,24 @@ void Logic::doCollisions()
 		// get first object to check
 		Object* obj1 = sysHeadHancho.RManager.findObjectByPos(x);
 
+		// temp?--------------------------------------------------
+		// might be better to have zombie flag for levels
+		if (obj1 == nullptr)
+		{
+			continue;
+		}
+
 		for (int y = x; y < totalNumObjects; ++y) // setting y = x to minimizie duplication in checks
 		{
 			// get object to check against second
 			Object* obj2 = sysHeadHancho.RManager.findObjectByPos(y);
+
+			// temp?--------------------------------------------------
+			// might be better to have zombie flag for levels
+			if (obj2 == nullptr)
+			{
+				continue;
+			}
 
 			// check the collision between the two objects
 			bool isCollision = checkCollision(obj1, obj2);

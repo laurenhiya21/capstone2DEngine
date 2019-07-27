@@ -14,12 +14,16 @@
 // Or what should be done in collisions
 namespace ObjectType
 {
-	enum
+	enum Type
 	{
 		PLAYER,
 		OTTER,
 		TEXT,
 		LEVEL,
+		TO_SPACE_INVADERS,
+		CARROT,
+		PLAYER_BULLET,
+		ENEMY_BULLET,
 		TOTAL
 	};
 }
@@ -79,7 +83,6 @@ class Object
 		int getType();
 		collisionFunction getCollisionPtr();
 		updateFunction getUpdatePtr();
-
 		ObjectData* getObjectDataPtr();
 
 		// setters

@@ -1,4 +1,5 @@
 #include "Object.h"
+#include "Level.h" // for levelptr
 
 // set first free id
 unsigned Object::freeID = 0;
@@ -84,8 +85,7 @@ unsigned Object::getSpriteID()
 	return spriteID;
 }
 
-//***************************************************
-int Object::getType()
+ObjectType::Type Object::getType()
 {
 	return type;
 }
@@ -105,7 +105,10 @@ ObjectData* Object::getObjectDataPtr()
 	return objDataPtr;
 }
 
-//***************************************************
+Level* Object::getLevelPtr()
+{
+	return levelPtr;
+}
 
 //----------------------------------------------------------------------------------
 // Setters------------------------------------------------------------------------------
@@ -153,7 +156,7 @@ void Object::setSpriteID(unsigned i)
 	spriteID = i;
 }
 
-void Object::setType(unsigned t)
+void Object::setType(ObjectType::Type t)
 {
 	//make sure given type is valid
 	if (t >= ObjectType::TOTAL)
@@ -180,6 +183,11 @@ void Object::setUpdateFunction(updateFunction newFunct)
 void Object::setObjectDataPtr(ObjectData* newData)
 {
 	objDataPtr = newData;
+}
+
+void Object::setLevelPtr(Level* newLevel)
+{
+	levelPtr = newLevel;
 }
 
 // deconstructor

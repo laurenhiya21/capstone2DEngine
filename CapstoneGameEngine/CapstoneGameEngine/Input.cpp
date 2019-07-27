@@ -23,6 +23,9 @@ Input::Input()
 
 	// add key for ACCEPT (Enter for now?)
 	keyList.push_back(InputKey(GLFW_KEY_ENTER, KeyState::UP, Action::ACCEPT));
+
+	// add key for shooting
+	keyList.push_back(InputKey(GLFW_KEY_SPACE, KeyState::UP, Action::SHOOT));
 }
 
 // add a key to the keyList

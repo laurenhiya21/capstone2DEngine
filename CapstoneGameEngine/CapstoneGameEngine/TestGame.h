@@ -63,5 +63,6 @@ void createCarrot(Level*);
 // returns ptr to new bullet
 Object* createBullet(Level*, ObjectType::Type);
 
-// Update behaviour on space invaders level given the type of update
+// Update behaviour on carrot ship given the type of update
 // update type can be on creation, run time, or on deletion
+void carrotUpdate(Object*, Update::Type);

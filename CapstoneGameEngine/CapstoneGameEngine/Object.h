@@ -9,6 +9,8 @@
 #include "Update.h" // update types
 #include "ObjectData.h" 
 
+class Level; // forward declare level
+
 // Types of Objects that exist
 // Used for checking if certain updates should be done
 // Or what should be done in collisions
@@ -55,11 +57,11 @@ class Object
 		glm::vec3 colour; // colour of object
 		float rotation; // rotation of object (0.0f if none)
 		unsigned spriteID; // ID of texture/sprite of the object
-		int type; // associated with ObjectType, used for checking object updates and collisions
+		ObjectType::Type type; // associated with ObjectType, used for checking object updates and collisions
 		updateFunction updatePtr; // the function used to update the object
 		collisionFunction collisionPtr; // the function used to figure out collision behaviour with other objects
-
-		ObjectData* objDataPtr;
+		ObjectData* objDataPtr; // ptr to Object specfic data (like player stats or text)
+		Level* levelPtr; // ptr to the level that the Object is in
 		
 	public:
 
@@ -80,10 +82,11 @@ class Object
 		glm::vec3 getColour();
 		float getRotation();
 		unsigned getSpriteID();
-		int getType();
+		ObjectType::Type getType();
 		collisionFunction getCollisionPtr();
 		updateFunction getUpdatePtr();
 		ObjectData* getObjectDataPtr();
+		Level* getLevelPtr();
 
 		// setters
 		void setName(std::string);
@@ -94,11 +97,12 @@ class Object
 		void setSize(float x, float y);
 		void setRotation(float r);
 		void setSpriteID(unsigned i);
-		void setType(unsigned);
+		void setType(ObjectType::Type);
 		void setColour(glm::vec3);
 		void setCollisionFunction(collisionFunction newFunct);
 		void setUpdateFunction(updateFunction newFunct);
 		void setObjectDataPtr(ObjectData* newData);
+		void setLevelPtr(Level* newLevel);
 
 		// deconstructor
 		~Object();

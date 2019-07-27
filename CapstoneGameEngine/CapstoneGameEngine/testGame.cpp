@@ -426,10 +426,6 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 
 		// load carrot spaceship
 		createCarrot(levelSpacePtr);
-
-		// load bullets (don't need to here anymore yo)---------------
-		createBullet(levelSpacePtr, ObjectType::PLAYER_BULLET);
-		createBullet(levelSpacePtr, ObjectType::ENEMY_BULLET);
 	}
 }
 
@@ -446,8 +442,9 @@ void createCarrot(Level* spawnLevel)
 	carrot.setSpriteID(carrotID);
 	carrot.setType(ObjectType::CARROT);
 	//carrot.setCollisionFunction(otterCollision);
-	//carrot.setUpdateFunction(otterUpdate);
+	carrot.setUpdateFunction(carrotUpdate);
 	carrot.setName("Carrot");
+	carrot.setLevelPtr(spawnLevel);
 	spawnLevel->addObject(carrot);
 }
 
@@ -465,6 +462,7 @@ Object* createBullet(Level* spawnLevel, ObjectType::Type bulletType)
 	Object newBullet;
 	newBullet.setSize(5, 10);
 	newBullet.setSpriteID(bulletID);
+	newBullet.setLevelPtr(spawnLevel);
 
 	if (bulletType == ObjectType::PLAYER_BULLET)
 	{
@@ -492,4 +490,47 @@ Object* createBullet(Level* spawnLevel, ObjectType::Type bulletType)
 
 	// add the bullet to the level and return ptr to it
 	return spawnLevel->addObject(newBullet);
+}
+
+// Update behaviour on carrot ship given the type of update
+// update type can be on creation, run time, or on deletion
+void carrotUpdate(Object* carrot, Update::Type t)
+{
+	// update the carrot while it is still not dead
+	// (movement and shooting)
+	if (t == Update::UPDATED)
+	{
+		Input* inputPtr = (Input*)sysHeadHancho.sysList[sysNames::INPUT];
+
+		// If left button was pressed, move player left
+		if (inputPtr->getState(Action::LEFT) == KeyState::DOWN)
+		{
+			carrot->updatePosition(-15, 0);
+		}
+
+		// If right button was pressed, move player right
+		if (inputPtr->getState(Action::RIGHT) == KeyState::DOWN)
+		{
+			carrot->updatePosition(15, 0);
+		}
+
+		// if space pressed, shoot!
+		if (inputPtr->getState(Action::SHOOT) == KeyState::PRESSED)
+		{
+			// create a bullet
+			Object* newBullet = createBullet(carrot->getLevelPtr(), ObjectType::PLAYER_BULLET);
+			newBullet->setActive(true);
+			newBullet->setVisable(true);
+			newBullet->setPosition(carrot->getPosition().x, carrot->getPosition().y - 10);
+
+			//Object* newBullet = createBullet();
+			std::cout << "SHOOT" << std::endl;
+		}
+
+		// temp escape-----------------------------------------------
+		if (inputPtr->getState(Action::ESCAPE) == KeyState::DOWN)
+		{
+			sysHeadHancho.exit();
+		}
+	}
 }

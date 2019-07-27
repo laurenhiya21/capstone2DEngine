@@ -17,6 +17,7 @@ namespace Action
 		UP,
 		DOWN,
 		ACCEPT,
+		SHOOT,
 		TOTAL
 	};
 }

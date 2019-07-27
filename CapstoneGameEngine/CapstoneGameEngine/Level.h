@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
-#include "Object.h"
+#include <string>
+
+class Object; // forward declare Object just so it knows it exists
 
 class Level
 {

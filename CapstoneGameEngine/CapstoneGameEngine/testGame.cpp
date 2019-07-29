@@ -517,13 +517,15 @@ void carrotUpdate(Object* carrot, Update::Type t)
 		// if space pressed, shoot!
 		if (inputPtr->getState(Action::SHOOT) == KeyState::PRESSED)
 		{
-			// create a bullet
+			// create a bullet and add to level (createBullet adds to level)
 			Object* newBullet = createBullet(carrot->getLevelPtr(), ObjectType::PLAYER_BULLET);
 			newBullet->setActive(true);
 			newBullet->setVisable(true);
 			newBullet->setPosition(carrot->getPosition().x, carrot->getPosition().y - 10);
+			newBullet->setVelocity(0, -10); // bullet should go straight up
+			newBullet->setUpdateFunction(bulletUpdate);
+			// set collision function
 
-			//Object* newBullet = createBullet();
 			std::cout << "SHOOT" << std::endl;
 		}
 
@@ -531,6 +533,30 @@ void carrotUpdate(Object* carrot, Update::Type t)
 		if (inputPtr->getState(Action::ESCAPE) == KeyState::DOWN)
 		{
 			sysHeadHancho.exit();
+		}
+	}
+}
+
+// Update behaviour on a bullet given the type of update
+// update type can be on creation, run time, or on deletion
+// can handle both enemy and player bullets
+void bulletUpdate(Object* bullet, Update::Type t)
+{
+	if (t == Update::UPDATED)
+	{
+		// keep bullet moving (get cur position & add velocity to get new position)
+		bullet->setPosition(bullet->getPosition().x + bullet->getVelocity().x, bullet->getPosition().y + bullet->getVelocity().y);
+
+		// check to see if bullet is off the screen, and destory if it is
+		glm::vec2 newPos = bullet->getPosition();
+		unsigned winH = sysHeadHancho.mainWindow.getHeight();
+		unsigned winW = sysHeadHancho.mainWindow.getWidth();
+
+		// check all 4 sides of the screen
+		if (newPos.x <= 0 || newPos.x >= winW || newPos.y <= 0 || newPos.y >= winH)
+		{
+			// mark the bullet for destruction if it went off
+			bullet->setZombie(true);
 		}
 	}
 }

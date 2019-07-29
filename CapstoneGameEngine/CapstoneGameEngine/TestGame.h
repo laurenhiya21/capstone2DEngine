@@ -66,3 +66,8 @@ Object* createBullet(Level*, ObjectType::Type);
 // Update behaviour on carrot ship given the type of update
 // update type can be on creation, run time, or on deletion
 void carrotUpdate(Object*, Update::Type);
+
+// Update behaviour on a bullet given the type of update
+// update type can be on creation, run time, or on deletion
+// can handle both enemy and player bullets
+void bulletUpdate(Object*, Update::Type);

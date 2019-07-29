@@ -53,6 +53,7 @@ class Object
 		bool visable; // is object visable?
 		bool active; // does object need to be updated?
 		glm::vec2 position; // where object is on screen
+		glm::vec2 velocity; // how many units (pixels?) object moves (x,y) Doesn't do anything if not used to update position
 		glm::vec2 size; // size of object (w x h)
 		glm::vec3 colour; // colour of object
 		float rotation; // rotation of object (0.0f if none)
@@ -78,6 +79,7 @@ class Object
 		unsigned getID();
 		bool getActive();
 		glm::vec2 getPosition();
+		glm::vec2 getVelocity();
 		glm::vec2 getSize();
 		glm::vec3 getColour();
 		float getRotation();
@@ -94,6 +96,7 @@ class Object
 		void setVisable(bool);
 		void setActive(bool);
 		void setPosition(float x, float y);
+		void setVelocity(float x, float y);
 		void setSize(float x, float y);
 		void setRotation(float r);
 		void setSpriteID(unsigned i);

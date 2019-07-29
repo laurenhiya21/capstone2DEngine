@@ -65,6 +65,11 @@ glm::vec2 Object::getPosition()
 	return position;
 }
 
+glm::vec2 Object::getVelocity()
+{
+	return velocity;
+}
+
 glm::vec2 Object::getSize()
 {
 	return size;
@@ -138,6 +143,12 @@ void Object::setPosition(float x, float y)
 {
 	position.x = x;
 	position.y = y;
+}
+
+void Object::setVelocity(float x, float y)
+{
+	velocity.x = x;
+	velocity.y = y;
 }
 
 void Object::setSize(float x, float y)

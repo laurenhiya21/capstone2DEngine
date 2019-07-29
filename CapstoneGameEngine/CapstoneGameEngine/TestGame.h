@@ -87,3 +87,7 @@ void bulletUpdate(Object*, Update::Type);
 // assumption that obj1 is a bullet
 // handles both enemy and player bullets
 void bulletCollision(Object*, Object*);
+
+// Update behaviour on score given the type of update
+// update type can be on creation, run time, or on deletion
+void scoreUpdate(Object*, Update::Type);

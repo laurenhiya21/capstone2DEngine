@@ -7,6 +7,8 @@
 int score = 0; // a player's score for testing
 int winScore = 0; // score player needs to win (based on number of otters to collect)
 
+int invadersScore = 0; // score during space invaders
+
 // Collision behaviour between an otter an another object
 // assumption that obj1 is an otter
 void otterCollision(Object* obj1, Object* obj2)
@@ -429,6 +431,17 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 
 		// load the enemies (just one for now)
 		createEnemy(levelSpacePtr);
+
+		// create score text
+		// text for displaying win/score
+		Object scoreText;
+		scoreText.setPosition(250, 10);
+		scoreText.setSize(1, 1);
+		scoreText.setColour(glm::vec3(1, 1, 1));
+		scoreText.setType(ObjectType::TEXT);
+		scoreText.setUpdateFunction(scoreUpdate);
+		scoreText.setName("ScoreText");
+		levelSpacePtr->addObject(scoreText);
 	}
 }
 
@@ -596,6 +609,27 @@ void bulletCollision(Object* bullet, Object* obj2)
 	}
 }
 
+// Update behaviour on score given the type of update
+// update type can be on creation, run time, or on deletion
+void scoreUpdate(Object* scoreText, Update::Type t)
+{
+	// create the text specfic data
+	// this is auto deleted in the Object deconstrucor
+	if (t == Update::CREATED)
+	{
+		TextData* tData = new TextData;
+		tData->data = "Score: " + std::to_string(invadersScore);
+		scoreText->setObjectDataPtr(tData);
+	}
+
+	if (t == Update::UPDATED)
+	{
+		// keep the score up to date
+		TextData* tData = (TextData*)scoreText->getObjectDataPtr();
+		tData->data = "Score " + std::to_string(invadersScore);
+	}
+}
+
 // Collision behaviour between an enemy an another object
 // assumption that obj1 is an enemy
 void enemyCollision(Object* enemy, Object* obj2)
@@ -603,7 +637,8 @@ void enemyCollision(Object* enemy, Object* obj2)
 	// if enemy was hit by a player bullet, add score and destory it
 	if (obj2->getType() == ObjectType::PLAYER_BULLET)
 	{
-		// add score?
+		// add to player score
+		invadersScore += 10;
 
 		// set to destroy enemy
 		enemy->setZombie(true);

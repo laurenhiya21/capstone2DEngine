@@ -426,6 +426,9 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 
 		// load carrot spaceship
 		createCarrot(levelSpacePtr);
+
+		// load the enemies (just one for now)
+		createEnemy(levelSpacePtr);
 	}
 }
 
@@ -448,6 +451,28 @@ void createCarrot(Level* spawnLevel)
 	spawnLevel->addObject(carrot);
 }
 
+// Creates an enemy
+// Takes in level to create it on
+//-------------------------
+// for now a lot of hard coding
+//-----------------------
+void createEnemy(Level* spawnLevel)
+{
+	Texture foxTexture = sysHeadHancho.RManager.getTexture("fox");
+	unsigned foxID = foxTexture.getID();
+
+	Object fox;
+	fox.setPosition(300, 70);
+	fox.setSize(40, 40);
+	fox.setSpriteID(foxID);
+	fox.setType(ObjectType::ENEMY);
+	fox.setCollisionFunction(enemyCollision);
+	//fox.setUpdateFunction();
+	fox.setName("Fox");
+	fox.setLevelPtr(spawnLevel);
+	spawnLevel->addObject(fox);
+}
+
 // Creates a bullet (set to inactive and not visable right now)
 // Takes in level to create it on and the type of bullet it is
 // Type can be PLAYER_BULLET or ENEMEY_BULLET"
@@ -464,15 +489,18 @@ Object* createBullet(Level* spawnLevel, ObjectType::Type bulletType)
 	newBullet.setSpriteID(bulletID);
 	newBullet.setLevelPtr(spawnLevel);
 
+	// set player bullet specfics options
 	if (bulletType == ObjectType::PLAYER_BULLET)
 	{
+		newBullet.setVelocity(0, -10); // bullet should go straight up
 		newBullet.setType(ObjectType::PLAYER_BULLET);
-		//playerBullet.setCollisionFunction();
-		//carrot.setUpdateFunction(otterUpdate);
+		newBullet.setCollisionFunction(bulletCollision);
+		newBullet.setUpdateFunction(bulletUpdate);
 		newBullet.setName("PlayerBullet");
 		newBullet.setColour(glm::vec3(0.3, 0.89, 1)); // blue bullet
 	}
 
+	// set enemy bullet specfics options
 	else if (bulletType == ObjectType::ENEMY_BULLET)
 	{
 		newBullet.setType(ObjectType::ENEMY_BULLET);
@@ -522,11 +550,6 @@ void carrotUpdate(Object* carrot, Update::Type t)
 			newBullet->setActive(true);
 			newBullet->setVisable(true);
 			newBullet->setPosition(carrot->getPosition().x, carrot->getPosition().y - 10);
-			newBullet->setVelocity(0, -10); // bullet should go straight up
-			newBullet->setUpdateFunction(bulletUpdate);
-			// set collision function
-
-			std::cout << "SHOOT" << std::endl;
 		}
 
 		// temp escape-----------------------------------------------
@@ -558,5 +581,31 @@ void bulletUpdate(Object* bullet, Update::Type t)
 			// mark the bullet for destruction if it went off
 			bullet->setZombie(true);
 		}
+	}
+}
+
+// Collision behaviour between bullet and another object
+// assumption that obj1 is a bullet
+// handles both enemy and player bullets
+void bulletCollision(Object* bullet, Object* obj2)
+{
+	// if player's bullet hit and enemy, destroy bullet
+	if (bullet->getType() == ObjectType::PLAYER_BULLET && obj2->getType() == ObjectType::ENEMY)
+	{
+		bullet->setZombie(true);
+	}
+}
+
+// Collision behaviour between an enemy an another object
+// assumption that obj1 is an enemy
+void enemyCollision(Object* enemy, Object* obj2)
+{
+	// if enemy was hit by a player bullet, add score and destory it
+	if (obj2->getType() == ObjectType::PLAYER_BULLET)
+	{
+		// add score?
+
+		// set to destroy enemy
+		enemy->setZombie(true);
 	}
 }

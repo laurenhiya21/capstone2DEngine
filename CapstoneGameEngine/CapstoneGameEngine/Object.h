@@ -24,6 +24,7 @@ namespace ObjectType
 		LEVEL,
 		TO_SPACE_INVADERS,
 		CARROT,
+		ENEMY,
 		PLAYER_BULLET,
 		ENEMY_BULLET,
 		TOTAL

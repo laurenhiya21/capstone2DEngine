@@ -57,17 +57,33 @@ void levelSpaceInvadersUpdate(Object*, Update::Type);
 // Takes in the level to create it on
 void createCarrot(Level*);
 
+// Update behaviour on carrot ship given the type of update
+// update type can be on creation, run time, or on deletion
+void carrotUpdate(Object*, Update::Type);
+
+// Creates an enemy
+// Takes in level to create it on
+//--------------------------------
+// might expand this to do whole level of enemies with another function but for now just one at a default position
+//--------------------------------
+void createEnemy(Level*);
+
+// Collision behaviour between an enemy an another object
+// assumption that obj1 is an enemy
+void enemyCollision(Object*, Object*);
+
 // Creates a bullet (set to inactive and not visable right now)
 // Takes in level to create it on and the type of bullet it is
 // Type can be "PlayerBullet" or "EnemyBullet"
 // returns ptr to new bullet
 Object* createBullet(Level*, ObjectType::Type);
 
-// Update behaviour on carrot ship given the type of update
-// update type can be on creation, run time, or on deletion
-void carrotUpdate(Object*, Update::Type);
-
 // Update behaviour on a bullet given the type of update
 // update type can be on creation, run time, or on deletion
 // can handle both enemy and player bullets
 void bulletUpdate(Object*, Update::Type);
+
+// Collision behaviour between bullet and another object
+// assumption that obj1 is a bullet
+// handles both enemy and player bullets
+void bulletCollision(Object*, Object*);

@@ -61,12 +61,16 @@ void createCarrot(Level*);
 // update type can be on creation, run time, or on deletion
 void carrotUpdate(Object*, Update::Type);
 
+// Creates all enemies in a level
+// Takes in level to create them in
+void createAllEnemies(Level*);
+
 // Creates an enemy
-// Takes in level to create it on
+// Takes in level to create it on and position it should spawn in
 //--------------------------------
 // might expand this to do whole level of enemies with another function but for now just one at a default position
 //--------------------------------
-void createEnemy(Level*);
+void createEnemy(Level*, unsigned, unsigned);
 
 // Collision behaviour between an enemy an another object
 // assumption that obj1 is an enemy

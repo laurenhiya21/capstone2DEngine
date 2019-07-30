@@ -429,8 +429,8 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 		// load carrot spaceship
 		createCarrot(levelSpacePtr);
 
-		// load the enemies (just one for now)
-		createEnemy(levelSpacePtr);
+		// load the enemies
+		createAllEnemies(levelSpacePtr);
 
 		// create score text
 		// text for displaying win/score
@@ -469,13 +469,13 @@ void createCarrot(Level* spawnLevel)
 //-------------------------
 // for now a lot of hard coding
 //-----------------------
-void createEnemy(Level* spawnLevel)
+void createEnemy(Level* spawnLevel, unsigned posX, unsigned posY)
 {
 	Texture foxTexture = sysHeadHancho.RManager.getTexture("fox");
 	unsigned foxID = foxTexture.getID();
 
 	Object fox;
-	fox.setPosition(300, 70);
+	fox.setPosition(posX, posY);
 	fox.setSize(40, 40);
 	fox.setSpriteID(foxID);
 	fox.setType(ObjectType::ENEMY);
@@ -569,6 +569,54 @@ void carrotUpdate(Object* carrot, Update::Type t)
 		if (inputPtr->getState(Action::ESCAPE) == KeyState::DOWN)
 		{
 			sysHeadHancho.exit();
+		}
+	}
+}
+
+// Creates all enemies in a level
+// Creates several enemies in a set number of rows
+// Takes in level to create them in
+void createAllEnemies(Level* spawnLevel)
+{
+	int startX = 100; // position of first enemy
+	int startY = 50;
+	int curX = startX; // position of currenly spawning enemy
+	int curY = startY;
+	int offsetX = 50; // how much to space enemies X (space between enemies in same row)
+	int offsetY = 70; // how much to space enemies Y (space between rows)
+
+	unsigned enemiesCurInRow = 0; // num enemies in cur row
+	unsigned enemiesPerRow = 12; // num enemies needed per row
+	unsigned curNumRows = 0; // cur number of rows fully spawned
+	unsigned totalRows = 4; // total num rows needed
+
+	// keep spawning enemies until all rows have finished spawning
+	while (curNumRows < totalRows)
+	{
+		// spawn an enemy at the cur position
+		createEnemy(spawnLevel, curX, curY);
+		++enemiesCurInRow;
+
+		// if spawned all enemies needed in row
+		// move onto the next row
+		if (enemiesCurInRow == enemiesPerRow)
+		{
+			// add to completed rows
+			++curNumRows;
+
+			// adjust cur spawn position to start of next row
+			curX = startX;
+			curY = startY + (offsetY * curNumRows);
+
+			// reset num enemies
+			enemiesCurInRow = 0;
+		}
+
+		// if still need to spawn in current row
+		else
+		{
+			// just adjust x position (keep enemy in cur row)
+			curX += offsetX;
 		}
 	}
 }

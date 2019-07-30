@@ -1,6 +1,7 @@
 #include "TestGame.h"
 
 #include <iostream>
+#include <ctime> // enemy firing time
 #include "Input.h" // moving player
 #include "CoreObjects.h" // text object data
 
@@ -429,6 +430,8 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 		// create and initliaze the level data
 		SpaceInvaderLevelData* levelData = new SpaceInvaderLevelData;
 		levelData->totalEnemies = 0;
+		levelData->fireInterval = 2;
+		levelData->timeSinceLastFire = std::time(0); // get current time
 		spaceLevel->setObjectDataPtr(levelData);
 
 		// load carrot spaceship
@@ -447,6 +450,41 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 		scoreText.setUpdateFunction(scoreUpdate);
 		scoreText.setName("ScoreText");
 		levelSpacePtr->addObject(scoreText);
+	}
+
+	if (t == Update::UPDATED)
+	{
+		// check to see if an enemy should fire or not
+		// data which has the time since the last enemy fire
+		Object* spaceLvObj = sysHeadHancho.RManager.getLevel("GLOBAL_LEVEL")->getObject("LEVEL_SPACE_INVADERS");
+		SpaceInvaderLevelData* spaceLvData = (SpaceInvaderLevelData*)spaceLvObj->getObjectDataPtr();
+
+		// probably need to set levelObjects active/inactive instead----------------------------------------
+		if (spaceLvData == nullptr)
+		{
+			return;
+		}
+
+		// get currrent time
+		time_t curTime = std::time(0);
+		
+		// if there has been enough time since the last fire (according to time interval)
+		// have an enemy fire a bullet
+		if ((curTime - spaceLvData->timeSinceLastFire) >= spaceLvData->fireInterval)
+		{
+			// get the Level to add the bullet to
+			Level* spaceLvPtr = sysHeadHancho.RManager.getLevel("LEVEL_SPACE_INVADERS");
+
+			// create the bullet
+			Object* newBullet = createBullet(spaceLvPtr, ObjectType::ENEMY_BULLET);
+			
+			// get a random enemy to fire from(for now not random)---------------------------------------
+			Object* enemyToFire = getNthEnemy(spaceLvPtr, 6);
+			newBullet->setPosition(enemyToFire->getPosition().x, enemyToFire->getPosition().y + 10);
+
+			// reset the fire time
+			spaceLvData->timeSinceLastFire = std::time(0);
+		}
 	}
 }
 
@@ -496,6 +534,34 @@ void createEnemy(Level* spawnLevel, unsigned posX, unsigned posY)
 	++spaceLvData->totalEnemies;
 }
 
+// get the nth enemy on given level, where n is a number between 0 and totalNum-1 of enemies
+// returns ptr to the chosen enemy
+// if given num is >= totalNum of enemies, returns the last enemy
+Object* getNthEnemy(Level* enemyLv, unsigned n)
+{
+	int currentEnemyNum = -1; // which nth enemy we're at (-1 = haven't checked any, 0th is first)
+	Object* curObject; // current object we're checking
+	Object* curEnemy = nullptr; // current enemy we're storing
+
+	// go through all the objects in the level until out of objects
+	// or we've gotten the nth enemy
+	for (int x = 0; currentEnemyNum > enemyLv->getNumObjects() || currentEnemyNum >= n; ++x)
+	{
+		// get the current object
+		curObject = enemyLv->getObjectByPos(x);
+
+		// if the current object is an enemy
+		// store it and increase num of enemies we've checked
+		if (curObject->getType() == ObjectType::ENEMY)
+		{
+			++currentEnemyNum;
+			curEnemy = curObject;
+		}
+	}
+
+	return curEnemy;
+}
+
 // Creates a bullet (set to inactive and not visable right now)
 // Takes in level to create it on and the type of bullet it is
 // Type can be PLAYER_BULLET or ENEMEY_BULLET"
@@ -526,9 +592,10 @@ Object* createBullet(Level* spawnLevel, ObjectType::Type bulletType)
 	// set enemy bullet specfics options
 	else if (bulletType == ObjectType::ENEMY_BULLET)
 	{
+		newBullet.setVelocity(0, 10); // bullet should go straight down
 		newBullet.setType(ObjectType::ENEMY_BULLET);
 		//playerBullet.setCollisionFunction();
-		//carrot.setUpdateFunction(otterUpdate);
+		newBullet.setUpdateFunction(bulletUpdate);
 		newBullet.setName("EnemyBullet");
 		newBullet.setColour(glm::vec3(1, 0, 0)); // red bullet
 	}

@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <cstring> // enemy firing time
 #include "Object.h"
 #include "Update.h" // update types
 #include "Level.h"
@@ -57,7 +58,9 @@ void levelSpaceInvadersUpdate(Object*, Update::Type);
 class SpaceInvaderLevelData : public ObjectData
 {
 	public: 
-		unsigned totalEnemies;
+		unsigned totalEnemies; // total num enemies cur in the level
+		unsigned fireInterval; // time (sec) when enemies should fire
+		time_t timeSinceLastFire; // time (secs) that any enemy fired last
 };
 
 // Creates the carrot ship with default starting position
@@ -78,6 +81,10 @@ void createAllEnemies(Level*);
 // might expand this to do whole level of enemies with another function but for now just one at a default position
 //--------------------------------
 void createEnemy(Level*, unsigned, unsigned);
+
+// get the nth enemy on given level, where n is a number between 1 and totalNum of enemies
+// returns ptr to the chosen enemy
+Object* getNthEnemy(Level*, unsigned);
 
 // Collision behaviour between an enemy an another object
 // assumption that obj1 is an enemy

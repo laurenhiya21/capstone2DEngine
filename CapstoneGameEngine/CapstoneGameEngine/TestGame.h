@@ -53,6 +53,13 @@ void toSpaceInvadersCollision(Object*, Object*);
 // update type can be on creation, run time, or on deletion
 void levelSpaceInvadersUpdate(Object*, Update::Type);
 
+// Data associated with the space invader level
+class SpaceInvaderLevelData : public ObjectData
+{
+	public: 
+		unsigned totalEnemies;
+};
+
 // Creates the carrot ship with default starting position
 // Takes in the level to create it on
 void createCarrot(Level*);

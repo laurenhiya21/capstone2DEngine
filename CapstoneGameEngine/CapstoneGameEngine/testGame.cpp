@@ -426,6 +426,11 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 		Level* levelSpacePtr = sysHeadHancho.RManager.addLevel("LEVEL_SPACE_INVADERS");
 		levelSpacePtr->setActive(true);
 
+		// create and initliaze the level data
+		SpaceInvaderLevelData* levelData = new SpaceInvaderLevelData;
+		levelData->totalEnemies = 0;
+		spaceLevel->setObjectDataPtr(levelData);
+
 		// load carrot spaceship
 		createCarrot(levelSpacePtr);
 
@@ -484,6 +489,11 @@ void createEnemy(Level* spawnLevel, unsigned posX, unsigned posY)
 	fox.setName("Fox");
 	fox.setLevelPtr(spawnLevel);
 	spawnLevel->addObject(fox);
+
+	// get the spaceInvadersLevel obj and incriment total num enemies in level
+	Object* spaceLvObj = sysHeadHancho.RManager.getLevel("GLOBAL_LEVEL")->getObject("LEVEL_SPACE_INVADERS");
+	SpaceInvaderLevelData* spaceLvData = (SpaceInvaderLevelData*)spaceLvObj->getObjectDataPtr();
+	++spaceLvData->totalEnemies;
 }
 
 // Creates a bullet (set to inactive and not visable right now)
@@ -586,9 +596,9 @@ void createAllEnemies(Level* spawnLevel)
 	int offsetY = 70; // how much to space enemies Y (space between rows)
 
 	unsigned enemiesCurInRow = 0; // num enemies in cur row
-	unsigned enemiesPerRow = 12; // num enemies needed per row
+	unsigned enemiesPerRow = 5; // num enemies needed per row
 	unsigned curNumRows = 0; // cur number of rows fully spawned
-	unsigned totalRows = 4; // total num rows needed
+	unsigned totalRows = 2; // total num rows needed
 
 	// keep spawning enemies until all rows have finished spawning
 	while (curNumRows < totalRows)
@@ -675,6 +685,17 @@ void scoreUpdate(Object* scoreText, Update::Type t)
 		// keep the score up to date
 		TextData* tData = (TextData*)scoreText->getObjectDataPtr();
 		tData->data = "Score " + std::to_string(invadersScore);
+
+		// TEMP FOR TEST!--------------------------------------------------
+		//-----------------------------------------------------------------
+		Object* spaceLvObj = sysHeadHancho.RManager.getLevel("GLOBAL_LEVEL")->getObject("LEVEL_SPACE_INVADERS");
+		SpaceInvaderLevelData* spaceLvData = (SpaceInvaderLevelData*)spaceLvObj->getObjectDataPtr();
+
+		if (spaceLvData->totalEnemies == 0)
+		{
+			tData->data = "Enemies all dead!";
+		}
+		//-----------------------------------------------------------------
 	}
 }
 
@@ -690,5 +711,10 @@ void enemyCollision(Object* enemy, Object* obj2)
 
 		// set to destroy enemy
 		enemy->setZombie(true);
+
+		// decrease count of enemy num
+		Object* spaceLvObj = sysHeadHancho.RManager.getLevel("GLOBAL_LEVEL")->getObject("LEVEL_SPACE_INVADERS");
+		SpaceInvaderLevelData* spaceLvData = (SpaceInvaderLevelData*)spaceLvObj->getObjectDataPtr();
+		--spaceLvData->totalEnemies;
 	}
 }

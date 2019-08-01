@@ -489,8 +489,8 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 				// create the bullet
 				Object* newBullet = createBullet(spaceLvPtr, ObjectType::ENEMY_BULLET);
 
-				// set the bullet position to come out of the enemy
-				newBullet->setPosition(enemyToFire->getPosition().x, enemyToFire->getPosition().y + 10);
+				// set the bullet position to come out approx center and front of the enemy
+				newBullet->setPosition(enemyToFire->getPosition().x + (enemyToFire->getSize().x/2), enemyToFire->getPosition().y + (enemyToFire->getSize().y));
 
 				// reset the fire time
 				spaceLvData->timeSinceLastFire = std::time(0);
@@ -656,7 +656,9 @@ void carrotUpdate(Object* carrot, Update::Type t)
 			Object* newBullet = createBullet(carrot->getLevelPtr(), ObjectType::PLAYER_BULLET);
 			newBullet->setActive(true);
 			newBullet->setVisable(true);
-			newBullet->setPosition(carrot->getPosition().x, carrot->getPosition().y - 10);
+
+			// set bullet position to come out approx center of carrot top
+			newBullet->setPosition(carrot->getPosition().x + (carrot->getSize().x/2), carrot->getPosition().y - 5);
 		}
 
 		// temp escape-----------------------------------------------

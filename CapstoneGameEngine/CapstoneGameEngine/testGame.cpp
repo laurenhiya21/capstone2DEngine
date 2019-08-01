@@ -1,6 +1,7 @@
 #include "TestGame.h"
 
 #include <iostream>
+#include <stdlib.h> // random enemy fire
 #include <ctime> // enemy firing time
 #include "Input.h" // moving player
 #include "CoreObjects.h" // text object data
@@ -475,15 +476,25 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 			// get the Level to add the bullet to
 			Level* spaceLvPtr = sysHeadHancho.RManager.getLevel("LEVEL_SPACE_INVADERS");
 
-			// create the bullet
-			Object* newBullet = createBullet(spaceLvPtr, ObjectType::ENEMY_BULLET);
-			
-			// get a random enemy to fire from(for now not random)---------------------------------------
-			Object* enemyToFire = getNthEnemy(spaceLvPtr, 6);
-			newBullet->setPosition(enemyToFire->getPosition().x, enemyToFire->getPosition().y + 10);
+			// itlitilzae rnd seed (for enemy firing)
+			srand(std::time(0));
 
-			// reset the fire time
-			spaceLvData->timeSinceLastFire = std::time(0);
+			// get rnd enemy to fire from (0 to # enemies -1)
+			unsigned enemyToGet = (rand() % (spaceLvPtr->getNumObjects() - 1));
+			Object* enemyToFire = getNthEnemy(spaceLvPtr, enemyToGet);
+
+			// make sure there actually was an enemy to fire
+			if (enemyToFire != nullptr)
+			{
+				// create the bullet
+				Object* newBullet = createBullet(spaceLvPtr, ObjectType::ENEMY_BULLET);
+
+				// set the bullet position to come out of the enemy
+				newBullet->setPosition(enemyToFire->getPosition().x, enemyToFire->getPosition().y + 10);
+
+				// reset the fire time
+				spaceLvData->timeSinceLastFire = std::time(0);
+			}
 		}
 	}
 }
@@ -535,7 +546,7 @@ void createEnemy(Level* spawnLevel, unsigned posX, unsigned posY)
 }
 
 // get the nth enemy on given level, where n is a number between 0 and totalNum-1 of enemies
-// returns ptr to the chosen enemy
+// returns ptr to the chosen enemy (nullptr if none)
 // if given num is >= totalNum of enemies, returns the last enemy
 Object* getNthEnemy(Level* enemyLv, unsigned n)
 {
@@ -545,7 +556,7 @@ Object* getNthEnemy(Level* enemyLv, unsigned n)
 
 	// go through all the objects in the level until out of objects
 	// or we've gotten the nth enemy
-	for (int x = 0; currentEnemyNum > enemyLv->getNumObjects() || currentEnemyNum >= n; ++x)
+	for (int x = 0; x < enemyLv->getNumObjects(); ++x)
 	{
 		// get the current object
 		curObject = enemyLv->getObjectByPos(x);
@@ -556,6 +567,12 @@ Object* getNthEnemy(Level* enemyLv, unsigned n)
 		{
 			++currentEnemyNum;
 			curEnemy = curObject;
+
+			// stop looking for enemies if we're at the right one
+			if (currentEnemyNum >= n)
+			{
+				break;
+			}
 		}
 	}
 

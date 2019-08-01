@@ -5,6 +5,7 @@
 #include <ctime> // enemy firing time
 #include "Input.h" // moving player
 #include "CoreObjects.h" // text object data
+#include <chrono>
 
 int score = 0; // a player's score for testing
 int winScore = 0; // score player needs to win (based on number of otters to collect)
@@ -433,7 +434,13 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 		levelData->totalEnemies = 0;
 		levelData->fireInterval = 2;
 		levelData->timeSinceLastFire = std::time(0); // get current time
+		levelData->moveInterval = 2; // change to ms later! (so need to really change num here)--------
+		levelData->enemyVelocity = 5; // amount enemies should move after eacf interval
+		levelData->timeSinceLastMove = std::time(0); // get current time ---- probably change to milliseconds later!
+		levelData->enemiesMoveRight = true; // enemies start by moving right
 		spaceLevel->setObjectDataPtr(levelData);
+
+		//std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
 
 		// load carrot spaceship
 		createCarrot(levelSpacePtr);
@@ -473,7 +480,7 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 		// have an enemy fire a bullet
 		if ((curTime - spaceLvData->timeSinceLastFire) >= spaceLvData->fireInterval)
 		{
-			// get the Level to add the bullet to
+			// get level for moving enemies and firing bullets
 			Level* spaceLvPtr = sysHeadHancho.RManager.getLevel("LEVEL_SPACE_INVADERS");
 
 			// itlitilzae rnd seed (for enemy firing)
@@ -495,6 +502,22 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 				// reset the fire time
 				spaceLvData->timeSinceLastFire = std::time(0);
 			}
+		}
+
+		curTime = std::time(0); // get current time
+
+		// need to change from secs to ms later prob!--------------------------------------------------------
+		// if there has been enough time since the last enemy movement (according to time interval)
+		// move all enemies
+		if ((curTime - spaceLvData->timeSinceLastMove) >= spaceLvData->moveInterval)
+		{
+			// get level for moving enemies and firing bullets
+			Level* spaceLvPtr = sysHeadHancho.RManager.getLevel("LEVEL_SPACE_INVADERS");
+
+			moveAllEnemies(spaceLvPtr);
+
+			// reset move time
+			spaceLvData->timeSinceLastMove = std::time(0);
 		}
 	}
 }
@@ -782,6 +805,46 @@ void scoreUpdate(Object* scoreText, Update::Type t)
 			tData->data = "Enemies all dead!";
 		}
 		//-----------------------------------------------------------------
+	}
+}
+
+// Move all the enemies in the level by the enemyVelocity (one step per call)
+// Moves enemies back and forth across screen while slowly advancing forward
+// keeps enemies within bounds of level
+void moveAllEnemies(Level* enemyLevel)
+{
+	Object* enemyToMove; // get the enemy to move
+	Object* previousEnemy = nullptr; // previous enemy we moved
+
+	// get level data
+	Object* spaceLvObj = sysHeadHancho.RManager.getLevel("GLOBAL_LEVEL")->getObject("LEVEL_SPACE_INVADERS");
+	SpaceInvaderLevelData* spaceLvData = (SpaceInvaderLevelData*)spaceLvObj->getObjectDataPtr();
+
+	// go through all objects in the level until there are no more enemies to move
+	for (int x = 0; x < enemyLevel->getNumObjects(); ++x)
+	{
+		// get the enemy to move
+		enemyToMove = getNthEnemy(enemyLevel, x);
+
+		// if there were no enemies in the level, there is nothing to move
+		if (enemyToMove == nullptr)
+		{
+			return;
+		}
+
+		// if the current enemy we're moving is the same as the last enemy we moved
+		// that means we ran out of enemies so no more moving
+		if (previousEnemy != nullptr && enemyToMove->getID() == previousEnemy->getID())
+		{
+			return;
+		}
+
+		// now enemy can actually be moved
+		// (for now just moving one direction)---------------------------------------
+		enemyToMove->setPosition(enemyToMove->getPosition().x + spaceLvData->enemyVelocity, enemyToMove->getPosition().y);
+
+		// set the moved enemy as the new previous one
+		previousEnemy = enemyToMove;
 	}
 }
 

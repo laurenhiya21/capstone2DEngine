@@ -61,6 +61,10 @@ class SpaceInvaderLevelData : public ObjectData
 		unsigned totalEnemies; // total num enemies cur in the level
 		unsigned fireInterval; // time (sec) when enemies should fire
 		time_t timeSinceLastFire; // time (secs) that any enemy fired last
+		unsigned moveInterval; // how often enemies should move (secs but later want ms)
+		time_t timeSinceLastMove; // time (secs) that enemies have moved last------------------------------ change to ms later
+		bool enemiesMoveRight; // whether enemies are moving right (true) or left (false)
+		unsigned enemyVelocity; // how much all enemies main move
 };
 
 // Creates the carrot ship with default starting position
@@ -85,6 +89,11 @@ void createEnemy(Level*, unsigned, unsigned);
 // get the nth enemy on given level, where n is a number between 1 and totalNum of enemies
 // returns ptr to the chosen enemy
 Object* getNthEnemy(Level*, unsigned);
+
+// Move all the enemies in the level by the enemyVelocity (one step per call)
+// Moves enemies back and forth across screen while slowly advancing forward
+// keeps enemies within bounds of level
+void moveAllEnemies(Level*);
 
 // Collision behaviour between an enemy an another object
 // assumption that obj1 is an enemy

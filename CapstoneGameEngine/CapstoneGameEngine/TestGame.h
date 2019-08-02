@@ -67,6 +67,18 @@ class SpaceInvaderLevelData : public ObjectData
 		unsigned enemyVelocity; // how much all enemies main move
 };
 
+// The four edges in the group of enemies
+namespace EnemyEdge
+{
+	enum Edge
+	{
+		TOP,
+		RIGHT,
+		BOTTOM,
+		LEFT
+	};
+}
+
 // Creates the carrot ship with default starting position
 // Takes in the level to create it on
 void createCarrot(Level*);
@@ -90,10 +102,21 @@ void createEnemy(Level*, unsigned, unsigned);
 // returns ptr to the chosen enemy
 Object* getNthEnemy(Level*, unsigned);
 
+// get the enemy that is on the outer edge of the group of enemies in the given level
+// Returns the enemy on the outermost edge
+// Edge can be TOP, RIGHT, BOTTOM, or LEFT
+// Returns nullptr if no enemies
+Object* getEdgeEnemy(Level*, EnemyEdge::Edge);
+
+// checks which direction enemies should move in (based on enemiesMoveRight)
+// changes direction to keep enemies within the window
+// calls moveAllEnemies based on what direction they should move in
+void moveEnemiesCheck(Level*);
+
 // Move all the enemies in the level by the enemyVelocity (one step per call)
-// Moves enemies back and forth across screen while slowly advancing forward
-// keeps enemies within bounds of level
-void moveAllEnemies(Level*);
+// EnemyEdge is uesd as a direction to move enemies
+// does not check for bounds and is assumed that given movement is valid
+void moveAllEnemies(Level*, EnemyEdge::Edge);
 
 // Collision behaviour between an enemy an another object
 // assumption that obj1 is an enemy

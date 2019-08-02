@@ -434,8 +434,8 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 		levelData->totalEnemies = 0;
 		levelData->fireInterval = 2;
 		levelData->timeSinceLastFire = std::time(0); // get current time
-		levelData->moveInterval = 2; // change to ms later! (so need to really change num here)--------
-		levelData->enemyVelocity = 5; // amount enemies should move after eacf interval
+		levelData->moveInterval = 1; // change to ms later! (so need to really change num here)--------
+		levelData->enemyVelocity = 40; // amount enemies should move after eacf interval
 		levelData->timeSinceLastMove = std::time(0); // get current time ---- probably change to milliseconds later!
 		levelData->enemiesMoveRight = true; // enemies start by moving right
 		spaceLevel->setObjectDataPtr(levelData);
@@ -514,7 +514,7 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 			// get level for moving enemies and firing bullets
 			Level* spaceLvPtr = sysHeadHancho.RManager.getLevel("LEVEL_SPACE_INVADERS");
 
-			moveAllEnemies(spaceLvPtr);
+			moveEnemiesCheck(spaceLvPtr);
 
 			// reset move time
 			spaceLvData->timeSinceLastMove = std::time(0);
@@ -705,9 +705,9 @@ void createAllEnemies(Level* spawnLevel)
 	int offsetY = 70; // how much to space enemies Y (space between rows)
 
 	unsigned enemiesCurInRow = 0; // num enemies in cur row
-	unsigned enemiesPerRow = 5; // num enemies needed per row
+	unsigned enemiesPerRow = 10; // num enemies needed per row
 	unsigned curNumRows = 0; // cur number of rows fully spawned
-	unsigned totalRows = 2; // total num rows needed
+	unsigned totalRows = 4; // total num rows needed
 
 	// keep spawning enemies until all rows have finished spawning
 	while (curNumRows < totalRows)
@@ -808,29 +808,150 @@ void scoreUpdate(Object* scoreText, Update::Type t)
 	}
 }
 
+// get the enemy that is on the outer edge of the group of enemies in the given level
+// Returns the enemy on the outermost edge
+// Edge can be TOP, RIGHT, BOTTOM, or LEFT
+// Returns nullptr if no enemies
+Object* getEdgeEnemy(Level* enemyLevel, EnemyEdge::Edge edgeToCheck)
+{
+	Object* enemyToCheck = nullptr; // get the enemy to check
+	Object* previousEnemy = nullptr; // previous enemy we check
+	Object* outerEnemy = nullptr; // the outermost enemy
+
+	// go through all objects in the level until there are no more enemies to check
+	for (int x = 0; x < enemyLevel->getNumObjects(); ++x)
+	{
+		// get the enemy to check
+		enemyToCheck = getNthEnemy(enemyLevel, x);
+
+		// stop if there are no enemies to check
+		if (enemyToCheck == nullptr)
+		{
+			return nullptr;
+		}
+
+		// if the current enemy we're moving is the same as the last enemy we checked
+		// that means we ran out of enemies stop checking
+		if (previousEnemy != nullptr && enemyToCheck->getID() == previousEnemy->getID())
+		{
+			break;
+		}
+
+		// if no enemy assigned to outer enemy yet
+		// auto assign current enemy to it
+		if (outerEnemy == nullptr)
+		{
+			outerEnemy = enemyToCheck;
+		}
+
+		// if we're checking the righthand side of the group and cur enemy is closer to right than outer enemy
+		// assign curenemy as new outerEnemy
+		else if (edgeToCheck == EnemyEdge::RIGHT && enemyToCheck->getPosition().x > outerEnemy->getPosition().x)
+		{
+			outerEnemy = enemyToCheck;
+		}
+
+		// reassign new previous enemy
+		previousEnemy = enemyToCheck;
+	}
+
+	return outerEnemy;
+}
+
 // Move all the enemies in the level by the enemyVelocity (one step per call)
 // Moves enemies back and forth across screen while slowly advancing forward
 // keeps enemies within bounds of level
-void moveAllEnemies(Level* enemyLevel)
+void moveEnemiesCheck(Level* enemyLevel)
 {
-	Object* enemyToMove; // get the enemy to move
-	Object* previousEnemy = nullptr; // previous enemy we moved
-
 	// get level data
 	Object* spaceLvObj = sysHeadHancho.RManager.getLevel("GLOBAL_LEVEL")->getObject("LEVEL_SPACE_INVADERS");
 	SpaceInvaderLevelData* spaceLvData = (SpaceInvaderLevelData*)spaceLvObj->getObjectDataPtr();
 
-	// go through all objects in the level until there are no more enemies to move
-	for (int x = 0; x < enemyLevel->getNumObjects(); ++x)
-	{
-		// get the enemy to move
-		enemyToMove = getNthEnemy(enemyLevel, x);
+	// dimensions of window to know when we need to change direction
+	unsigned winH = sysHeadHancho.mainWindow.getHeight();
+	unsigned winW = sysHeadHancho.mainWindow.getWidth();
 
-		// if there were no enemies in the level, there is nothing to move
-		if (enemyToMove == nullptr)
+	// figure out which direction enemies need to move
+
+	// if enemies are supposed to move right
+	if (spaceLvData->enemiesMoveRight == true)
+	{
+		// get the outermost enemy on the right (for checking if go offscreen)
+		Object* outerEnemy = getEdgeEnemy(enemyLevel, EnemyEdge::RIGHT);
+
+		// if outerEnemy is null, no enemies exist so stop
+		if (outerEnemy == nullptr)
 		{
 			return;
 		}
+
+		// check if enemies would go offscreen before moving right
+		// if they would, move down instead and switch enemy movement to left for next time
+		// (need to add position, velocity, and size of enemy since position is based on top left corner)
+		if (outerEnemy->getPosition().x + spaceLvData->enemyVelocity + outerEnemy->getSize().x > winW)
+		{
+			// move all enemies down
+			moveAllEnemies(enemyLevel, EnemyEdge::BOTTOM);
+
+			// move enemies left next time
+			spaceLvData->enemiesMoveRight = false;
+		}
+
+		// if enemies would still be in bounds, move them right
+		else
+		{
+			moveAllEnemies(enemyLevel, EnemyEdge::RIGHT);
+		}
+	}
+
+	// enemies are supposed to move left
+	else
+	{
+		// get the outermost enemy on the left (for checking if go offscreen)
+		Object* outerEnemy = getEdgeEnemy(enemyLevel, EnemyEdge::LEFT);
+
+		// if outerEnemy is null, no enemies exist so stop
+		if (outerEnemy == nullptr)
+		{
+			return;
+		}
+
+		// check if enemies would go offscreen before moving left
+		// if they would, move down instead and switch enemy movement to right for next time
+		if (outerEnemy->getPosition().x - spaceLvData->enemyVelocity < 0)
+		{
+			// move all enemies down
+			moveAllEnemies(enemyLevel, EnemyEdge::BOTTOM);
+
+			// move enemies left next time
+			spaceLvData->enemiesMoveRight = true;
+		}
+
+		// if enemies would still be in bounds, move them left
+		else
+		{
+			moveAllEnemies(enemyLevel, EnemyEdge::LEFT);
+		}
+	}
+}
+
+// Move all the enemies in the level by the enemyVelocity (one step per call)
+// EnemyEdge is uesd as a direction to move enemies
+// does not check for bounds and is assumed that given movement is valid
+void moveAllEnemies(Level* enemyLevel, EnemyEdge::Edge directionToMove)
+{
+	// get level data
+	Object* spaceLvObj = sysHeadHancho.RManager.getLevel("GLOBAL_LEVEL")->getObject("LEVEL_SPACE_INVADERS");
+	SpaceInvaderLevelData* spaceLvData = (SpaceInvaderLevelData*)spaceLvObj->getObjectDataPtr();
+
+	Object* enemyToMove; // get the enemy to move
+	Object* previousEnemy = nullptr; // previous enemy we moved
+
+	// go through all objects in the level until there are no more enemies to move
+	for (int x = 0; x < enemyLevel->getNumObjects(); ++x)
+	{
+		// get the enemy to move (if getting outer enemy passed, this should pass too)
+		enemyToMove = getNthEnemy(enemyLevel, x);
 
 		// if the current enemy we're moving is the same as the last enemy we moved
 		// that means we ran out of enemies so no more moving
@@ -839,9 +960,29 @@ void moveAllEnemies(Level* enemyLevel)
 			return;
 		}
 
-		// now enemy can actually be moved
-		// (for now just moving one direction)---------------------------------------
-		enemyToMove->setPosition(enemyToMove->getPosition().x + spaceLvData->enemyVelocity, enemyToMove->getPosition().y);
+		// if enemies need to move right, move them right
+		if (directionToMove == EnemyEdge::RIGHT)
+		{
+			enemyToMove->setPosition(enemyToMove->getPosition().x + spaceLvData->enemyVelocity, enemyToMove->getPosition().y);
+		}
+
+		// if enemies need to move left, move them left
+		else if (directionToMove == EnemyEdge::LEFT)
+		{
+			enemyToMove->setPosition(enemyToMove->getPosition().x - spaceLvData->enemyVelocity, enemyToMove->getPosition().y);
+		}
+
+		// if enemies need to move down, move them down
+		else if (directionToMove == EnemyEdge::BOTTOM)
+		{
+			enemyToMove->setPosition(enemyToMove->getPosition().x, enemyToMove->getPosition().y + spaceLvData->enemyVelocity);
+		}
+
+		// something went wrong?
+		else
+		{
+			std::cout << "Oh no! Invalid direction??" << std::endl;
+		}
 
 		// set the moved enemy as the new previous one
 		previousEnemy = enemyToMove;

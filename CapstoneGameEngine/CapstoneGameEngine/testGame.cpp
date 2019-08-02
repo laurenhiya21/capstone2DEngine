@@ -851,6 +851,27 @@ Object* getEdgeEnemy(Level* enemyLevel, EnemyEdge::Edge edgeToCheck)
 			outerEnemy = enemyToCheck;
 		}
 
+		// if we're checking the lefthand side of the group and cur enemy is closer to left than outer enemy
+		// assign curenemy as new outerEnemy
+		else if (edgeToCheck == EnemyEdge::LEFT && enemyToCheck->getPosition().x < outerEnemy->getPosition().x)
+		{
+			outerEnemy = enemyToCheck;
+		}
+
+		// if we're checking the bottom of the group and cur enemy is closer to bottom than outer enemy
+		// assign curenemy as new outerEnemy
+		else if (edgeToCheck == EnemyEdge::BOTTOM && enemyToCheck->getPosition().y > outerEnemy->getPosition().y)
+		{
+			outerEnemy = enemyToCheck;
+		}
+
+		// if we're checking the top of the group and cur enemy is closer to top than outer enemy
+		// assign curenemy as new outerEnemy
+		else if (edgeToCheck == EnemyEdge::TOP && enemyToCheck->getPosition().y < outerEnemy->getPosition().y)
+		{
+			outerEnemy = enemyToCheck;
+		}
+
 		// reassign new previous enemy
 		previousEnemy = enemyToCheck;
 	}

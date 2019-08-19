@@ -14,7 +14,6 @@ namespace sysNames
 		GRAPHICS,
 		TOTAL
 	};
-
 };
 
 // Manager that takes care of communication between the systems

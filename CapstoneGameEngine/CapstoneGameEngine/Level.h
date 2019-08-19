@@ -30,14 +30,6 @@ class Level
 		// get an object by its name
 		Object* getObject(std::string);
 
-		// load needed for the objects for the level
-		void load();
-
-		// check if the trigger for another level was triggered
-
-		// mark all objects used as zombies to move onto another level
-		void unload();
-
 		// gettors
 		std::string getName();
 		bool getActive();

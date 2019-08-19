@@ -434,13 +434,11 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 		levelData->totalEnemies = 0;
 		levelData->fireInterval = 2;
 		levelData->timeSinceLastFire = std::time(0); // get current time
-		levelData->moveInterval = 1; // change to ms later! (so need to really change num here)--------
+		levelData->moveInterval = 1; // how often enemies should move (secs)
 		levelData->enemyVelocity = 40; // amount enemies should move after eacf interval
-		levelData->timeSinceLastMove = std::time(0); // get current time ---- probably change to milliseconds later!
+		levelData->timeSinceLastMove = std::time(0); // get current time
 		levelData->enemiesMoveRight = true; // enemies start by moving right
 		spaceLevel->setObjectDataPtr(levelData);
-
-		//std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
 
 		// load carrot spaceship
 		createCarrot(levelSpacePtr);
@@ -462,12 +460,21 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 
 	if (t == Update::UPDATED)
 	{
+		// get access to input so we can check if need to exit
+		Input* inputPtr = (Input*)sysHeadHancho.sysList[sysNames::INPUT];
+
+		// escape the engine if escape key pressed
+		if (inputPtr->getState(Action::ESCAPE) == KeyState::DOWN)
+		{
+			sysHeadHancho.exit();
+		}
+
 		// check to see if an enemy should fire or not
 		// data which has the time since the last enemy fire
 		Object* spaceLvObj = sysHeadHancho.RManager.getLevel("GLOBAL_LEVEL")->getObject("LEVEL_SPACE_INVADERS");
 		SpaceInvaderLevelData* spaceLvData = (SpaceInvaderLevelData*)spaceLvObj->getObjectDataPtr();
 
-		// probably need to set levelObjects active/inactive instead----------------------------------------
+		// don't access the level data if it doesn't exist
 		if (spaceLvData == nullptr)
 		{
 			return;
@@ -497,7 +504,8 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 				Object* newBullet = createBullet(spaceLvPtr, ObjectType::ENEMY_BULLET);
 
 				// set the bullet position to come out approx center and front of the enemy
-				newBullet->setPosition(enemyToFire->getPosition().x + (enemyToFire->getSize().x/2), enemyToFire->getPosition().y + (enemyToFire->getSize().y));
+				newBullet->setPosition(enemyToFire->getPosition().x + 
+					(enemyToFire->getSize().x/2), enemyToFire->getPosition().y + (enemyToFire->getSize().y));
 
 				// reset the fire time
 				spaceLvData->timeSinceLastFire = std::time(0);
@@ -506,7 +514,6 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 
 		curTime = std::time(0); // get current time
 
-		// need to change from secs to ms later prob!--------------------------------------------------------
 		// if there has been enough time since the last enemy movement (according to time interval)
 		// move all enemies
 		if ((curTime - spaceLvData->timeSinceLastMove) >= spaceLvData->moveInterval)
@@ -534,7 +541,6 @@ void createCarrot(Level* spawnLevel)
 	carrot.setSize(20, 40);
 	carrot.setSpriteID(carrotID);
 	carrot.setType(ObjectType::CARROT);
-	//carrot.setCollisionFunction(otterCollision);
 	carrot.setUpdateFunction(carrotUpdate);
 	carrot.setName("Carrot");
 	carrot.setLevelPtr(spawnLevel);
@@ -543,9 +549,6 @@ void createCarrot(Level* spawnLevel)
 
 // Creates an enemy
 // Takes in level to create it on
-//-------------------------
-// for now a lot of hard coding
-//-----------------------
 void createEnemy(Level* spawnLevel, unsigned posX, unsigned posY)
 {
 	Texture foxTexture = sysHeadHancho.RManager.getTexture("fox");
@@ -557,7 +560,6 @@ void createEnemy(Level* spawnLevel, unsigned posX, unsigned posY)
 	fox.setSpriteID(foxID);
 	fox.setType(ObjectType::ENEMY);
 	fox.setCollisionFunction(enemyCollision);
-	//fox.setUpdateFunction();
 	fox.setName("Fox");
 	fox.setLevelPtr(spawnLevel);
 	spawnLevel->addObject(fox);
@@ -634,7 +636,7 @@ Object* createBullet(Level* spawnLevel, ObjectType::Type bulletType)
 	{
 		newBullet.setVelocity(0, 10); // bullet should go straight down
 		newBullet.setType(ObjectType::ENEMY_BULLET);
-		//playerBullet.setCollisionFunction();
+		//newBullet.setCollisionFunction();
 		newBullet.setUpdateFunction(bulletUpdate);
 		newBullet.setName("EnemyBullet");
 		newBullet.setColour(glm::vec3(1, 0, 0)); // red bullet
@@ -682,12 +684,6 @@ void carrotUpdate(Object* carrot, Update::Type t)
 
 			// set bullet position to come out approx center of carrot top
 			newBullet->setPosition(carrot->getPosition().x + (carrot->getSize().x/2), carrot->getPosition().y - 5);
-		}
-
-		// temp escape-----------------------------------------------
-		if (inputPtr->getState(Action::ESCAPE) == KeyState::DOWN)
-		{
-			sysHeadHancho.exit();
 		}
 	}
 }
@@ -766,7 +762,7 @@ void bulletUpdate(Object* bullet, Update::Type t)
 
 // Collision behaviour between bullet and another object
 // assumption that obj1 is a bullet
-// handles both enemy and player bullets
+// could be expanded to handle both enemy and player bullets (currently only works for player bullets)
 void bulletCollision(Object* bullet, Object* obj2)
 {
 	// if player's bullet hit and enemy, destroy bullet
@@ -795,16 +791,15 @@ void scoreUpdate(Object* scoreText, Update::Type t)
 		TextData* tData = (TextData*)scoreText->getObjectDataPtr();
 		tData->data = "Score " + std::to_string(invadersScore);
 
-		// TEMP FOR TEST!--------------------------------------------------
-		//-----------------------------------------------------------------
+		// get the space level data to get the total num of enemies
 		Object* spaceLvObj = sysHeadHancho.RManager.getLevel("GLOBAL_LEVEL")->getObject("LEVEL_SPACE_INVADERS");
 		SpaceInvaderLevelData* spaceLvData = (SpaceInvaderLevelData*)spaceLvObj->getObjectDataPtr();
 
+		// change score to win message if all enemies dead
 		if (spaceLvData->totalEnemies == 0)
 		{
 			tData->data = "Enemies all dead!";
 		}
-		//-----------------------------------------------------------------
 	}
 }
 
@@ -984,19 +979,22 @@ void moveAllEnemies(Level* enemyLevel, EnemyEdge::Edge directionToMove)
 		// if enemies need to move right, move them right
 		if (directionToMove == EnemyEdge::RIGHT)
 		{
-			enemyToMove->setPosition(enemyToMove->getPosition().x + spaceLvData->enemyVelocity, enemyToMove->getPosition().y);
+			enemyToMove->setPosition(enemyToMove->getPosition().x + 
+				spaceLvData->enemyVelocity, enemyToMove->getPosition().y);
 		}
 
 		// if enemies need to move left, move them left
 		else if (directionToMove == EnemyEdge::LEFT)
 		{
-			enemyToMove->setPosition(enemyToMove->getPosition().x - spaceLvData->enemyVelocity, enemyToMove->getPosition().y);
+			enemyToMove->setPosition(enemyToMove->getPosition().x - 
+				spaceLvData->enemyVelocity, enemyToMove->getPosition().y);
 		}
 
 		// if enemies need to move down, move them down
 		else if (directionToMove == EnemyEdge::BOTTOM)
 		{
-			enemyToMove->setPosition(enemyToMove->getPosition().x, enemyToMove->getPosition().y + spaceLvData->enemyVelocity);
+			enemyToMove->setPosition(enemyToMove->getPosition().x, 
+				enemyToMove->getPosition().y + spaceLvData->enemyVelocity);
 		}
 
 		// something went wrong?

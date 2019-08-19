@@ -52,16 +52,11 @@ class Input: public System
 		
 		std::vector<InputKey> keyList; // list of the keys used
 
-		// someting for if keys dealt with
-		// mouse postion?
-		// similar to keyboard keys but mouse keys?
-		// controlelr stuff?
-
 	public:
 
 		// constructor
 		// adds all the keys used and associates them with their actions
-		// needs to be manually done (at least for now?) for each since is specfic to each action
+		// needs to be manually done for each since is specfic to each action
 		Input();
 
 		// add a key to the keyArray

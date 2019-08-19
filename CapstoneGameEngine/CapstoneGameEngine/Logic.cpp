@@ -15,10 +15,10 @@ bool once = true;
 // run/update the logic system
 void Logic::run()
 {
-	// only create the player once at start
+	// only create the level objects once at start
 	if (once)
 	{
-		createPlayer();
+		createLevelObjects();
 		once = false;
 	}
 
@@ -29,9 +29,10 @@ void Logic::run()
 	sysHeadHancho.RManager.updateActiveObjects();
 }
 
-// create the player object
-void Logic::createPlayer()
+// create the level objects, which are used to create, update, and delete the levels
+void Logic::createLevelObjects()
 {
+	// a dummy level that is used to hold the levelObjs
 	Level* globalLvPtr = sysHeadHancho.RManager.addLevel("GLOBAL_LEVEL");
 	globalLvPtr->setActive(true);
 
@@ -74,8 +75,8 @@ void Logic::doCollisions()
 		// get first object to check
 		Object* obj1 = sysHeadHancho.RManager.findObjectByPos(x);
 
-		// temp?--------------------------------------------------
-		// might be better to have zombie flag for levels
+		// skip over objects that are no longer there
+		// quick fix to avoid checking objects that were in a removed Level
 		if (obj1 == nullptr)
 		{
 			continue;
@@ -86,8 +87,8 @@ void Logic::doCollisions()
 			// get object to check against second
 			Object* obj2 = sysHeadHancho.RManager.findObjectByPos(y);
 
-			// temp?--------------------------------------------------
-			// might be better to have zombie flag for levels
+			// skip over objects that are no longer there
+			// quick fix to avoid checking objects that were in a removed Level
 			if (obj2 == nullptr)
 			{
 				continue;
@@ -116,7 +117,6 @@ void Logic::doCollisions()
 			}
 		}
 	}
-
 }
 
 /************************************************************************

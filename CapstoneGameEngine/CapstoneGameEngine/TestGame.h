@@ -61,8 +61,8 @@ class SpaceInvaderLevelData : public ObjectData
 		unsigned totalEnemies; // total num enemies cur in the level
 		unsigned fireInterval; // time (sec) when enemies should fire
 		time_t timeSinceLastFire; // time (secs) that any enemy fired last
-		unsigned moveInterval; // how often enemies should move (secs but later want ms)
-		time_t timeSinceLastMove; // time (secs) that enemies have moved last------------------------------ change to ms later
+		unsigned moveInterval; // how often enemies should move (secs)
+		time_t timeSinceLastMove; // time (secs) that enemies have moved last
 		bool enemiesMoveRight; // whether enemies are moving right (true) or left (false)
 		unsigned enemyVelocity; // how much all enemies main move
 };
@@ -93,9 +93,6 @@ void createAllEnemies(Level*);
 
 // Creates an enemy
 // Takes in level to create it on and position it should spawn in
-//--------------------------------
-// might expand this to do whole level of enemies with another function but for now just one at a default position
-//--------------------------------
 void createEnemy(Level*, unsigned, unsigned);
 
 // get the nth enemy on given level, where n is a number between 1 and totalNum of enemies

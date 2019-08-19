@@ -7,8 +7,6 @@
 // start the engine's various managers and necessary parts
 HeadHancho::HeadHancho()
 {
-	std::cout << "start engine!" << std::endl;
-
 	// set the game to continue running by default
 	runGame = true;
 
@@ -45,8 +43,6 @@ HeadHancho::HeadHancho()
 // continue running the engine
 void HeadHancho::run()
 {
-	std::cout << "run engine!!" << std::endl;
-
 	// the main rendering loop
 	while (runGame)
 	{

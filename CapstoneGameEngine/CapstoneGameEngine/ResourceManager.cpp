@@ -360,10 +360,8 @@ void ResourceManager::renderVisable()
 				{
 					graphicsPtr->drawSprite(*curObj);
 				}
-
 			}
 		}
-
 	}
 }
 

@@ -35,8 +35,8 @@ class Logic: public System
 		// run/update the logic system
 		void run();
 
-		// create the player object
-		void createPlayer();
+		// create the level objects, which are used to create, update, and delete the levels
+		void createLevelObjects();
 
 		// check for any collisions betwen all Objects
 		void doCollisions();

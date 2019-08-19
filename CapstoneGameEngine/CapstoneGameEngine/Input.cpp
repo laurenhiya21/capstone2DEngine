@@ -109,7 +109,7 @@ void Input::run()
 }
 
 // get the state of given action
-// return -1 if invalid key passed
+// return UP as default
 int Input::getState(int stateToGet)
 {
 	int state = KeyState::UP;

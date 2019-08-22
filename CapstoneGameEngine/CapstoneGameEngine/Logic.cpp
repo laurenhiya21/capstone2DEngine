@@ -4,8 +4,6 @@
 #include "TestGame.h" // for assigning collision functions and update functions
 
 // constructor
-// just needs to set the triggers
-// don't think triggers need to be set during runtime so just set at beginning for now?
 Logic::Logic()
 {
 }
@@ -59,8 +57,7 @@ void Logic::createLevelObjects()
 	spaceInvadersLevelObj.setUpdateFunction(levelSpaceInvadersUpdate);
 	spaceInvadersLevelObj.setVisable(false);
 	spaceInvadersLevelObj.setName("LEVEL_SPACE_INVADERS");
-	globalLvPtr->addObject(spaceInvadersLevelObj);
-	
+	globalLvPtr->addObject(spaceInvadersLevelObj);	
 }
 
 // check for any collisions betwen all Objects

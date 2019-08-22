@@ -65,6 +65,9 @@ class SpaceInvaderLevelData : public ObjectData
 		time_t timeSinceLastMove; // time (secs) that enemies have moved last
 		bool enemiesMoveRight; // whether enemies are moving right (true) or left (false)
 		unsigned enemyVelocity; // how much all enemies main move
+
+		bool runGame; // if game should be playing or not (enemies moving etc)
+		bool wonGame; // if game has been won or not (false if either lost or in progress)
 };
 
 // The four edges in the group of enemies
@@ -114,6 +117,10 @@ void moveEnemiesCheck(Level*);
 // EnemyEdge is uesd as a direction to move enemies
 // does not check for bounds and is assumed that given movement is valid
 void moveAllEnemies(Level*, EnemyEdge::Edge);
+
+// Update behaviour on a enemy given the type of update
+// update type can be on creation, run time, or on deletion
+void enemyUpdate(Object*, Update::Type);
 
 // Collision behaviour between an enemy an another object
 // assumption that obj1 is an enemy

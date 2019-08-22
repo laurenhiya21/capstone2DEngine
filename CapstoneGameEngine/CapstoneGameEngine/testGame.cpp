@@ -251,7 +251,6 @@ void level1Update(Object* level1, Update::Type t)
 			// should never get this
 			if (globalLvPtr == nullptr)
 			{
-				std::cout << "Reall bad stuff! Couldn't find global level oh no!" << std::endl;
 				return;
 			}
 
@@ -262,7 +261,6 @@ void level1Update(Object* level1, Update::Type t)
 			// should never get this
 			if (level2Obj == nullptr)
 			{
-				std::cout << "Reall bad stuff! Couldn't find level 2 object oh no!" << std::endl;
 				return;
 			}
 
@@ -399,8 +397,6 @@ void toSpaceInvadersCollision(Object* collisonObj, Object* obj2)
 	// only transition to the space invader level if the player collided with it
 	if (obj2->getType() == ObjectType::PLAYER)
 	{
-		std::cout << "Go to space invaders!" << std::endl;
-
 		// get the global level to access the level objects
 		// for destorying level 2 and creating next levvel
 		Level* globalLvPtr = sysHeadHancho.RManager.getLevel("GLOBAL_LEVEL");
@@ -438,6 +434,8 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 		levelData->enemyVelocity = 40; // amount enemies should move after eacf interval
 		levelData->timeSinceLastMove = std::time(0); // get current time
 		levelData->enemiesMoveRight = true; // enemies start by moving right
+		levelData->runGame = true; // set flag to run game
+		levelData->wonGame = true; // set won to default
 		spaceLevel->setObjectDataPtr(levelData);
 
 		// load carrot spaceship
@@ -476,6 +474,12 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 
 		// don't access the level data if it doesn't exist
 		if (spaceLvData == nullptr)
+		{
+			return;
+		}
+
+		// don't bother firing if the game is over
+		if (spaceLvData->runGame == false)
 		{
 			return;
 		}
@@ -560,6 +564,7 @@ void createEnemy(Level* spawnLevel, unsigned posX, unsigned posY)
 	fox.setSpriteID(foxID);
 	fox.setType(ObjectType::ENEMY);
 	fox.setCollisionFunction(enemyCollision);
+	fox.setUpdateFunction(enemyUpdate);
 	fox.setName("Fox");
 	fox.setLevelPtr(spawnLevel);
 	spawnLevel->addObject(fox);
@@ -787,19 +792,29 @@ void scoreUpdate(Object* scoreText, Update::Type t)
 
 	if (t == Update::UPDATED)
 	{
-		// keep the score up to date
-		TextData* tData = (TextData*)scoreText->getObjectDataPtr();
-		tData->data = "Score " + std::to_string(invadersScore);
-
-		// get the space level data to get the total num of enemies
+		// get the space level data to get the total num of enemies & win details
 		Object* spaceLvObj = sysHeadHancho.RManager.getLevel("GLOBAL_LEVEL")->getObject("LEVEL_SPACE_INVADERS");
 		SpaceInvaderLevelData* spaceLvData = (SpaceInvaderLevelData*)spaceLvObj->getObjectDataPtr();
+
+		// get the score data to update it
+		TextData* tData = (TextData*)scoreText->getObjectDataPtr();
+
+		// change score to lose message if game has been lost
+		if (spaceLvData->runGame == false && spaceLvData->wonGame == false)
+		{
+			tData->data = "Lost!";
+			return;
+		}
 
 		// change score to win message if all enemies dead
 		if (spaceLvData->totalEnemies == 0)
 		{
 			tData->data = "Enemies all dead!";
+			return;
 		}
+
+		// if game as normal, just display score
+		tData->data = "Score " + std::to_string(invadersScore);
 	}
 }
 
@@ -888,6 +903,12 @@ void moveEnemiesCheck(Level* enemyLevel)
 	unsigned winW = sysHeadHancho.mainWindow.getWidth();
 
 	// figure out which direction enemies need to move
+
+	// don't do any movement if game should not be running
+	if (spaceLvData->runGame == false)
+	{
+		return;
+	}
 
 	// if enemies are supposed to move right
 	if (spaceLvData->enemiesMoveRight == true)
@@ -1006,6 +1027,31 @@ void moveAllEnemies(Level* enemyLevel, EnemyEdge::Edge directionToMove)
 		// set the moved enemy as the new previous one
 		previousEnemy = enemyToMove;
 	}
+}
+
+// Update behaviour on a enemy given the type of update
+// update type can be on creation, run time, or on deletion
+void enemyUpdate(Object* enemy, Update::Type t)
+{
+	if (t == Update::UPDATED)
+	{
+		// check if enemy has reached the bottom of the screen (same y as player)
+		// first get player
+		Object* playerObj = sysHeadHancho.RManager.getLevel("LEVEL_SPACE_INVADERS")->getObject("Carrot");
+
+		// lose when enemies get past the player
+		if (enemy->getPosition().y + enemy->getSize().y > playerObj->getPosition().y)
+		{
+			// get the level data to set the proper game run flags
+			Object* spaceLvObj = sysHeadHancho.RManager.getLevel("GLOBAL_LEVEL")->getObject("LEVEL_SPACE_INVADERS");
+			SpaceInvaderLevelData* spaceLvData = (SpaceInvaderLevelData*)spaceLvObj->getObjectDataPtr();
+
+			// stop the game and say player lost
+			spaceLvData->runGame = false;
+			spaceLvData->wonGame = false;
+		}
+	}
+
 }
 
 // Collision behaviour between an enemy an another object

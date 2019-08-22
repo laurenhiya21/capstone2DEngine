@@ -62,7 +62,7 @@ Object* Level::addObject(Object tempObj)
 Object* Level::getObject(std::string name)
 {
 	// go through elvel and find obejct
-	for (int x = 0; objectList.size(); ++x)
+	for (int x = 0; x < objectList.size(); ++x)
 	{
 		// check if found the object (same name)
 		if (!objectList[x]->getName().compare(name))

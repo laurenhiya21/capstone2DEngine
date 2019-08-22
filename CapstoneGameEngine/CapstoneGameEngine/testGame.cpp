@@ -425,6 +425,9 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 		Level* levelSpacePtr = sysHeadHancho.RManager.addLevel("LEVEL_SPACE_INVADERS");
 		levelSpacePtr->setActive(true);
 
+		// set score to 0
+		invadersScore = 0;
+
 		// create and initliaze the level data
 		SpaceInvaderLevelData* levelData = new SpaceInvaderLevelData;
 		levelData->totalEnemies = 0;
@@ -454,6 +457,19 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 		scoreText.setUpdateFunction(scoreUpdate);
 		scoreText.setName("ScoreText");
 		levelSpacePtr->addObject(scoreText);
+
+		// create restart text
+		// displaying restart information
+		Object restartText;
+		restartText.setPosition(250, 30);
+		restartText.setSize(1, 1);
+		restartText.setColour(glm::vec3(1, 1, 1));
+		restartText.setType(ObjectType::TEXT);
+		restartText.setUpdateFunction(restartTextUpdate);
+		restartText.setName("RestartText");
+		restartText.setVisable(false);
+		levelSpacePtr->addObject(restartText);
+
 	}
 
 	if (t == Update::UPDATED)
@@ -478,9 +494,24 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 			return;
 		}
 
-		// don't bother firing if the game is over
+		// don't bother firing if the game is over, but check if user pressed r to restart
 		if (spaceLvData->runGame == false)
 		{
+			// restart the level if the game ended and player said to restart
+			if (inputPtr->getState(Action::RESTART) == KeyState::PRESSED)
+			{
+				// destroy and create the level to restart it
+				spaceLvObj->getUpdatePtr()(spaceLvObj, Update::DESTROYED);
+				spaceLvObj->getUpdatePtr()(spaceLvObj, Update::CREATED);
+			}
+
+			return;
+		}
+
+		// if there are no more enemies, stop the game (don't move non-existant enemies)
+		if (spaceLvData->totalEnemies == 0)
+		{
+			spaceLvData->runGame = false;
 			return;
 		}
 
@@ -530,6 +561,14 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 			// reset move time
 			spaceLvData->timeSinceLastMove = std::time(0);
 		}
+	} // end of update
+
+	if (t == Update::DESTROYED)
+	{
+		// get the level object so it can be removed (don't set inactive since no next level)
+		Object* spaceLvObj = sysHeadHancho.RManager.getLevel("GLOBAL_LEVEL")->getObject("LEVEL_SPACE_INVADERS");
+
+		sysHeadHancho.RManager.removeLevel("LEVEL_SPACE_INVADERS");
 	}
 }
 
@@ -546,6 +585,7 @@ void createCarrot(Level* spawnLevel)
 	carrot.setSpriteID(carrotID);
 	carrot.setType(ObjectType::CARROT);
 	carrot.setUpdateFunction(carrotUpdate);
+	carrot.setCollisionFunction(carrotCollision);
 	carrot.setName("Carrot");
 	carrot.setLevelPtr(spawnLevel);
 	spawnLevel->addObject(carrot);
@@ -624,14 +664,14 @@ Object* createBullet(Level* spawnLevel, ObjectType::Type bulletType)
 	newBullet.setSize(5, 10);
 	newBullet.setSpriteID(bulletID);
 	newBullet.setLevelPtr(spawnLevel);
+	newBullet.setCollisionFunction(bulletCollision);
+	newBullet.setUpdateFunction(bulletUpdate);
 
 	// set player bullet specfics options
 	if (bulletType == ObjectType::PLAYER_BULLET)
 	{
 		newBullet.setVelocity(0, -10); // bullet should go straight up
 		newBullet.setType(ObjectType::PLAYER_BULLET);
-		newBullet.setCollisionFunction(bulletCollision);
-		newBullet.setUpdateFunction(bulletUpdate);
 		newBullet.setName("PlayerBullet");
 		newBullet.setColour(glm::vec3(0.3, 0.89, 1)); // blue bullet
 	}
@@ -641,8 +681,6 @@ Object* createBullet(Level* spawnLevel, ObjectType::Type bulletType)
 	{
 		newBullet.setVelocity(0, 10); // bullet should go straight down
 		newBullet.setType(ObjectType::ENEMY_BULLET);
-		//newBullet.setCollisionFunction();
-		newBullet.setUpdateFunction(bulletUpdate);
 		newBullet.setName("EnemyBullet");
 		newBullet.setColour(glm::vec3(1, 0, 0)); // red bullet
 	}
@@ -690,6 +728,26 @@ void carrotUpdate(Object* carrot, Update::Type t)
 			// set bullet position to come out approx center of carrot top
 			newBullet->setPosition(carrot->getPosition().x + (carrot->getSize().x/2), carrot->getPosition().y - 5);
 		}
+	}
+}
+
+// Collision behaviour between an carrot an another object
+// assumption that obj1 is the carrot
+void carrotCollision(Object* player, Object* obj2)
+{
+	// if player got hit by an enemy bullet, game over!
+	if (obj2->getType() == ObjectType::ENEMY_BULLET)
+	{
+		player->setZombie(true);
+
+		// stop the game and say lost
+
+		// get the space level data first to set that stuff
+		Object* spaceLvObj = sysHeadHancho.RManager.getLevel("GLOBAL_LEVEL")->getObject("LEVEL_SPACE_INVADERS");
+		SpaceInvaderLevelData* spaceLvData = (SpaceInvaderLevelData*)spaceLvObj->getObjectDataPtr();
+
+		spaceLvData->wonGame = false;
+		spaceLvData->runGame = false;
 	}
 }
 
@@ -773,6 +831,13 @@ void bulletCollision(Object* bullet, Object* obj2)
 	// if player's bullet hit and enemy, destroy bullet
 	if (bullet->getType() == ObjectType::PLAYER_BULLET && obj2->getType() == ObjectType::ENEMY)
 	{
+		bullet->setZombie(true);
+	}
+
+	// if enemy bullet hit player, destory bullet
+	else if (bullet->getType() == ObjectType::ENEMY_BULLET && obj2->getType() == ObjectType::PLAYER)
+	{
+		// destroy bullet
 		bullet->setZombie(true);
 	}
 }
@@ -1039,6 +1104,12 @@ void enemyUpdate(Object* enemy, Update::Type t)
 		// first get player
 		Object* playerObj = sysHeadHancho.RManager.getLevel("LEVEL_SPACE_INVADERS")->getObject("Carrot");
 
+		// if player is already dead, do nothing
+		if (playerObj == nullptr)
+		{
+			return;
+		}
+
 		// lose when enemies get past the player
 		if (enemy->getPosition().y + enemy->getSize().y > playerObj->getPosition().y)
 		{
@@ -1072,4 +1143,32 @@ void enemyCollision(Object* enemy, Object* obj2)
 		SpaceInvaderLevelData* spaceLvData = (SpaceInvaderLevelData*)spaceLvObj->getObjectDataPtr();
 		--spaceLvData->totalEnemies;
 	}
+}
+
+// Update behaviour on restart text given the type of update
+// update type can be on creation, run time, or on deletion
+void restartTextUpdate(Object* restartText, Update::Type t)
+{
+	// create the text specfic data
+	// this is auto deleted in the Object deconstrucor
+	if (t == Update::CREATED)
+	{
+		TextData* tData = new TextData;
+		tData->data = "Game over! Press R to restart!";
+		restartText->setObjectDataPtr(tData);
+	}
+
+	if (t == Update::UPDATED)
+	{
+		// get the space level data to get the level details
+		Object* spaceLvObj = sysHeadHancho.RManager.getLevel("GLOBAL_LEVEL")->getObject("LEVEL_SPACE_INVADERS");
+		SpaceInvaderLevelData* spaceLvData = (SpaceInvaderLevelData*)spaceLvObj->getObjectDataPtr();
+		
+		// if game has ended, show the text
+		if (spaceLvData->runGame == false)
+		{
+			restartText->setVisable(true);
+		}
+	}
+
 }

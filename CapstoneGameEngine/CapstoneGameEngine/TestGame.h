@@ -90,6 +90,10 @@ void createCarrot(Level*);
 // update type can be on creation, run time, or on deletion
 void carrotUpdate(Object*, Update::Type);
 
+// Collision behaviour between an carrot an another object
+// assumption that obj1 is the carrot
+void carrotCollision(Object*, Object*);
+
 // Creates all enemies in a level
 // Takes in level to create them in
 void createAllEnemies(Level*);
@@ -145,3 +149,7 @@ void bulletCollision(Object*, Object*);
 // Update behaviour on score given the type of update
 // update type can be on creation, run time, or on deletion
 void scoreUpdate(Object*, Update::Type);
+
+// Update behaviour on restart text given the type of update
+// update type can be on creation, run time, or on deletion
+void restartTextUpdate(Object*, Update::Type);

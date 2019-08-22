@@ -18,6 +18,7 @@ namespace Action
 		DOWN,
 		ACCEPT,
 		SHOOT,
+		RESTART,
 		TOTAL
 	};
 }

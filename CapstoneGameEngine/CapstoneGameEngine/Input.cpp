@@ -26,6 +26,9 @@ Input::Input()
 
 	// add key for shooting
 	keyList.push_back(InputKey(GLFW_KEY_SPACE, KeyState::UP, Action::SHOOT));
+
+	// add key to restart level
+	keyList.push_back(InputKey(GLFW_KEY_R, KeyState::UP, Action::RESTART));
 }
 
 // add a key to the keyList

@@ -383,8 +383,8 @@ void ResourceManager::updateActiveObjects()
 			// get the current object
 			Object* curObj = levelList[curLevelPos]->getObjectByPos(curObjPos);
 
-			// check if object is active (aka it still needs to update)
-			if (curObj->getActive() == true)
+			// check if object is active and not zombie (aka it still needs to update)
+			if (curObj->getActive() == true && curObj->getZombie() == false)
 			{
 				// get the update function of the curObj
 				updateFunction updatePtr = curObj->getUpdatePtr();

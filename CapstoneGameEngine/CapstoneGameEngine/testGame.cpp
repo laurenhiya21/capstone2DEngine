@@ -466,6 +466,9 @@ void levelSpaceStartUpdate(Object* startLevel, Update::Type t)
 
 			// create the space invader level
 			levelSpaceObj->getUpdatePtr()(levelSpaceObj, Update::CREATED);
+
+			// activate that level
+			levelSpaceObj->setActive(true);
 		}
 	}
 
@@ -626,6 +629,9 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 
 					// we need it to be active
 					levelSpaceStartObj->setActive(true);
+
+					// make sure we are not active anymore
+					spaceLvObj->setActive(false);
 				}
 
 				// restart movment instead if still have lives

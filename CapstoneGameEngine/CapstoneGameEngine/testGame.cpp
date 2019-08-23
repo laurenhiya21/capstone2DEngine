@@ -849,13 +849,24 @@ void carrotUpdate(Object* carrot, Update::Type t)
 		// If left button was pressed, move player left
 		if (inputPtr->getState(Action::LEFT) == KeyState::DOWN)
 		{
-			carrot->updatePosition(-15, 0);
+			// only allow movement if player wouldn't go off screen
+			if (carrot->getPosition().x - 15 >= 0)
+			{
+				carrot->updatePosition(-15, 0);
+			}
 		}
 
 		// If right button was pressed, move player right
 		if (inputPtr->getState(Action::RIGHT) == KeyState::DOWN)
 		{
-			carrot->updatePosition(15, 0);
+			// get the window width to make sure not going off right side of screen
+			unsigned winW = sysHeadHancho.mainWindow.getWidth();
+
+			// only allow movement if player wouldn't go off screen
+			if ((carrot->getPosition().x + 15 + carrot->getSize().x) < winW)
+			{
+				carrot->updatePosition(15, 0);
+			}
 		}
 
 		// if space pressed, shoot!
@@ -1316,8 +1327,8 @@ void restartTextUpdate(Object* restartText, Update::Type t)
 			// get the lives data to update it
 			TextData* tData = (TextData*)restartText->getObjectDataPtr();
 
-			// if player won, display win!
-			if (spaceLvData->wonGame == true)
+			// if player won (no enemies), display win!
+			if (spaceLvData->totalEnemies == 0)
 			{
 				tData->data = "You won! Press R to restart!";
 			}

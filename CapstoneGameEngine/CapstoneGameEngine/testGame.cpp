@@ -407,11 +407,107 @@ void toSpaceInvadersCollision(Object* collisonObj, Object* obj2)
 		// destory level 2
 		level2Obj->getUpdatePtr()(level2Obj, Update::DESTROYED);
 
-		// get space invader level
-		Object* levelSpaceObj = globalLvPtr->getObject("LEVEL_SPACE_INVADERS");
+		// get space invader start level
+		Object* levelSpaceStartObj = globalLvPtr->getObject("LEVEL_START_SPACE_INVADERS");
 
-		// create the space invader level
-		levelSpaceObj->getUpdatePtr()(levelSpaceObj, Update::CREATED);
+		// create the space invader start level
+		levelSpaceStartObj->getUpdatePtr()(levelSpaceStartObj, Update::CREATED);
+	}
+}
+
+// Update behaviour on space invaders start screen level given the type of update
+// update type can be on creation, run time, or on deletion
+void levelSpaceStartUpdate(Object* startLevel, Update::Type t)
+{
+	if (t == Update::CREATED)
+	{
+		// add the level
+		Level* levelStartPtr = sysHeadHancho.RManager.addLevel("LEVEL_START_SPACE_INVADERS");
+		levelStartPtr->setActive(true);
+
+		// create the info text for directions
+		Object infoText;
+		infoText.setPosition(250, 30);
+		infoText.setSize(1, 1);
+		infoText.setColour(glm::vec3(1, 1, 1));
+		infoText.setType(ObjectType::TEXT);
+		infoText.setName("InfoText");
+		infoText.setUpdateFunction(infoTextUpdate);
+		levelStartPtr->addObject(infoText);
+
+		// create the info text for controls
+		Object controlText;
+		controlText.setPosition(100, 50);
+		controlText.setSize(1, 1);
+		controlText.setColour(glm::vec3(1, 1, 1));
+		controlText.setType(ObjectType::TEXT);
+		controlText.setName("ControlText");
+		controlText.setUpdateFunction(controlTextUpdate);
+		levelStartPtr->addObject(controlText);
+	}
+
+	if (t == Update::UPDATED)
+	{
+		// move onto the proper space invaders level
+		// when accept pushed
+		Input* inputPtr = (Input*)sysHeadHancho.sysList[sysNames::INPUT];
+
+		if (inputPtr->getState(Action::ACCEPT) == KeyState::PRESSED)
+		{
+			// get the global level to access the level objects
+			// for destorying start level and creating next levvel
+			Level* globalLvPtr = sysHeadHancho.RManager.getLevel("GLOBAL_LEVEL");
+
+			// destory the start level
+			startLevel->getUpdatePtr()(startLevel, Update::DESTROYED);
+
+			// get the space inadver lv object
+			Object* levelSpaceObj = globalLvPtr->getObject("LEVEL_SPACE_INVADERS");
+
+			// create the space invader level
+			levelSpaceObj->getUpdatePtr()(levelSpaceObj, Update::CREATED);
+		}
+	}
+
+	if (t == Update::DESTROYED)
+	{
+		// get global level ptr to access level 2 ptr
+		Level* globalLvPtr = sysHeadHancho.RManager.getLevel("GLOBAL_LEVEL");
+
+		// get the level1 object and set it to inactive
+		Object* levelStartObj = globalLvPtr->getObject("LEVEL_START_SPACE_INVADERS");
+		levelStartObj->setActive(false);
+
+		sysHeadHancho.RManager.removeLevel("LEVEL_START_SPACE_INVADERS");
+	}
+
+}
+
+// Update behaviour on start text given the type of update
+// update type can be on creation, run time, or on deletion
+void infoTextUpdate(Object* infoText, Update::Type t)
+{
+	// create the text specfic data
+	// this is auto deleted in the Object deconstrucor
+	if (t == Update::CREATED)
+	{
+		TextData* tData = new TextData;
+		tData->data = "Press space to start!";
+		infoText->setObjectDataPtr(tData);
+	}
+}
+
+// Update behaviour on control text given the type of update
+// update type can be on creation, run time, or on deletion
+void controlTextUpdate(Object* controlText, Update::Type t)
+{
+	// create the text specfic data
+	// this is auto deleted in the Object deconstrucor
+	if (t == Update::CREATED)
+	{
+		TextData* tData = new TextData;
+		tData->data = "Controls: Left/Right (A/D), Shoot (Space)";
+		controlText->setObjectDataPtr(tData);
 	}
 }
 
@@ -430,8 +526,8 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 
 		// create and initliaze the level data
 		SpaceInvaderLevelData* levelData = new SpaceInvaderLevelData;
-		levelData->totalEnemies = 0;
-		levelData->fireInterval = 2;
+		levelData->totalEnemies = 0; // how many total enemies currently
+		levelData->fireInterval = 1; // how often a bullet is fired (secs)
 		levelData->timeSinceLastFire = std::time(0); // get current time
 		levelData->moveInterval = 1; // how often enemies should move (secs)
 		levelData->enemyVelocity = 40; // amount enemies should move after eacf interval
@@ -439,6 +535,8 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 		levelData->enemiesMoveRight = true; // enemies start by moving right
 		levelData->runGame = true; // set flag to run game
 		levelData->wonGame = true; // set won to default
+		levelData->startLives = 3;
+		levelData->curLives = levelData->startLives; // start off the game with the start num of lives
 		spaceLevel->setObjectDataPtr(levelData);
 
 		// load carrot spaceship
@@ -470,6 +568,17 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 		restartText.setVisable(false);
 		levelSpacePtr->addObject(restartText);
 
+		// create lives text
+		// text for displaying how many lives player has
+		Object livesText;
+		livesText.setPosition(100, 10);
+		livesText.setSize(1, 1);
+		livesText.setColour(glm::vec3(1, 1, 1));
+		livesText.setType(ObjectType::TEXT);
+		livesText.setUpdateFunction(livesTextUpdate);
+		livesText.setName("LivesText");
+		levelSpacePtr->addObject(livesText);
+
 	}
 
 	if (t == Update::UPDATED)
@@ -500,9 +609,30 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 			// restart the level if the game ended and player said to restart
 			if (inputPtr->getState(Action::RESTART) == KeyState::PRESSED)
 			{
-				// destroy and create the level to restart it
-				spaceLvObj->getUpdatePtr()(spaceLvObj, Update::DESTROYED);
-				spaceLvObj->getUpdatePtr()(spaceLvObj, Update::CREATED);
+				// if the player has no lives left or they won (no enemies), restart the whole game
+				if (spaceLvData->totalEnemies == 0 || spaceLvData->curLives < 1)
+				{
+					// destroy main space invaders level
+					spaceLvObj->getUpdatePtr()(spaceLvObj, Update::DESTROYED);
+					
+					// get global level ptr to acess space start level
+					Level* globalLvPtr = sysHeadHancho.RManager.getLevel("GLOBAL_LEVEL");
+
+					// get space invader start level
+					Object* levelSpaceStartObj = globalLvPtr->getObject("LEVEL_START_SPACE_INVADERS");
+
+					// create the space invader start level to restart the game
+					levelSpaceStartObj->getUpdatePtr()(levelSpaceStartObj, Update::CREATED);
+
+					// we need it to be active
+					levelSpaceStartObj->setActive(true);
+				}
+
+				// restart movment instead if still have lives
+				else
+				{
+					spaceLvData->runGame = true;
+				}
 			}
 
 			return;
@@ -512,6 +642,7 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 		if (spaceLvData->totalEnemies == 0)
 		{
 			spaceLvData->runGame = false;
+			spaceLvData->wonGame = true;
 			return;
 		}
 
@@ -703,6 +834,16 @@ void carrotUpdate(Object* carrot, Update::Type t)
 	// (movement and shooting)
 	if (t == Update::UPDATED)
 	{
+		// get the space level data to check if player can move/shoot
+		Object* spaceLvObj = sysHeadHancho.RManager.getLevel("GLOBAL_LEVEL")->getObject("LEVEL_SPACE_INVADERS");
+		SpaceInvaderLevelData* spaceLvData = (SpaceInvaderLevelData*)spaceLvObj->getObjectDataPtr();
+
+		// if game is paused/waiting for user confirm, don't allow movment or shooting
+		if (spaceLvData->runGame == false)
+		{
+			return;
+		}
+
 		Input* inputPtr = (Input*)sysHeadHancho.sysList[sysNames::INPUT];
 
 		// If left button was pressed, move player left
@@ -738,15 +879,17 @@ void carrotCollision(Object* player, Object* obj2)
 	// if player got hit by an enemy bullet, game over!
 	if (obj2->getType() == ObjectType::ENEMY_BULLET)
 	{
-		player->setZombie(true);
-
-		// stop the game and say lost
-
-		// get the space level data first to set that stuff
+		// get the space level data to update lives
 		Object* spaceLvObj = sysHeadHancho.RManager.getLevel("GLOBAL_LEVEL")->getObject("LEVEL_SPACE_INVADERS");
 		SpaceInvaderLevelData* spaceLvData = (SpaceInvaderLevelData*)spaceLvObj->getObjectDataPtr();
 
-		spaceLvData->wonGame = false;
+		// decrease the live count
+		if (spaceLvData->curLives > 0)
+		{
+			--spaceLvData->curLives;
+		}
+
+		// stop running the game for now
 		spaceLvData->runGame = false;
 	}
 }
@@ -766,7 +909,7 @@ void createAllEnemies(Level* spawnLevel)
 	unsigned enemiesCurInRow = 0; // num enemies in cur row
 	unsigned enemiesPerRow = 10; // num enemies needed per row
 	unsigned curNumRows = 0; // cur number of rows fully spawned
-	unsigned totalRows = 4; // total num rows needed
+	unsigned totalRows = 3; // total num rows needed
 
 	// keep spawning enemies until all rows have finished spawning
 	while (curNumRows < totalRows)
@@ -820,6 +963,18 @@ void bulletUpdate(Object* bullet, Update::Type t)
 			// mark the bullet for destruction if it went off
 			bullet->setZombie(true);
 		}
+
+		// get the space level data to get the total num of enemies & win details
+		Object* spaceLvObj = sysHeadHancho.RManager.getLevel("GLOBAL_LEVEL")->getObject("LEVEL_SPACE_INVADERS");
+		SpaceInvaderLevelData* spaceLvData = (SpaceInvaderLevelData*)spaceLvObj->getObjectDataPtr();
+
+		// destory bullets when game is paused
+		if (spaceLvData->runGame == false)
+		{
+			// mark the bullet for destruction if it went off
+			bullet->setZombie(true);
+		}
+		
 	}
 }
 
@@ -835,7 +990,7 @@ void bulletCollision(Object* bullet, Object* obj2)
 	}
 
 	// if enemy bullet hit player, destory bullet
-	else if (bullet->getType() == ObjectType::ENEMY_BULLET && obj2->getType() == ObjectType::PLAYER)
+	else if (bullet->getType() == ObjectType::ENEMY_BULLET && obj2->getType() == ObjectType::CARROT)
 	{
 		// destroy bullet
 		bullet->setZombie(true);
@@ -863,20 +1018,6 @@ void scoreUpdate(Object* scoreText, Update::Type t)
 
 		// get the score data to update it
 		TextData* tData = (TextData*)scoreText->getObjectDataPtr();
-
-		// change score to lose message if game has been lost
-		if (spaceLvData->runGame == false && spaceLvData->wonGame == false)
-		{
-			tData->data = "Lost!";
-			return;
-		}
-
-		// change score to win message if all enemies dead
-		if (spaceLvData->totalEnemies == 0)
-		{
-			tData->data = "Enemies all dead!";
-			return;
-		}
 
 		// if game as normal, just display score
 		tData->data = "Score " + std::to_string(invadersScore);
@@ -1120,6 +1261,9 @@ void enemyUpdate(Object* enemy, Update::Type t)
 			// stop the game and say player lost
 			spaceLvData->runGame = false;
 			spaceLvData->wonGame = false;
+
+			// set lives to 0 just to double make sure to end the game
+			spaceLvData->curLives = 0;
 		}
 	}
 
@@ -1168,7 +1312,62 @@ void restartTextUpdate(Object* restartText, Update::Type t)
 		if (spaceLvData->runGame == false)
 		{
 			restartText->setVisable(true);
+
+			// get the lives data to update it
+			TextData* tData = (TextData*)restartText->getObjectDataPtr();
+
+			// if player won, display win!
+			if (spaceLvData->wonGame == true)
+			{
+				tData->data = "You won! Press R to restart!";
+			}
+
+			// if the player has lives, say got shot text
+			else if (spaceLvData->curLives > 0)
+			{
+				tData->data = "You got shot! Press R to continue!";
+			}
+
+			// otherwise it's a game over and need to restart the whole game
+			else
+			{
+				tData->data = "Game over! Press R to restart!";
+			}
+
+		}
+
+		// when the game is running, dont show the text
+		else
+		{
+			restartText->setVisable(false);
 		}
 	}
 
+}
+
+// Update behaviour on lives text given the type of update
+// update type can be on creation, run time, or on deletion
+void livesTextUpdate(Object* livesText, Update::Type t)
+{
+	// get the space level data to get the lives details
+	Object * spaceLvObj = sysHeadHancho.RManager.getLevel("GLOBAL_LEVEL")->getObject("LEVEL_SPACE_INVADERS");
+	SpaceInvaderLevelData* spaceLvData = (SpaceInvaderLevelData*)spaceLvObj->getObjectDataPtr();
+
+	// create the text specfic data
+	// this is auto deleted in the Object deconstrucor
+	if (t == Update::CREATED)
+	{
+		TextData* tData = new TextData;
+		tData->data = "Lives: " + std::to_string(spaceLvData->curLives);
+		livesText->setObjectDataPtr(tData);
+	}
+
+	if (t == Update::UPDATED)
+	{
+		// get the score data to update it
+		TextData* tData = (TextData*)livesText->getObjectDataPtr();
+
+		// keep the lives info up to date
+		tData->data = "Lives: " + std::to_string(spaceLvData->curLives);
+	}
 }

@@ -34,30 +34,54 @@ void Logic::createLevelObjects()
 	Level* globalLvPtr = sysHeadHancho.RManager.addLevel("GLOBAL_LEVEL");
 	globalLvPtr->setActive(true);
 
-	Object level1Obj;
-	level1Obj.setType(ObjectType::LEVEL);
-	level1Obj.setUpdateFunction(level1Update);
-	level1Obj.setVisable(false);
-	level1Obj.setName("LEVEL1");
+	bool otterTest = false; // TESTING ONLY FOR EARLY LEVELS
 
-	// only for the first level, call creation update function
-	// (don't want multiple levls being created at once)
-	Object* level1Ptr = globalLvPtr->addObject(level1Obj);
-	level1Ptr->getUpdatePtr()(level1Ptr, Update::CREATED);
+	// only do this when testing all levels
+	if (otterTest)
+	{
+		Object level1Obj;
+		level1Obj.setType(ObjectType::LEVEL);
+		level1Obj.setUpdateFunction(level1Update);
+		level1Obj.setVisable(false);
+		level1Obj.setName("LEVEL1");
 
-	Object level2Obj;
-	level2Obj.setType(ObjectType::LEVEL);
-	level2Obj.setUpdateFunction(level2Update);
-	level2Obj.setVisable(false);
-	level2Obj.setName("LEVEL2");
-	globalLvPtr->addObject(level2Obj);
+		// only for the first level, call creation update function
+		// (don't want multiple levls being created at once)
+		Object* level1Ptr = globalLvPtr->addObject(level1Obj);
+		level1Ptr->getUpdatePtr()(level1Ptr, Update::CREATED);
+
+		Object level2Obj;
+		level2Obj.setType(ObjectType::LEVEL);
+		level2Obj.setUpdateFunction(level2Update);
+		level2Obj.setVisable(false);
+		level2Obj.setName("LEVEL2");
+		globalLvPtr->addObject(level2Obj);
+	}
+
+	Object spaceStartLevelObj;
+	spaceStartLevelObj.setType(ObjectType::LEVEL);
+	spaceStartLevelObj.setUpdateFunction(levelSpaceStartUpdate);
+	spaceStartLevelObj.setVisable(false);
+	spaceStartLevelObj.setName("LEVEL_START_SPACE_INVADERS");
+	
+	Object* spaceStartPtr = globalLvPtr->addObject(spaceStartLevelObj); // need the object only when not in test
+
+	// if not testing, make first space invader screen the first one
+	if (!otterTest)
+	{
+		// only for the first level, call creation update function
+		// (don't want multiple levls being created at once)
+		
+		spaceStartPtr->getUpdatePtr()(spaceStartPtr, Update::CREATED);
+	}
 
 	Object spaceInvadersLevelObj;
 	spaceInvadersLevelObj.setType(ObjectType::LEVEL);
 	spaceInvadersLevelObj.setUpdateFunction(levelSpaceInvadersUpdate);
 	spaceInvadersLevelObj.setVisable(false);
 	spaceInvadersLevelObj.setName("LEVEL_SPACE_INVADERS");
-	globalLvPtr->addObject(spaceInvadersLevelObj);	
+	globalLvPtr->addObject(spaceInvadersLevelObj);
+
 }
 
 // check for any collisions betwen all Objects

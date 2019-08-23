@@ -50,6 +50,18 @@ void level2Update(Object*, Update::Type);
 	// and an another object
 void toSpaceInvadersCollision(Object*, Object*);
 
+// Update behaviour on space invaders start screen level given the type of update
+// update type can be on creation, run time, or on deletion
+void levelSpaceStartUpdate(Object*, Update::Type);
+
+// Update behaviour on start text given the type of update
+// update type can be on creation, run time, or on deletion
+void infoTextUpdate(Object*, Update::Type);
+
+// Update behaviour on control text given the type of update
+// update type can be on creation, run time, or on deletion
+void controlTextUpdate(Object*, Update::Type);
+
 // Update behaviour on space invaders level given the type of update
 // update type can be on creation, run time, or on deletion
 void levelSpaceInvadersUpdate(Object*, Update::Type);
@@ -68,6 +80,9 @@ class SpaceInvaderLevelData : public ObjectData
 
 		bool runGame; // if game should be playing or not (enemies moving etc)
 		bool wonGame; // if game has been won or not (false if either lost or in progress)
+
+		unsigned startLives; // how many lives player starts with in a new game
+		unsigned curLives; // how mant lives player currently has
 };
 
 // The four edges in the group of enemies
@@ -153,3 +168,7 @@ void scoreUpdate(Object*, Update::Type);
 // Update behaviour on restart text given the type of update
 // update type can be on creation, run time, or on deletion
 void restartTextUpdate(Object*, Update::Type);
+
+// Update behaviour on lives text given the type of update
+// update type can be on creation, run time, or on deletion
+void livesTextUpdate(Object*, Update::Type);

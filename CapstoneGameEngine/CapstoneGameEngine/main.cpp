@@ -3,14 +3,15 @@
 */
 
 #include <iostream> //cin & cout
+#include "HeadHancho.h"
+#include "Window.h"
+#include "Graphics.h"
+#include "ResourceManager.h"
 
+HeadHancho sysHeadHancho; // global HeadHancho for engine
 
 int main()
 {
-	std::cout << "Test!" << std::endl;
-
-	// another repository change test
-	getchar();
-
+	sysHeadHancho.run();
 	return 0;
 }

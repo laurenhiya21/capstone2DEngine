@@ -79,7 +79,6 @@ class SpaceInvaderLevelData : public ObjectData
 		unsigned enemyVelocity; // how much all enemies main move
 
 		bool runGame; // if game should be playing or not (enemies moving etc)
-		bool wonGame; // if game has been won or not (false if either lost or in progress)
 
 		unsigned startLives; // how many lives player starts with in a new game
 		unsigned curLives; // how mant lives player currently has

@@ -537,7 +537,6 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 		levelData->timeSinceLastMove = std::time(0); // get current time
 		levelData->enemiesMoveRight = true; // enemies start by moving right
 		levelData->runGame = true; // set flag to run game
-		levelData->wonGame = true; // set won to default
 		levelData->startLives = 3;
 		levelData->curLives = levelData->startLives; // start off the game with the start num of lives
 		spaceLevel->setObjectDataPtr(levelData);
@@ -648,7 +647,6 @@ void levelSpaceInvadersUpdate(Object* spaceLevel, Update::Type t)
 		if (spaceLvData->totalEnemies == 0)
 		{
 			spaceLvData->runGame = false;
-			spaceLvData->wonGame = true;
 			return;
 		}
 
@@ -900,7 +898,7 @@ void carrotCollision(Object* player, Object* obj2)
 		Object* spaceLvObj = sysHeadHancho.RManager.getLevel("GLOBAL_LEVEL")->getObject("LEVEL_SPACE_INVADERS");
 		SpaceInvaderLevelData* spaceLvData = (SpaceInvaderLevelData*)spaceLvObj->getObjectDataPtr();
 
-		// decrease the live count
+		// decrease the live count (check so that there is no weird underflows)
 		if (spaceLvData->curLives > 0)
 		{
 			--spaceLvData->curLives;
@@ -991,7 +989,6 @@ void bulletUpdate(Object* bullet, Update::Type t)
 			// mark the bullet for destruction if it went off
 			bullet->setZombie(true);
 		}
-		
 	}
 }
 
@@ -1277,7 +1274,6 @@ void enemyUpdate(Object* enemy, Update::Type t)
 
 			// stop the game and say player lost
 			spaceLvData->runGame = false;
-			spaceLvData->wonGame = false;
 
 			// set lives to 0 just to double make sure to end the game
 			spaceLvData->curLives = 0;
